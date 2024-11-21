@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 
 const app = express();
-const PORT = process.env.PORT || 8080
+const PORT = process.env.PORT || 8080;
 
 app.use(morgan("dev"));
 app.use(cookieParser());
@@ -30,7 +30,14 @@ app.use(
   })
 );
 
-
+mongoose
+  .connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+  })
+  .catch((err) => {
+    console.log(err.message);
+  });
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-})
+  console.log(`Server is running on port ${PORT}`);
+});
