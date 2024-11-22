@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
 const User = require("../models/user.models");
 const Role = require("../models/role.models");
+const sendEmailService = require("../services/sendEmail");
 
 //@desc Post user
 //@route POST /api/user/signup
@@ -35,6 +36,9 @@ const signup = async (req, res) => {
       role_id: assignedRole,
       role_name: assignedRoleName,
     });
+
+    // Khi user dang khi tai khoan thanh cong se co email chuc mung
+    sendEmailService(email);
 
     return res.status(201).json({ message: "Sign up successfully" });
   } catch (error) {
