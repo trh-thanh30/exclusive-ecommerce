@@ -6,6 +6,9 @@ const session = require("express-session");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 
+const roleRouters = require("./routers/role.router");
+const userRouters = require("./routers/user.router");
+
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -29,6 +32,10 @@ app.use(
     credentials: true,
   })
 );
+
+// App routes
+app.use("/api/role", roleRouters);
+app.use("/api/user", userRouters);
 
 mongoose
   .connect(process.env.MONGODB_URI)

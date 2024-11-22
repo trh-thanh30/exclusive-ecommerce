@@ -1,0 +1,127 @@
+****Xây dựng thiết kế database
+1. Bảng Role 
+    - id: int -> random (trường khóa chính)
+    - role_name: string
+    - created_at: datetime -> ngày tạo
+    - update_at: datetime -> ngày sửa
+
+2. Bảng User
+    - id: int -> random (trường khóa chính)
+    - username: string
+    - email: string
+    - password: string
+    - avatar: string
+    - phone_number: string
+    - address: string 
+    - is_active: boolean
+    - role_id: int -> mongoose.Schema.Types.ObjectId -> ref: role
+    - created_at: datetime -> ngày tạo
+    - update_at: datetime -> ngày sửa
+
+3. Bảng Danh Mục -> Category 
+    - id: int ->  random (trường khóa chính)
+    - title(name): string
+    - created_at: datetime -> ngày tạo
+    - update_at: datetime -> ngày sửa
+
+4. Bảng Sản Phẩm -> Product 
+    - id: int -> random (trường khóa chính)
+    - category_id: int -> mongoose.Schema.Types.ObjectId -> ref: category
+    - title: string
+    - description: string
+    - price: float
+    - discount: float
+    - size: string
+    - rating: int
+    - thumbnail (images): [string]
+    - created_at: datetime -> ngày tạo
+    - update_at: datetime -> ngày sửa
+
+5. Bảng đánh giá sản phẩm -> Evaluate
+    - id: int -> random (trường khóa chính)
+    - product_id: int -> mongoose.Schema.Types.ObjectId -> ref: product
+    - comment: string
+    - user_id: int ->mongoose.Schema.Types.ObjectId -> ref: user
+    - username: string
+    - like: boolean
+    - like_num: int
+    - created_at: datetime -> ngày tạo
+    - update_at: datetime -> ngày sửa
+
+6.Bảng hồi đáp -> Reply
+    - id: int (random, khóa chính)
+    - evaluate_id: int -> mongoose.Schema.Types.ObjectId -> ref: evaluate
+    - user_id: int -> mongoose.Schema.Types.ObjectId -> ref: user
+    - username: string (người phản hồi)
+    - comment: string (nội dung phản hồi)
+    - created_at: datetime (ngày tạo phản hồi)
+    - updated_at: datetime (ngày sửa phản hồi)
+
+6. Bảng quản lý phản hồi -> Feedback(trang liên hệ (contact))
+    - id: int -> random (trường khóa chính)
+    - firstname: string
+    - lastname: string
+    - email: string
+    - phone_number: string
+    - subject_name: string
+    - note: string
+    - status: string(chưa xử lý, đã phản hồi)
+
+7. Bảng quản lý đơn hàng 
+    - id: int -> random (trường khóa chính)
+    - username
+    - phone_number
+    - address
+    - note
+    - order_date(created_at): datetime -> thời điểm đặt đơn hàng
+    - Danh sách các sản phẩm: 
+        - sản phẩn 1 x số lượng x giá tại thời điểm đặt hàng
+        - sản phẩm 2 x số lượng x giá tại thời điểm đặt hàng
+        - sản phẩm n nx số lượng nx giá tại thời điểm đặt hàng
+
+    7.1 Bảng Order -> Order
+        - id: int -> random 
+        - username
+        - phone_number
+        - address
+        - note
+        - order_date(created_at): datetime -> thời điểm đặt đơn hàng
+        - status: string -> (Pending, Processing, Packed, Awaiting, Shipped, Awaiting Payment, Failed Payment, ...)
+        - total_price -> lưu tổng tiền order (price * num)
+        - shipping_id: int -> mongoose.Schema.Types.ObjectId -> ref: shipping
+        - payment_id: int -> mongoose.Schema.Types.ObjectId -> ref: payment
+
+    7.2 Bảng chi tiết đơn hàng -> Order_deatils
+        - id: int -> random
+        - order_id: int -> mongoose.Schema.Types.ObjectId -> ref: order
+        - product_id: int -> mongoose.Schema.Types.ObjectId -> ref: product
+        - price: int
+        - num -> int -> số lượng sản phẩm mua
+        - total_price -> lưu tổng tiền order (price * num)
+
+8. Bảng quản lý số tiền giao hàng -> Shipping
+    - id: int -> random (trường khóa chính)
+    - name: string
+    - price_ship: int
+    - created_at: datetime -> ngày tạo
+    - update_at: datetime -> ngày sửa
+
+9. Bảng quản lí sự chi trả -> Payment
+    - id: int -> random (trường khóa chính)
+    - user_id: int -> mongoose.Schema.Types.ObjectId -> ref: user
+    - method_payment: string
+    - order_id : [int] -> mongoose.Schema.Types.ObjectId -> ref: order
+    - created_at: datetime -> ngày tạo
+    - update_at: datetime -> ngày sửa 
+
+**** Server
+    - node.js
+    - express.js
+**** DB
+    - mongoDB    
+    - cloundidary (img)
+**** Client
+    - Next.js
+    - React.js    
+**** Connect Internet
+    - Vercel    
