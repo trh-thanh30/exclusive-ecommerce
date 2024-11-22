@@ -45,6 +45,7 @@ const signup = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
+
 //@desc Post user
 //@route POST /api/user/signin
 //@access protected
