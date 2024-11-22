@@ -1,4 +1,7 @@
-const { validateSignupInput } = require("../middleware/validateInput");
+const {
+  validateSignupInput,
+  validateSigninInput,
+} = require("../middleware/validateInput");
 const jwt = require("jsonwebtoken");
 const bcryptjs = require("bcryptjs");
 const User = require("../models/user.models");
@@ -37,7 +40,7 @@ const signup = async (req, res) => {
       role_name: assignedRoleName,
     });
 
-    // Khi user dang khi tai khoan thanh cong se co email chuc mung
+    // Khi user đăng kí tài khoản sẽ có thư gửi email chúc mừng
     sendEmailService(email);
 
     return res.status(201).json({ message: "Sign up successfully" });
@@ -49,7 +52,37 @@ const signup = async (req, res) => {
 //@desc Post user
 //@route POST /api/user/signin
 //@access protected
-const signin = async (req, res) => {};
+const signin = async (req, res) => {
+  try {
+    const error = validateSigninInput(req.body);
+    if (error) return res.status(400).json({ message: error });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const isMatch = await bcryptjs.compare(password, user.password);
+    if (!isMatch)
+      return res.status(400).json({ message: "Invalid credentials" });
+    const token = jwt.sign(
+      { id: user._id, role_id: user.role_id, role_name: user.role_name },
+      process.env.JWT_SECRET
+    );
+    const dateToken = new Date(Date.now() + 24 * 60 * 60 * 1000); // 1day from now
+    const { password: privatePass, ...rest } = user._doc;
+    return res
+      .cookie("access_token", token, {
+        httpOnly: true,
+        expires: dateToken,
+      })
+      .status(200)
+      .json({
+        message: "Login successful",
+        user: rest,
+      });
+  } catch (error) {
+    return res.status(404).send({ message: error.message });
+  }
+};
 
 module.exports = {
   signin,
