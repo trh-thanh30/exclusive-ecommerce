@@ -1,4 +1,5 @@
 require("dotenv").config();
+require("./services/passport");
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -8,6 +9,7 @@ const morgan = require("morgan");
 
 const roleRouters = require("./routers/role.router");
 const userRouters = require("./routers/user.router");
+const gooleRouters = require("./routers/google.router");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -34,9 +36,15 @@ app.use(
 );
 
 // App routes
+/**  ROLE ROUTER **/
 app.use("/api/role", roleRouters);
+/**  USER ROUTER  **/
 app.use("/api/user", userRouters);
+/**  GOOGLE ROUTER  **/
+app.use(gooleRouters); // GET -> auth/google
 
+
+// Connect to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
@@ -46,6 +54,7 @@ mongoose
     console.log(err.message);
   });
 
+// Start server  
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
