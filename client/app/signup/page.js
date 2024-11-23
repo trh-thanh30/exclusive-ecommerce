@@ -9,6 +9,7 @@ import Input from "../_components/Input";
 import ButtonIcon from "../_components/ButtonIcon";
 import Separate from "../_components/Separate";
 import SpinnerMini from "../_components/SpinnerMini";
+import toast from "react-hot-toast";
 export default function Page() {
   const sizeIcon = 22;
   const [isLoading, setIsLoading] = useState(false);
@@ -33,10 +34,12 @@ export default function Page() {
         body: JSON.stringify(result),
       });
       const data = await res.json();
-      console.log(data)
-      if (!res.ok) setError(data.message);
+      if (!res.ok) {
+        toast.error(data.message);
+      }
     } catch (error) {
       setError(error.message);
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +98,7 @@ export default function Page() {
                 text={isLoading ? <SpinnerMini /> : "Sign Up"}
                 className={` text-primary-800 border-primary-400 hover:bg-primary-800 hover:border-primary-800 hover:text-white`}
               />
-              {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
+
               <Separate />
 
               <ButtonIcon

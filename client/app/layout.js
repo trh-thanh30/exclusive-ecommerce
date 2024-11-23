@@ -1,22 +1,49 @@
-import "./_styles/index.css"
+import "./_styles/index.css";
 import { Poppins } from "next/font/google";
+import { Toaster } from "react-hot-toast"; // Import Toaster
 
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
+
 export const metadata = {
   title: {
     template: "%s | The Exclusive",
     default: "Welcome | The Exclusive",
   },
-  description: "Buy anything you like, you want and i'll deliver it for you",
+  description: "Buy anything you like, you want and I'll deliver it for you",
 };
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} bg-primary-50`}>{children}</body>
+      <head>
+        <title>{metadata.title.default}</title>
+        <meta name="description" content={metadata.description} />
+      </head>
+      <body className={`${poppins.className} bg-primary-50`}>
+        <Toaster
+          position="top-center"
+          gutter={12}
+          containerStyle={{ margin: "4px" }}
+          toastOptions={{
+            success: {
+              duration: 3000,
+            },
+            error: {
+              duration: 4000,
+            },
+            style: {
+              fontSize: "14px",
+              color: "#9CA3AF",
+              maxWidth: "500px",
+              padding: "16px 24px",
+            },
+          }}
+        />
+        {children}
+      </body>
     </html>
   );
 }
