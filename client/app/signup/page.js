@@ -1,18 +1,46 @@
-import { CiGlass, CiLock, CiMail, CiUser } from "react-icons/ci";
+"use client"; // Thêm dòng này ở đầu file
+import { CiLock, CiMail, CiUser } from "react-icons/ci";
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import thumb from "@/public/thumb-login.svg";
 import Link from "next/link";
 import Logo from "../_components/Logo";
 import Input from "../_components/Input";
 import ButtonIcon from "../_components/ButtonIcon";
 import Separate from "../_components/Separate";
-
-export const metadata = {
-  title: "Sign Up",
-};
+import SpinnerMini from "../_components/SpinnerMini";
 export default function Page() {
   const sizeIcon = 22;
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setError(null);
+    try {
+      const formData = new FormData(e.currentTarget);
+      // Chuyển đổi FormData thành Object
+      const result = {
+        username: formData.get("username"),
+        email: formData.get("email"),
+        password: formData.get("password"),
+      };
+      const res = await fetch("http://localhost:8000/api/user/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(result),
+      });
+      const data = await res.json();
+      console.log(data)
+      if (!res.ok) setError(data.message);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   return (
     <div className="flex items-center justify-center h-screen ">
       <div className="flex items-center w-full gap-12">
@@ -35,27 +63,43 @@ export default function Page() {
             Let’s create your account and Shop like a pro and save money.
           </p>
 
-          <form className="flex flex-col gap-6 mt-6">
+          <form onSubmit={onSubmit} className="flex flex-col gap-6 mt-6">
             <Input
+              id={"username"}
+              name={"username"}
+              type={"text"}
               placeholder={"Please enter your user name"}
+              disabled={isLoading}
               icon={<CiUser size={sizeIcon} />}
             />
             <Input
+              id={"email"}
+              name={"email"}
+              type={"email"}
+              disabled={isLoading}
               placeholder={"Please enter your email"}
               icon={<CiMail size={sizeIcon} />}
             />
             <Input
+              id={"password"}
+              name={"password"}
+              disabled={isLoading}
+              type={"password"}
               placeholder={"Please enter your password"}
               icon={<CiLock size={sizeIcon} />}
             />
             <div className="mt-6">
               <ButtonIcon
-                text={"Sign Up"}
+                disabled={isLoading}
+                type={"submit"}
+                text={isLoading ? <SpinnerMini /> : "Sign Up"}
                 className={` text-primary-800 border-primary-400 hover:bg-primary-800 hover:border-primary-800 hover:text-white`}
               />
+              {error && <p className="mt-4 text-sm text-red-500">{error}</p>}
               <Separate />
 
               <ButtonIcon
+                type={"button"}
                 text={"Sign In with Google"}
                 icon={
                   <svg
@@ -65,7 +109,7 @@ export default function Page() {
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                   >
-                    <g clip-path="url(#clip0_155_1565)">
+                    <g clipPath="url(#clip0_155_1565)">
                       <path
                         d="M23.766 12.2764C23.766 11.4607 23.6999 10.6406 23.5588 9.83807H12.24V14.4591H18.7217C18.4528 15.9494 17.5885 17.2678 16.323 18.1056V21.1039H20.19C22.4608 19.0139 23.766 15.9274 23.766 12.2764Z"
                         fill="#4285F4"
@@ -93,6 +137,7 @@ export default function Page() {
               />
             </div>
           </form>
+
           <div className="flex items-center gap-1 mt-6">
             <p className="text-sm text-primary-400 ">
               Already have an account?
