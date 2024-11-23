@@ -7,7 +7,6 @@ import Logo from "../_components/Logo";
 import Input from "../_components/Input";
 import ButtonIcon from "../_components/ButtonIcon";
 import Separate from "../_components/Separate";
-import { iconGoogle } from "@/public/icon-Google.svg";
 
 export const metadata = {
   title: "Sign Up",
@@ -57,7 +56,7 @@ export default function Page() {
               <Separate />
 
               <ButtonIcon
-                text={"Sign Up with Google"}
+                text={"Sign In with Google"}
                 icon={
                   <svg
                     width="24"
