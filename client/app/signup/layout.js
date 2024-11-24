@@ -1,4 +1,3 @@
-// app/signup/layout.js
 export const metadata = {
   title: "Sign Up",
 };
