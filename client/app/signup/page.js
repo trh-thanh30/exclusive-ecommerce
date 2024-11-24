@@ -1,17 +1,14 @@
 "use client";
 import { CiLock, CiMail, CiUser } from "react-icons/ci";
-import { IoEyeOffOutline } from "react-icons/io5";
-import { IoEyeOutline } from "react-icons/io5";
-import Image from "next/image";
-import React, { useState } from "react";
-import thumb from "@/public/thumb-login.svg";
 import Link from "next/link";
 import Logo from "../_components/Logo";
 import Input from "../_components/Input";
 import ButtonIcon from "../_components/ButtonIcon";
 import Separate from "../_components/Separate";
 import SpinnerMini from "../_components/SpinnerMini";
-import toast from "react-hot-toast";
+import useSignup from "../hooks/useSignup";
+import useEyePassword from "../hooks/useEyePassword";
+import ImageLeftForm from "../_components/ImageLeftForm";
 
 const iconGooogle = (
   <svg
@@ -49,78 +46,27 @@ const iconGooogle = (
 
 export default function Page() {
   const sizeIcon = 22;
-  const sizeIconPass = 18;
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [password, setPassword] = useState("");
-  const [openPassword, setOpenPassword] = useState(false);
-
-  const handleToggleOpenPassword = () => {
-    setOpenPassword((open) => !open);
-  };
-  const eyePassword = openPassword ? (
-    <IoEyeOutline
-      className="cursor-pointer"
-      onClick={handleToggleOpenPassword}
-      size={sizeIconPass}
-    />
-  ) : (
-    <IoEyeOffOutline
-      className="cursor-pointer"
-      onClick={handleToggleOpenPassword}
-      size={sizeIconPass}
-    />
-  );
-
+  const { isLoading, signup } = useSignup();
+  const { password, setPassword, openPassword, eyePassword } = useEyePassword();
+  
   const onSubmit = async (e) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    try {
-      const formData = new FormData(e.currentTarget);
-      // Chuyển đổi FormData thành Object
-      const result = {
-        username: formData.get("username"),
-        email: formData.get("email"),
-        password: formData.get("password"),
-      };
-      const res = await fetch("http://localhost:8000/api/user/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(result),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        toast.error(data.message);
-        console.log(error);
-      } else {
-        toast.success(data.message);
-        window.location.href = "/signin";
-      }
-    } catch (error) {
-      setError(error.message);
-      toast.error(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+    const formData = new FormData(e.currentTarget);
+    // Chuyển đổi FormData thành Object
+    const result = {
+      username: formData.get("username"),
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+    await signup(result);
   };
+  
   return (
     <div className="flex items-center justify-center h-screen ">
       <div className="flex items-center w-full gap-12">
-        <div className="flex flex-col items-center justify-center w-1/2 h-screen gap-10 p-4 ">
-          <Image
-            src={thumb}
-            width={500}
-            alt="Family sitting around a fire pit in front of cabin"
-            quality={100}
-          />
-          <p className="text-sm font-medium text-center text-primary-800">
-            The best of luxury brand values, high quality products, and
-            innovative services
-          </p>
-        </div>
+        {/* Left Side */}
+        <ImageLeftForm />
+        {/* Right Side */}
         <div className="flex flex-col items-center justify-center w-1/2 gap-4 p-4 mt-12 bg-white">
           <Logo classname={"my-8"} />
           <h1 className="text-3xl font-medium">Sign Up</h1>
@@ -167,9 +113,7 @@ export default function Page() {
                 text={isLoading ? <SpinnerMini /> : "Sign Up"}
                 className={` text-primary-800 border-primary-400 hover:bg-primary-800 hover:border-primary-800 hover:text-white`}
               />
-
               <Separate />
-
               <ButtonIcon
                 type={"button"}
                 text={"Sign In with Google"}
