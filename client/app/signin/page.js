@@ -8,6 +8,10 @@ import Logo from "../_components/Logo";
 import Input from "../_components/Input";
 import ButtonIcon from "../_components/ButtonIcon";
 import Separate from "../_components/Separate";
+import ImageLeftForm from "../_components/ImageLeftForm";
+import useEyePassword from "../hooks/useEyePassword";
+import useSignin from "../hooks/useSignin";
+import SpinnerMini from "../_components/SpinnerMini";
 
 const iconGoogle = (
   <svg
@@ -45,21 +49,23 @@ const iconGoogle = (
 
 export default function Page() {
   const sizeIcon = 22;
+  const { password, setPassword, openPassword, eyePassword } = useEyePassword();
+  const { signin, isLoading } = useSignin();
+  const onSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const result = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+    };
+    await signin(result);
+  };
   return (
     <div className="flex items-center justify-center h-screen ">
       <div className="flex items-center w-full gap-12">
-        <div className="flex flex-col items-center justify-center w-1/2 h-screen gap-10 p-4 ">
-          <Image
-            src={thumb}
-            width={500}
-            alt="Family sitting around a fire pit in front of cabin"
-            quality={100}
-          />
-          <p className="text-sm font-medium text-center text-primary-800">
-            The best of luxury brand values, high quality products, and
-            innovative services
-          </p>
-        </div>
+        {/* Left Side */}
+        <ImageLeftForm />
+        {/* Right Side */}
         <div className="flex flex-col items-center justify-center w-1/2 gap-4 p-4 mt-12 bg-white">
           <Logo classname={"my-8"} />
           <h1 className="text-3xl font-medium">Hello Again!</h1>
@@ -67,30 +73,45 @@ export default function Page() {
             Welcome back to sign in. As a returning customer, you have access to
             your previously saved all information.
           </p>
-
-          <form className="flex flex-col gap-6 mt-6">
+          <form onSubmit={onSubmit} className="flex flex-col gap-6 mt-6">
             <Input
+              name={"email"}
+              disabled={isLoading}
+              type={"email"}
               placeholder={"Please enter your email"}
               icon={<CiMail size={sizeIcon} />}
             />
             <Input
+              name={"password"}
               placeholder={"Please enter your password"}
-              icon={<CiLock size={sizeIcon} />}
+              disabled={isLoading}
+              onChange={(e) => setPassword(e.target.value)}
+              type={openPassword ? "text" : "password"}
+              icon={
+                <div className="flex items-center gap-3">
+                  {password ? eyePassword : null}
+                  <CiLock size={sizeIcon} />
+                </div>
+              }
             />
             <div className="mt-6">
-              <ButtonIcon
-                text={"Sign In"}
-                className={` text-primary-800 border-primary-400 hover:bg-primary-800 hover:border-primary-800 hover:text-white`}
-              />
+              {isLoading ? (
+                <SpinnerMini />
+              ) : (
+                <ButtonIcon
+                  type={"submit"}
+                  disabled={isLoading}
+                  text={"Sign In"}
+                  className={`text-primary-800 border-primary-400 hover:bg-primary-800 hover:border-primary-800 hover:text-white`}
+                />
+              )}
               <Separate />
 
               <ButtonIcon text={"Sign In with Google"} icon={iconGoogle} />
             </div>
           </form>
-          <div className="flex items-center gap-1 mt-6">
-            <p className="text-sm text-primary-400 ">
-              Dont't have an account yet?
-            </p>
+          <div className="flex items-center gap-1 mt-6 text-sm">
+            <p className=" text-primary-400">Dont't have an account yet?</p>
             <Link className="text-primary-800 hover:underline" href={"/signup"}>
               Sign Up
             </Link>

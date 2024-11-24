@@ -48,7 +48,7 @@ export default function Page() {
   const sizeIcon = 22;
   const { isLoading, signup } = useSignup();
   const { password, setPassword, openPassword, eyePassword } = useEyePassword();
-  
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -60,7 +60,7 @@ export default function Page() {
     };
     await signup(result);
   };
-  
+
   return (
     <div className="flex items-center justify-center h-screen ">
       <div className="flex items-center w-full gap-12">
@@ -122,10 +122,8 @@ export default function Page() {
             </div>
           </form>
 
-          <div className="flex items-center gap-1 mt-6">
-            <p className="text-sm text-primary-400 ">
-              Already have an account?
-            </p>
+          <div className="flex items-center gap-1 mt-6 text-sm">
+            <p className=" text-primary-400">Already have an account?</p>
             <Link className="text-primary-800 hover:underline" href={"/signin"}>
               Sign In
             </Link>
