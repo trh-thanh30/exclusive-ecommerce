@@ -62,13 +62,13 @@ export default function Page() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen ">
+    <div className="flex items-center justify-center">
       <div className="flex items-center w-full gap-12">
         {/* Left Side */}
         <ImageLeftForm />
         {/* Right Side */}
-        <div className="flex flex-col items-center justify-center w-1/2 gap-4 p-4 mt-12 bg-white">
-          <Logo classname={"my-8"} />
+        <div className="flex flex-col items-center justify-center w-1/2 gap-4 p-4 bg-white">
+          <Logo classname={"mt-4 mb-6"} />
           <h1 className="text-3xl font-medium">Sign Up</h1>
           <p className="text-sm font-medium text-center text-primary-400">
             Let’s create your account and Shop like a pro and save money.

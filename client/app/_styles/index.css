@@ -29,3 +29,23 @@
     }
   }
 }
+
+.nav-link {
+  position: relative; /* Cần để pseudo-element ::before hoạt động */
+}
+
+.nav-link::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0; /* Border sẽ bắt đầu từ 0 */
+  height: 1.5px; /* Độ dày của border */
+  background-color: #111827; /* Màu sắc của border */
+  transition: width 0.3s ease-in-out; /* Hiệu ứng chuyển động */
+}
+
+.nav-link:hover::before {
+  width: 100%; /* Khi hover, border mở rộng đầy đủ */
+}
+

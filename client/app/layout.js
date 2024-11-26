@@ -1,6 +1,8 @@
 import "./_styles/index.css";
 import { Poppins } from "next/font/google";
-import { Toaster } from "react-hot-toast"; // Import Toaster
+import { Toaster } from "react-hot-toast";
+import Header from "./_components/Header";
+import Footer from "./_components/Footer";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,18 +24,14 @@ export default function RootLayout({ children }) {
         <title>{metadata.title.default}</title>
         <meta name="description" content={metadata.description} />
       </head>
-      <body className={`${poppins.className} bg-primary-50`}>
+      <body className={`${poppins.className} bg-primary-100 `}>
         <Toaster
           position="top-center"
           gutter={12}
           containerStyle={{ margin: "4px" }}
           toastOptions={{
-            success: {
-              duration: 3000,
-            },
-            error: {
-              duration: 4000,
-            },
+            success: { duration: 3000 },
+            error: { duration: 4000 },
             style: {
               fontSize: "14px",
               color: "#9CA3AF",
@@ -42,7 +40,12 @@ export default function RootLayout({ children }) {
             },
           }}
         />
-        {children}
+        {/* Ẩn Header nếu đang ở trang signin/signup */}
+        <Header />
+        <div className="grid flex-1 px-8 py-8">
+          <main className="w-full mx-auto max-w-7xl">{children}</main>
+        </div>
+        <Footer />
       </body>
     </html>
   );

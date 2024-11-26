@@ -1,10 +1,8 @@
 "use client";
 import { CiLock, CiMail } from "react-icons/ci";
-import Image from "next/image";
 import React from "react";
-import thumb from "@/public/thumb-login.svg";
 import Link from "next/link";
-import Logo from "../_components/Logo";
+
 import Input from "../_components/Input";
 import ButtonIcon from "../_components/ButtonIcon";
 import Separate from "../_components/Separate";
@@ -12,6 +10,7 @@ import ImageLeftForm from "../_components/ImageLeftForm";
 import useEyePassword from "../hooks/useEyePassword";
 import useSignin from "../hooks/useSignin";
 import SpinnerMini from "../_components/SpinnerMini";
+import Logo from "../_components/Logo";
 
 const iconGoogle = (
   <svg
@@ -61,13 +60,13 @@ export default function Page() {
     await signin(result);
   };
   return (
-    <div className="flex items-center justify-center h-screen ">
+    <div className="flex items-center justify-center">
       <div className="flex items-center w-full gap-12">
         {/* Left Side */}
         <ImageLeftForm />
         {/* Right Side */}
-        <div className="flex flex-col items-center justify-center w-1/2 gap-4 p-4 mt-12 bg-white">
-          <Logo classname={"my-8"} />
+        <div className="flex flex-col items-center justify-center w-1/2 gap-4 p-4 bg-white">
+          <Logo classname={"mt-4 mb-6"} />
           <h1 className="text-3xl font-medium">Hello Again!</h1>
           <p className="text-sm font-medium text-center text-primary-400">
             Welcome back to sign in. As a returning customer, you have access to

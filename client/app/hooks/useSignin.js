@@ -14,6 +14,7 @@ export default function useSignin() {
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(userData),
       });
       const data = await res.json();
@@ -21,8 +22,8 @@ export default function useSignin() {
         toast.error(data.message);
         console.log(error);
       } else {
-          window.location.href = "/";
-          toast.success(data.message);
+        window.location.href = "/";
+        toast.success(data.message);
       }
     } catch (error) {
       setError(error.message);
