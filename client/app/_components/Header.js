@@ -67,7 +67,7 @@ export default function Header() {
         </ul>
 
         <div className="flex items-center gap-4">
-          <Input icon={<CiSearch size={sizeIcon} />} className={""} />
+          <Input icon={<CiSearch size={sizeIcon} />} />
           <div className="flex items-center gap-1">
             {navIcon.map((icon, index) => (
               <span

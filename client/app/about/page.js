@@ -3,7 +3,6 @@ import Breadcrumb from "../_components/Breadcrumb";
 import Image from "next/image";
 import AboutImg1 from "@/public/about-img1.png";
 
-
 import {
   CiShop,
   CiDollar,
@@ -76,7 +75,7 @@ const service = [
 export default function Page() {
   const iconStyle = `flex items-center justify-center w-12 h-12 mb-4 transition-colors rounded-full bg-primary-900 text-primary-50`;
   return (
-    <div>
+    <>
       <Breadcrumb items={breadcrumb} />
 
       <div className="flex flex-col mt-10 gap-28">
@@ -136,6 +135,6 @@ export default function Page() {
           ))}
         </ul>
       </div>
-    </div>
+    </>
   );
 }
