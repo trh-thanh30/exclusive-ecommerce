@@ -7,6 +7,7 @@ import Introduce from "./Introduce";
 
 import { usePathname } from "next/navigation";
 import { CiUser, CiShoppingCart, CiHeart, CiSearch } from "react-icons/ci";
+import { useSelector } from "react-redux";
 
 const navLink = [
   {
@@ -42,6 +43,8 @@ const navIcon = [
 
 export default function Header() {
   const pathname = usePathname();
+  const user = useSelector((state) => state.user);
+  console.log(user)
   return (
     <>
       <Introduce />
@@ -67,7 +70,14 @@ export default function Header() {
         </ul>
 
         <div className="flex items-center gap-4">
-          <Input icon={<CiSearch size={sizeIcon} />} />
+          <Input
+            icon={
+              <CiSearch
+                className="rounded-full cursor-pointer hover:bg-primary-200"
+                size={sizeIcon}
+              />
+            }
+          />
           <div className="flex items-center gap-1">
             {navIcon.map((icon, index) => (
               <span

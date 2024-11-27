@@ -3,9 +3,10 @@ import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import Header from "./_components/Header";
 import Footer from "./_components/Footer";
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/pagination";
+import { ReduxProvider } from "@/redux/provider";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -27,28 +28,30 @@ export default function RootLayout({ children }) {
         <title>{metadata.title.default}</title>
         <meta name="description" content={metadata.description} />
       </head>
-      <body className={`${poppins.className} bg-primary-100 `}>
-        <Toaster
-          position="top-center"
-          gutter={12}
-          containerStyle={{ margin: "4px" }}
-          toastOptions={{
-            success: { duration: 3000 },
-            error: { duration: 4000 },
-            style: {
-              fontSize: "14px",
-              color: "#9CA3AF",
-              maxWidth: "500px",
-              padding: "16px 24px",
-            },
-          }}
-        />
-        {/* Ẩn Header nếu đang ở trang signin/signup */}
-        <Header />
-        <div className="flex-1 px-8 py-8">
-          <main className="w-full mx-auto max-w-7xl">{children}</main>
-        </div>
-        <Footer />
+      <body className={`${poppins.className} bg-primary-100`}>
+        <ReduxProvider>
+          <Toaster
+            position="top-center"
+            gutter={12}
+            containerStyle={{ margin: "4px" }}
+            toastOptions={{
+              success: { duration: 3000 },
+              error: { duration: 4000 },
+              style: {
+                fontSize: "14px",
+                color: "#9CA3AF",
+                maxWidth: "500px",
+                padding: "16px 24px",
+              },
+            }}
+          />
+          {/* Ẩn Header nếu đang ở trang signin/signup */}
+          <Header />
+          <div className="flex-1 px-8 py-8">
+            <main className="w-full mx-auto max-w-7xl">{children}</main>
+          </div>
+          <Footer />
+        </ReduxProvider>
       </body>
     </html>
   );

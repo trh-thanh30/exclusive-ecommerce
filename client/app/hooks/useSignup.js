@@ -1,10 +1,12 @@
+"use client";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
 export default function useSignup() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const router = useRouter();
   const signup = async (userData) => {
     setIsLoading(true);
     setError(null);
@@ -22,7 +24,7 @@ export default function useSignup() {
         console.log(error);
       } else {
         toast.success(data.message);
-        window.location.href = "/signin";
+        router.push("/signin");
       }
     } catch (error) {
       setError(error.message);

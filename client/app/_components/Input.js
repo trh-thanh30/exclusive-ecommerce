@@ -43,9 +43,9 @@ export default function Input({
         />
       )}
       {icon && !isTextArea && (
-        <span className="absolute pl-2 border-l border-primary-400 right-3 text-primary-800">
-          {icon}
-        </span>
+        <div className="absolute pl-2 border-l border-primary-400 right-3 text-primary-800">
+          <span>{icon}</span>
+        </div>
       )}
     </div>
   );

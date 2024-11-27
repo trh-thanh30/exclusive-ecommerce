@@ -49,7 +49,7 @@ const iconGoogle = (
 export default function Page() {
   const sizeIcon = 22;
   const { password, setPassword, openPassword, eyePassword } = useEyePassword();
-  const { signin, isLoading } = useSignin();
+  const { signin, loading } = useSignin();
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -75,7 +75,7 @@ export default function Page() {
           <form onSubmit={onSubmit} className="flex flex-col gap-6 mt-6">
             <Input
               name={"email"}
-              disabled={isLoading}
+              disabled={loading}
               type={"email"}
               placeholder={"Please enter your email"}
               icon={<CiMail size={sizeIcon} />}
@@ -83,7 +83,7 @@ export default function Page() {
             <Input
               name={"password"}
               placeholder={"Please enter your password"}
-              disabled={isLoading}
+              disabled={loading}
               onChange={(e) => setPassword(e.target.value)}
               type={openPassword ? "text" : "password"}
               icon={
@@ -94,16 +94,13 @@ export default function Page() {
               }
             />
             <div className="mt-6">
-              {isLoading ? (
-                <SpinnerMini />
-              ) : (
-                <ButtonIcon
-                  type={"submit"}
-                  disabled={isLoading}
-                  text={"Sign In"}
-                  className={`text-primary-800 border-primary-400 hover:bg-primary-800 hover:border-primary-800 hover:text-white`}
-                />
-              )}
+              <ButtonIcon
+                type={"submit"}
+                disabled={loading}
+                text={loading ? <SpinnerMini /> : "Sign In"}
+                className={`text-primary-800 border-primary-400 hover:bg-primary-800 hover:border-primary-800 hover:text-white`}
+              />
+
               <Separate />
 
               <ButtonIcon text={"Sign In with Google"} icon={iconGoogle} />
