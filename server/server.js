@@ -11,12 +11,21 @@ const roleRouters = require("./routers/role.router");
 const userRouters = require("./routers/user.router");
 const gooleRouters = require("./routers/google.router");
 const contactRouters = require("./routers/contact.router");
+const passport = require("passport");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
 
 app.use(morgan("dev"));
 app.use(cookieParser());
+app.use(express.json());
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+  })
+);
 app.use(
   session({
     secret: process.env.SESSION_SECRET, // Khóa bí mật để mã hóa session
@@ -28,14 +37,8 @@ app.use(
     },
   })
 );
-app.use(express.json());
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
-
+app.use(passport.initialize());
+app.use(passport.session());
 // App routes
 /**  ROLE ROUTER **/
 app.use("/api/role", roleRouters);

@@ -1,17 +1,17 @@
 require("dotenv").config();
+const OAuth2Strategy = require("passport-google-oauth2").Strategy;
 const Role = require("../models/role.models");
 const User = require("../models/user.models");
-const GoogleStrategy = require("passport-google-oauth2").Strategy;
 const passport = require("passport");
 passport.use(
-  new GoogleStrategy(
+  new OAuth2Strategy(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
       callbackURL: process.env.REDIRECT_URI,
-      passReqToCallback: true,
+      scope: ["email", "profile"],
     },
-    async function (request, accessToken, refreshToken, profile, done) {
+    async function (accessToken, refreshToken, profile, done) {
       try {
         let user = await User.findOne({ googleId: profile.id });
         const role = await Role.findOne({ role_name: "user" });

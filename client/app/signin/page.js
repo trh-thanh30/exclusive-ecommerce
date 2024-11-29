@@ -103,7 +103,11 @@ export default function Page() {
 
               <Separate />
 
-              <ButtonIcon text={"Sign In with Google"} icon={iconGoogle} />
+              <ButtonIcon
+                type={"button"}
+                text={"Sign In with Google"}
+                icon={iconGoogle}
+              />
             </div>
           </form>
           <div className="flex items-center gap-1 mt-6 text-sm">

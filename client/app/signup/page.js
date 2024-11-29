@@ -9,6 +9,7 @@ import SpinnerMini from "../_components/SpinnerMini";
 import useSignup from "../hooks/useSignup";
 import useEyePassword from "../hooks/useEyePassword";
 import ImageLeftForm from "../_components/ImageLeftForm";
+import useSignInWithGoogle from "../hooks/useSignInWithGoogle";
 
 const iconGooogle = (
   <svg
@@ -48,6 +49,7 @@ export default function Page() {
   const sizeIcon = 22;
   const { isLoading, signup } = useSignup();
   const { password, setPassword, openPassword, eyePassword } = useEyePassword();
+  const { signinWithGoogle } = useSignInWithGoogle();
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -115,6 +117,7 @@ export default function Page() {
               />
               <Separate />
               <ButtonIcon
+                onClick={signinWithGoogle}
                 type={"button"}
                 text={"Sign In with Google"}
                 icon={iconGooogle}

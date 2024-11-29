@@ -12,8 +12,8 @@ router.get(
 router.get(
   "/auth/google/callback",
   passport.authenticate("google", {
-    failureRedirect: "/auth/failure",
-    successRedirect: "/", // URL bạn muốn chuyển hướng sau khi đăng nhập thành công
+    failureRedirect: "http://localhost:3000/signin",
+    successRedirect: "http://localhost:3000/",
   })
 );
 
