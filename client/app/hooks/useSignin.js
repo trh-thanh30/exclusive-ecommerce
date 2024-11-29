@@ -31,7 +31,7 @@ export default function useSignin() {
         dispatch(signinFailure(data.message));
       } else {
         dispatch(signinSuccess(data.user));
-        // router.push("/");
+        router.push("/");
         toast.success(data.message);
       }
     } catch (error) {

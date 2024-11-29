@@ -10,6 +10,7 @@ const morgan = require("morgan");
 const roleRouters = require("./routers/role.router");
 const userRouters = require("./routers/user.router");
 const gooleRouters = require("./routers/google.router");
+const contactRouters = require("./routers/contact.router");
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -42,7 +43,8 @@ app.use("/api/role", roleRouters);
 app.use("/api/user", userRouters);
 /**  GOOGLE ROUTER  **/
 app.use(gooleRouters); // GET -> auth/google
-
+/** CONTACT ROUTER */
+app.use("/api/contact", contactRouters);
 
 // Connect to MongoDB
 mongoose
@@ -54,7 +56,7 @@ mongoose
     console.log(err.message);
   });
 
-// Start server  
+// Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });

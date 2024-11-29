@@ -8,6 +8,7 @@ import Introduce from "./Introduce";
 import { usePathname } from "next/navigation";
 import { CiUser, CiShoppingCart, CiHeart, CiSearch } from "react-icons/ci";
 import { useSelector } from "react-redux";
+import ButtonLink from "./ButtonLink";
 
 const navLink = [
   {
@@ -36,15 +37,14 @@ const navIcon = [
   {
     icon: <CiShoppingCart size={sizeIcon} />,
   },
-  {
-    icon: <CiUser size={sizeIcon} />,
-  },
 ];
 
 export default function Header() {
+  const styleIcon =
+    "p-1 transition-colors rounded-full hover:bg-black hover:text-primary-50 hover:cursor-pointer";
   const pathname = usePathname();
   const user = useSelector((state) => state.user);
-  console.log(user)
+  const { username } = user.user;
   return (
     <>
       <Introduce />
@@ -80,13 +80,17 @@ export default function Header() {
           />
           <div className="flex items-center gap-1">
             {navIcon.map((icon, index) => (
-              <span
-                className="p-1 transition-colors rounded-full hover:bg-black hover:text-primary-50 hover:cursor-pointer"
-                key={index}
-              >
+              <span className={`${styleIcon}`} key={index}>
                 {icon.icon}
               </span>
             ))}
+            {username ? (
+              <span className={`${styleIcon}`}>
+                <CiUser size={sizeIcon} />
+              </span>
+            ) : (
+              <ButtonLink link={"/signup"} text={"Sign Up"} />
+            )}
           </div>
         </div>
       </header>
