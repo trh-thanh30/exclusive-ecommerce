@@ -60,7 +60,7 @@ const signin = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const isMatch = await bcryptjs.compare(password, user.password);
+    const isMatch = await bcryptjs.compareSync(password, user.password);
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
     const token = jwt.sign(

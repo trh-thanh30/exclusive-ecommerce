@@ -34,6 +34,7 @@
     - size: string
     - rating: int
     - thumbnail (images): [string]
+    - stock: int
     - created_at: datetime -> ngày tạo
     - update_at: datetime -> ngày sửa
 

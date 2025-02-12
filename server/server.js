@@ -11,6 +11,9 @@ const roleRouters = require("./routers/role.router");
 const userRouters = require("./routers/user.router");
 const gooleRouters = require("./routers/google.router");
 const contactRouters = require("./routers/contact.router");
+const categoryRouters = require("./routers/category.router");
+const productRouters = require("./routers/products.router");
+
 const passport = require("passport");
 
 const app = express();
@@ -46,9 +49,15 @@ app.use("/api/role", roleRouters);
 app.use("/api/user", userRouters);
 /**  GOOGLE ROUTER  **/
 app.use(gooleRouters); // GET -> auth/google
+
 /** CONTACT ROUTER */
 app.use("/api/contact", contactRouters);
 
+/* CATEGORY ROUTER */
+app.use("/api/category", categoryRouters);
+
+/* PRODUCTS ROUTER */
+app.use("/api/product", productRouters);
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI)

@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { CiUser, CiShoppingCart, CiHeart, CiSearch } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import ButtonLink from "./ButtonLink";
+import useGetUserWithGoogle from "../hooks/useGetUserWithGoogle";
 
 const navLink = [
   {
@@ -40,11 +41,13 @@ const navIcon = [
 ];
 
 export default function Header() {
+  const { user: userGoogle } = useGetUserWithGoogle();
   const styleIcon =
     "p-1 transition-colors rounded-full hover:bg-black hover:text-primary-50 hover:cursor-pointer";
   const pathname = usePathname();
   const user = useSelector((state) => state.user);
-  const { username } = user.user;
+  const currentUser = user.user;
+  console.log(currentUser);
   return (
     <>
       <Introduce />
@@ -84,7 +87,7 @@ export default function Header() {
                 {icon.icon}
               </span>
             ))}
-            {username ? (
+            {currentUser.username ? (
               <span className={`${styleIcon}`}>
                 <CiUser size={sizeIcon} />
               </span>
