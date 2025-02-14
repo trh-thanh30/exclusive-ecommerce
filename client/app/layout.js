@@ -1,12 +1,13 @@
 import "./_styles/index.css";
-import { Poppins } from "next/font/google";
-import { Toaster } from "react-hot-toast";
-import Header from "./_components/Header";
-import Footer from "./_components/Footer";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import { ReduxProvider } from "@/redux/provider";
+import Header from "./_components/Header";
+import Footer from "./_components/Footer";
+import ClientProvider from "./_providers/ClientProvider";
+
+import { Poppins } from "next/font/google";
+import { Toaster } from "react-hot-toast";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -29,7 +30,7 @@ export default function RootLayout({ children }) {
         <meta name="description" content={metadata.description} />
       </head>
       <body className={`${poppins.className} bg-primary-100`}>
-        <ReduxProvider>
+        <ClientProvider>
           <Toaster
             position="top-center"
             gutter={12}
@@ -51,7 +52,7 @@ export default function RootLayout({ children }) {
             <main className="w-full mx-auto max-w-7xl">{children}</main>
           </div>
           <Footer />
-        </ReduxProvider>
+        </ClientProvider>
       </body>
     </html>
   );
