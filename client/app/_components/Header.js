@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Logo from "./Logo";
 import Link from "next/link";
 import Input from "./Input";
@@ -8,8 +8,10 @@ import Introduce from "./Introduce";
 import { usePathname } from "next/navigation";
 import { CiUser, CiShoppingCart, CiHeart, CiSearch } from "react-icons/ci";
 import { useSelector } from "react-redux";
+import { AnimatePresence, motion } from "framer-motion";
 import ButtonLink from "./ButtonLink";
 import useGetUserWithGoogle from "../hooks/useGetUserWithGoogle";
+import Dropdown from "./Dropdown";
 
 const navLink = [
   {
@@ -47,7 +49,20 @@ export default function Header() {
   const pathname = usePathname();
   const user = useSelector((state) => state.user);
   const currentUser = user.user;
-  console.log(currentUser);
+  const [dropDown, setDropDown] = useState(false);
+  const dropdownRef = useRef(null);
+  // Hàm xử lý đóng dropdown khi click ra ngoài
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropDown(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
   return (
     <>
       <Introduce />
@@ -88,9 +103,35 @@ export default function Header() {
               </span>
             ))}
             {currentUser.username ? (
-              <span className={`${styleIcon}`}>
-                <CiUser size={sizeIcon} />
-              </span>
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setDropDown((perv) => !perv)}
+                  className={`${styleIcon}`}
+                >
+                  <CiUser size={sizeIcon} />
+                </button>
+                <AnimatePresence>
+                  {dropDown && (
+                    <motion.div
+                      initial={{
+                        scale: 0,
+                        opacity: 0,
+                        transformOrigin: "top right",
+                      }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      exit={{
+                        scale: 0,
+                        opacity: 0,
+                      }}
+                      transition={{ duration: 0.2, ease: "easeOut" }}
+                      className="absolute right-0 mt-2"
+                    >
+                      <Dropdown user={currentUser} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             ) : (
               <ButtonLink link={"/signup"} text={"Sign Up"} />
             )}
