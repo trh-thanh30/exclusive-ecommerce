@@ -41,7 +41,7 @@ const navIcon = [
 ];
 
 export default function Header() {
-  const { user: userGoogle } = useGetUserWithGoogle();
+  // const { user: userGoogle } = useGetUserWithGoogle();
   const styleIcon =
     "p-1 transition-colors rounded-full hover:bg-black hover:text-primary-50 hover:cursor-pointer";
   const pathname = usePathname();
