@@ -1,6 +1,17 @@
 import Link from "next/link";
-import { CiLogout, CiShoppingCart, CiStar, CiNoWaitingSign  } from "react-icons/ci";
+import {
+  CiLogout,
+  CiShoppingCart,
+  CiStar,
+  CiNoWaitingSign,
+  CiUser,
+} from "react-icons/ci";
 const list = [
+  {
+    name: "My Account",
+    icon: <CiUser size={22} />,
+    link: "/account",
+  },
   {
     name: "My Order",
     icon: <CiShoppingCart size={22} />,
