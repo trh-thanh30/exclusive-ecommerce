@@ -198,6 +198,15 @@ const updateUser = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
+const logout = async (req, res) => {
+  try {
+    res.clearCookie("access_token");
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   signin,
   signup,
@@ -205,4 +214,5 @@ module.exports = {
   deleteUser,
   deleteUserByAdmin,
   updateUser,
+  logout,
 };

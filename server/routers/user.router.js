@@ -6,6 +6,7 @@ const {
   deleteUser,
   deleteUserByAdmin,
   updateUser,
+  logout,
 } = require("../controllers/user.controllers");
 const verifyToken = require("../middleware/verifyToken");
 const cloudinaryFileUploader = require("../middleware/uploadImage");
@@ -16,6 +17,7 @@ router.get("/get-information", verifyToken, getInformation);
 /** POST */
 router.post("/signup", signup);
 router.post("/signin", signin);
+router.post("/logout", logout);
 /** PUT */
 router.put(
   "/update-user",
