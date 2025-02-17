@@ -129,12 +129,39 @@ const deleteUserByAdmin = async (req, res) => {
 };
 const updateUser = async (req, res) => {
   const { id } = req.user;
-  if (!id) {
-    return res.status(404).json({ message: "User not found" });
-  }
-  const { username, email, firstname, lastname, address, phone_number } =
-    req.body;
+
   try {
+    const userInfo = await User.findById(id);
+    if (!userInfo) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const {
+      username,
+      email,
+      firstname,
+      lastname,
+      address,
+      phone_number,
+      oldpassword,
+      newpassword,
+      confirmPassword,
+    } = req.body;
+
+    // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới
+    if (newpassword && newpassword !== confirmPassword) {
+      return res
+        .status(400)
+        .json({ message: "New password and confirm password do not match" });
+    }
+
+    // Kiểm tra nếu mật khẩu mới thì cần có mật khẩu cũ
+    if (newpassword && !oldpassword) {
+      return res
+        .status(400)
+        .json({ message: "Please provide your current password" });
+    }
+
     let userUpdate = {
       username,
       email,
@@ -143,14 +170,29 @@ const updateUser = async (req, res) => {
       address,
       phone_number,
     };
+
+    // Nếu có mật khẩu mới, kiểm tra và thay đổi mật khẩu
+    if (oldpassword && newpassword) {
+      const isMatch = await bcryptjs.compare(oldpassword, userInfo.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Incorrect current password" });
+      }
+
+      // Băm mật khẩu mới và thêm vào userUpdate
+      userUpdate.password = await bcryptjs.hash(newpassword, 10);
+
+      // Xóa token khi user đổi mật khẩu
+      res.clearCookie("access_token");
+    }
+
+    // Cập nhật avatar nếu có
     if (req.file) {
       userUpdate.avatar = req.file.path;
     }
 
-    console.log(req.file);
+    // Cập nhật người dùng
     const user = await User.findByIdAndUpdate(id, userUpdate, { new: true });
     return res.status(200).json(user);
-    console.log(user);
   } catch (error) {
     console.log(error);
     return res.status(400).json({ message: error.message });
