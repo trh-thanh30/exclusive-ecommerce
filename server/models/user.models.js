@@ -1,6 +1,16 @@
 const mongoose = require("mongoose");
 const userSchema = new mongoose.Schema(
   {
+    firstname: {
+      type: String,
+      maxlength: [25, "Your first name must be at most 25 characters"],
+      minlength: [1, "Your firt name must be at least 1 character"],
+    },
+    lastname: {
+      type: String,
+      maxlength: [25, "Your last name must be at most 25 characters"],
+      minlength: [1, "Your last name must be at least 1 character"],
+    },
     username: {
       type: String,
       required: true,
@@ -26,7 +36,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     },
-
     address: {
       type: String,
       required: false,

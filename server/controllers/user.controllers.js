@@ -128,13 +128,31 @@ const deleteUserByAdmin = async (req, res) => {
   }
 };
 const updateUser = async (req, res) => {
+  const { id } = req.user;
+  if (!id) {
+    return res.status(404).json({ message: "User not found" });
+  }
+  const { username, email, firstname, lastname, address, phone_number } =
+    req.body;
   try {
-    const { id } = req.user;
-    const user = await User.findById(id);
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
+    let userUpdate = {
+      username,
+      email,
+      firstname,
+      lastname,
+      address,
+      phone_number,
+    };
+    if (req.file) {
+      userUpdate.avatar = req.file.path;
     }
+
+    console.log(req.file);
+    const user = await User.findByIdAndUpdate(id, userUpdate, { new: true });
+    return res.status(200).json(user);
+    console.log(user);
   } catch (error) {
+    console.log(error);
     return res.status(400).json({ message: error.message });
   }
 };
@@ -144,4 +162,5 @@ module.exports = {
   getInformation,
   deleteUser,
   deleteUserByAdmin,
+  updateUser,
 };
