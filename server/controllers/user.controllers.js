@@ -84,15 +84,55 @@ const signin = async (req, res) => {
   }
 };
 
-const getInformation = async (req, res) => {
+const getUser = async (req, res) => {
   try {
-    const { id } = req.user;
+    const { role_name } = req.user;
+    if (role_name !== "admin") {
+      return res
+        .status(401)
+        .json({ message: "Yot are not allowed to view!!!" });
+    }
+    let { page, limit, search } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
+    const skip = (page - 1) * limit;
+    let query = {};
+    if (search) {
+      query = {
+        $or: [
+          { username: new RegExp(search, "i") },
+          { email: new RegExp(search, "i") },
+          { phone_number: new RegExp(search, "i") },
+        ],
+      };
+    }
+    if (role_name === "admin") {
+      const user = await User.find(query).skip(skip).limit(limit);
+      return res.status(200).json({
+        message: "List of all users",
+        data: {
+          users: user,
+          pagination: {
+            currentPage: page,
+            totalPages: Math.ceil((await User.countDocuments(query)) / limit),
+            totalUsers: await User.countDocuments(query),
+            pageSize: limit,
+          },
+        },
+      });
+    }
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+const getUserByID = async (req, res) => {
+  try {
+    const { id } = req.params;
     const user = await User.findById(id);
     if (!user) {
-      return res.staus(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "User not found" });
     }
-    const { password, ...rest } = user._doc;
-    return res.status(200).json(rest);
+    return res.status(200).json(user);
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -210,9 +250,10 @@ const logout = async (req, res) => {
 module.exports = {
   signin,
   signup,
-  getInformation,
+  getUser,
   deleteUser,
   deleteUserByAdmin,
   updateUser,
   logout,
+  getUserByID,
 };

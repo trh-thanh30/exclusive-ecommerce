@@ -2,18 +2,20 @@ const express = require("express");
 const {
   signup,
   signin,
-  getInformation,
   deleteUser,
   deleteUserByAdmin,
   updateUser,
   logout,
+  getUser,
+  getUserByID,
 } = require("../controllers/user.controllers");
 const verifyToken = require("../middleware/verifyToken");
 const cloudinaryFileUploader = require("../middleware/uploadImage");
 const router = express.Router();
 
 /** GET */
-router.get("/get-information", verifyToken, getInformation);
+router.get("/get-user", verifyToken, getUser);
+router.get("/get-user/:id", verifyToken, getUserByID);
 /** POST */
 router.post("/signup", signup);
 router.post("/signin", signin);
