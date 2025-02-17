@@ -8,6 +8,8 @@ const {
   logout,
   getUser,
   getUserByID,
+  blockedUser,
+  unblockedUser,
 } = require("../controllers/user.controllers");
 const verifyToken = require("../middleware/verifyToken");
 const cloudinaryFileUploader = require("../middleware/uploadImage");
@@ -27,6 +29,8 @@ router.put(
   cloudinaryFileUploader.single("avatar"),
   updateUser
 );
+router.put("/blocked-user/:id", verifyToken, blockedUser);
+router.put("/unblocked-user/:id", verifyToken, unblockedUser);
 /** DELETE */
 router.delete("/delete-user", verifyToken, deleteUser);
 router.delete("/deleteUserByAdmin", verifyToken, deleteUserByAdmin);

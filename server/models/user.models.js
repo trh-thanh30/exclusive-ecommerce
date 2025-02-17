@@ -48,9 +48,9 @@ const userSchema = new mongoose.Schema(
         "Invalid phone number format",
       ],
     },
-    is_active: {
+    is_blocked: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     role_id: {
       type: mongoose.Schema.Types.ObjectId,

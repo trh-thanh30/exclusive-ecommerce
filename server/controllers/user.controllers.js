@@ -247,6 +247,54 @@ const logout = async (req, res) => {
   }
 };
 
+const blockedUser = async (req, res) => {
+  try {
+    const { role_name } = req.user;
+    if (role_name !== "admin") {
+      return res
+        .status(401)
+        .json({ message: "You are not allowed to block users!!!" });
+    }
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+    const blockedUser = await User.findByIdAndUpdate(
+      id,
+      {
+        $set: { is_blocked: true },
+      },
+      { new: true }
+    );
+    return res.status(200).json({ message: "User blocked successfully!!!" });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+
+const unblockedUser = async (req, res) => {
+  try {
+    const { role_name } = req.user;
+    if (role_name !== "admin") {
+      return res
+        .status(401)
+        .json({ message: "You are not allowed to unblock users!!!" });
+    }
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "User ID is required" });
+    }
+    const unblockedUser = await User.findByIdAndUpdate(
+      id,
+      { $set: { is_blocked: false } },
+      { new: true }
+    );
+    return res.status(200).json({ message: "User unblocked successfully!!!" });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+
 module.exports = {
   signin,
   signup,
@@ -256,4 +304,6 @@ module.exports = {
   updateUser,
   logout,
   getUserByID,
+  blockedUser,
+  unblockedUser,
 };
