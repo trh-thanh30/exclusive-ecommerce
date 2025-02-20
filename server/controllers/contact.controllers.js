@@ -27,6 +27,60 @@ const createContact = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
-const getAllContacts = async (req, res) => {};
-const getContact = async (req, res) => {};
+const getAllContacts = async (req, res) => {
+  try {
+    const { role_name } = req.user;
+    if (role_name !== "admin")
+      return res
+        .status(403)
+        .json({ message: "You are not allowed to doing this!!!" });
+
+    let { limit, page, search } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 5;
+    const skip = (page - 1) * limit;
+    let query = {};
+    if (search) {
+      query = {
+        $or: [
+          { subject_name: new RegExp(search, "i") },
+          { username: new RegExp(search, "i") },
+          { email: new RegExp(search, "i") },
+          { note: new RegExp(search, "i") },
+        ],
+      };
+    }
+    const contacts = await Contact.find(query).skip(skip).limit(limit);
+    return res.status(200).json({
+      message: "List of all contacts",
+      contacts,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil((await Contact.countDocuments(query)) / limit),
+        totalContacts: await Contact.countDocuments(query),
+        pageSize: limit,
+      },
+    });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+const getContact = async (req, res) => {
+  try {
+    const { role_name } = req.user;
+    if (role_name !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "You are not allowed to doing this!!!" });
+    }
+    const { id } = req.params;
+    const contact = await Contact.findById(id);
+    if (!contact) {
+      return res.status(404).json({ message: "Contact not found" });
+    }
+    return res.status(200).json(contact);
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
 module.exports = { createContact, getAllContacts, getContact };

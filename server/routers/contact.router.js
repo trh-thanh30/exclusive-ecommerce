@@ -9,4 +9,5 @@ router.post("/create-contact", verifyToken, createContact);
 // GET
 router.get("/", verifyToken, getAllContacts);
 router.get("/:id", verifyToken, getContact);
+// DELETE
 module.exports = router;
