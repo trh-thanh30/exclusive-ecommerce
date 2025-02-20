@@ -13,6 +13,7 @@ const gooleRouters = require("./routers/google.router");
 const contactRouters = require("./routers/contact.router");
 const categoryRouters = require("./routers/category.router");
 const productRouters = require("./routers/products.router");
+const blogRouters = require("./routers/blog.router");
 
 const passport = require("passport");
 
@@ -58,6 +59,9 @@ app.use("/api/category", categoryRouters);
 
 /* PRODUCTS ROUTER */
 app.use("/api/product", productRouters);
+
+/* BLOG ROUTER */
+app.use("/api/blog", blogRouters)
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI)
