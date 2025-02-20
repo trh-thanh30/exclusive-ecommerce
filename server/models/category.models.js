@@ -2,10 +2,11 @@ const { default: mongoose } = require("mongoose");
 
 const categorySchema = new mongoose.Schema(
   {
-    titel: {
+    title: {
       type: String,
-      require: true,
-      unique: true,
+      require: [true, "Please enter a category title"],
+      unique: [true, "Category already exists"],
+      index: true,
     },
   },
   {

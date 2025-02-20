@@ -305,5 +305,5 @@ module.exports = {
   logout,
   getUserByID,
   blockedUser,
-  unblockedUser,
+  unblockedUser
 };
