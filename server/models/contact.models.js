@@ -1,23 +1,10 @@
 const mongoose = require("mongoose");
 const contactSchema = new mongoose.Schema(
   {
-    firstname: {
-      type: String,
+    userInformations: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       required: true,
-    },
-    lastname: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      match: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-    },
-    phone_number: {
-      type: String,
-      required: true,
-      match: /^\+?([0-9]{1,3})?[- ]?([0-9]{1,14})$/,
     },
     subject_name: {
       type: String,
