@@ -83,4 +83,20 @@ const getContact = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
-module.exports = { createContact, getAllContacts, getContact };
+const deleteContact = async (req, res) => {
+  try {
+    const { role_name } = req.user;
+    if (role_name !== "admin")
+      return res
+        .status(403)
+        .json({ message: "You are not allowed to delete this contact" });
+    const { id } = req.params;
+    if (!id)
+      return res.status(403).json({ messgae: "Contact ID not provided" });
+    await Contact.findByIdAndDelete(id);
+    return res.status(200).json({ message: "Delete contact successfully" });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+module.exports = { createContact, getAllContacts, getContact, deleteContact };
