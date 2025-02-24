@@ -108,16 +108,27 @@ const updateContact = async (req, res) => {
         .json({ message: "You are not allowed to update this contact" });
     }
     const { id } = req.params;
-    const contact = Contact.findById(id);
+    const contact = await Contact.findById(id);
     if (!contact) return res.status(403).json({ messgae: "Contact not found" });
     if (!id)
       return res.status(403).json({ messgae: "Contact ID not provided" });
     const { note, status, subject_name } = req.body;
-    if(note) contact.note = note;
-    if(status) contact.status = status;
-    if(subject_name) contact.subject_name = subject_name;
+    const ALLOWED_STATUS = [
+      "Not processed yet",
+      "Processing",
+      "Completed",
+      "Rejected",
+    ];
+    if (status && !ALLOWED_STATUS.includes(status)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+    if (note) contact.note = note;
+    if (status) contact.status = status;
+    if (subject_name) contact.subject_name = subject_name;
     await contact.save();
-    return res.status(200).json({ message: "Contact updated successfully", contact });
+    return res
+      .status(200)
+      .json({ message: "Contact updated successfully", contact });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

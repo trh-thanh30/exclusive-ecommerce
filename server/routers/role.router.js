@@ -1,9 +1,11 @@
-const express = require('express');
-const createRole = require('../controllers/role.controllers');
+const express = require("express");
+const createRole = require("../controllers/role.controllers");
+const verifyToken = require("../middleware/verifyToken");
 const router = express.Router();
 
 /**POST */
-// Create a new role
-router.post('/', createRole)
-
-module.exports = router
+router.post("/", verifyToken, createRole);
+// GET
+// PUT
+// DELETE
+module.exports = router;
