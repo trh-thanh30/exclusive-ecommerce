@@ -99,4 +99,33 @@ const deleteContact = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
-module.exports = { createContact, getAllContacts, getContact, deleteContact };
+const updateContact = async (req, res) => {
+  try {
+    const { role_name } = req.user;
+    if (role_name !== "admin") {
+      return res
+        .status(403)
+        .json({ message: "You are not allowed to update this contact" });
+    }
+    const { id } = req.params;
+    const contact = Contact.findById(id);
+    if (!contact) return res.status(403).json({ messgae: "Contact not found" });
+    if (!id)
+      return res.status(403).json({ messgae: "Contact ID not provided" });
+    const { note, status, subject_name } = req.body;
+    if(note) contact.note = note;
+    if(status) contact.status = status;
+    if(subject_name) contact.subject_name = subject_name;
+    await contact.save();
+    return res.status(200).json({ message: "Contact updated successfully", contact });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+module.exports = {
+  createContact,
+  getAllContacts,
+  getContact,
+  deleteContact,
+  updateContact,
+};
