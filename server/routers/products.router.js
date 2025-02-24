@@ -6,10 +6,17 @@ const {
   updateProduct,
   deleteProduct,
 } = require("../controllers/products.controllers");
+const verifyToken = require("../middleware/verifyToken");
+const cloudinaryFileUploader = require("../middleware/uploadImage");
 const router = express.Router();
-router.post("/", createProducts);
+router.post(
+  "/create-product",
+  verifyToken,
+  cloudinaryFileUploader.array("images", 10),
+  createProducts
+);
 router.get("/", getAllProducts);
 router.get("/:id", getProduct);
-router.put("/:id", updateProduct);
-router.delete("/:id", deleteProduct);
+router.put("/:id", verifyToken, updateProduct);
+router.delete("/:id", verifyToken, deleteProduct);
 module.exports = router;

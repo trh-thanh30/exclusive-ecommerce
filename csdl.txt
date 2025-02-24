@@ -30,8 +30,6 @@
     - title: string
     - description: string
     - price: float
-    - discount: float
-    - size: string
     - rating: int
     - thumbnail (images): [string]
     - stock: int
