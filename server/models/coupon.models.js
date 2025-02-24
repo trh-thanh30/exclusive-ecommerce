@@ -21,3 +21,5 @@ const couponSchema = new mongoose.Schema({
     max: 100,
   },
 });
+const Coupon = mongoose.model("Coupon", couponSchema);
+module.exports = Coupon;
