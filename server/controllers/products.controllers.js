@@ -66,7 +66,7 @@ const getAllProducts = async (req, res) => {
   try {
     // Filetring
     const queryObject = { ...req.query };
-    const excludeFields = ["page", "sort", "limit", "order"];
+    const excludeFields = ["page", "sort", "limit", "order", "fields", "search"];
     excludeFields.forEach((field) => delete queryObject[field]);
     let queryString = JSON.stringify(queryObject);
     queryString = queryString.replace(
@@ -89,10 +89,22 @@ const getAllProducts = async (req, res) => {
     } else {
       query = query.select("-__v");
     }
-    // Pagination
-    let { limit, page } = req.query;
+    // Pagination & Search
+    let { limit, page, search } = req.query;
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 10;
+    if (search) {
+      query = query.find({
+        $or: [
+          { title: new RegExp(search, "i") },
+          { description: new RegExp(search, "i") },
+          { category: new RegExp(search, "i") },
+          { brand: new RegExp(search, "i") },
+          { color: new RegExp(search, "i") },
+          { size: new RegExp(search, "i") },
+        ],
+      });
+    }
     const skip = (page - 1) * limit;
     const products = await query.skip(skip).limit(limit);
     const totalProducts = await Product.countDocuments(query._conditions);

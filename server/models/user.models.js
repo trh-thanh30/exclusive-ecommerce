@@ -64,6 +64,12 @@ const userSchema = new mongoose.Schema(
     googleId: {
       type: String,
     },
+    wishList: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Wishlists",
+      },
+    ],
   },
   { timestamps: true }
 );
