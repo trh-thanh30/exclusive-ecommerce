@@ -66,7 +66,14 @@ const getAllProducts = async (req, res) => {
   try {
     // Filetring
     const queryObject = { ...req.query };
-    const excludeFields = ["page", "sort", "limit", "order", "fields", "search"];
+    const excludeFields = [
+      "page",
+      "sort",
+      "limit",
+      "order",
+      "fields",
+      "search",
+    ];
     excludeFields.forEach((field) => delete queryObject[field]);
     let queryString = JSON.stringify(queryObject);
     queryString = queryString.replace(
@@ -179,10 +186,76 @@ const deleteProduct = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
+const rating = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { star, comment, productId } = req.body;
+    const product = await Product.findById(productId);
+    let alreadyRating = product.ratings.find(
+      (userId) => userId.postedBy.toString() === id.toString()
+    );
+    if (alreadyRating) {
+      await Product.updateOne(
+        {
+          ratings: {
+            $elemMatch: alreadyRating,
+          },
+        },
+        {
+          $set: {
+            "ratings.$.star": star,
+            "ratings.$.comment": comment,
+          },
+        },
+        {
+          new: true,
+        }
+      );
+    } else {
+      await Product.findByIdAndUpdate(
+        productId,
+        {
+          $push: {
+            ratings: {
+              star: star,
+              comment: comment,
+              postedBy: id,
+            },
+          },
+        },
+        {
+          new: true,
+        }
+      );
+    }
+    const getAllRatings = await Product.findById(productId);
+    let totalRatings = getAllRatings.ratings.length;
+    console.log(totalRatings);
+    let sumRatings = getAllRatings.ratings
+      .map((item) => item.star)
+      .reduce((a, b) => a + b, 0);
+    console.log(sumRatings);
+    let avgRating = Math.round(sumRatings / totalRatings);
+    let finalProduct = await Product.findByIdAndUpdate(
+      productId,
+      {
+        totalRating: avgRating,
+      },
+      { new: true }
+    );
+    return res.status(200).json({
+      message: "Product rating updated successfully",
+      finalProduct,
+    });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
 module.exports = {
   createProducts,
   getAllProducts,
   getProduct,
   updateProduct,
   deleteProduct,
+  rating,
 };
