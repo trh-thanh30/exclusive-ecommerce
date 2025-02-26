@@ -17,6 +17,7 @@ const blogRouters = require("./routers/blog.router");
 const brandRouters = require("./routers/brand.router");
 const couponRouters = require("./routers/coupon.router");
 const wishlistsRouters = require("./routers/wishlists.router");
+const cartRouters = require("./routers/cart.router");
 
 const passport = require("passport");
 
@@ -74,6 +75,9 @@ app.use("/api/coupon", couponRouters);
 
 /* WISHLISTS ROUTER */
 app.use("/api/wishlists", wishlistsRouters);
+
+/* CART ROUTER */
+app.use("/api/cart", cartRouters);
 // Connect to MongoDB
 mongoose
   .connect(process.env.MONGODB_URI)
