@@ -10,12 +10,14 @@ const {
   getUserByID,
   blockedUser,
   unblockedUser,
+  checkAuth,
 } = require("../controllers/user.controllers");
 const verifyToken = require("../middleware/verifyToken");
 const cloudinaryFileUploader = require("../middleware/uploadImage");
 const router = express.Router();
 
 /** GET */
+router.get("/check-auth", checkAuth);
 router.get("/get-user", verifyToken, getUser);
 router.get("/get-user/:id", verifyToken, getUserByID);
 /** POST */

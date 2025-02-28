@@ -7,17 +7,16 @@ import {
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { SIGNIN_ENDPOINT } from "../constants/api";
 
 export default function useSignin() {
-  // const [isLoading, setIsLoading] = useState(false);
-  // const [error, setError] = useState(null);
   const { loading, error } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const router = useRouter();
   const signin = async (userData) => {
     dispatch(signinStart());
     try {
-      const res = await fetch("http://localhost:8000/api/user/signin", {
+      const res = await fetch(SIGNIN_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -27,15 +26,16 @@ export default function useSignin() {
       });
       const data = await res.json();
       if (!res.ok) {
-        toast.error(data.message);
         dispatch(signinFailure(data.message));
-      } else {
-        dispatch(signinSuccess(data.user));
+        throw new Error(data.message);
+      }
+      if (res.ok) {
+        dispatch(signinSuccess(data));
+        toast.success("Sign in successfully");
         router.push("/");
-        toast.success(data.message);
       }
     } catch (error) {
-      setError(error.message);
+      dispatch(signinFailure(error.message));
       toast.error(error.message);
     }
   };

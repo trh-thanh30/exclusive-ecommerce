@@ -6,6 +6,8 @@ import {
   CiNoWaitingSign,
   CiUser,
 } from "react-icons/ci";
+import useSignOut from "../hooks/useSignOut";
+import SpinnerMini from "./SpinnerMini";
 const list = [
   {
     name: "My Account",
@@ -29,9 +31,10 @@ const list = [
   },
 ];
 export default function Dropdown({ user }) {
-  const { avatar, email, role_name, username } = user;
+  const { avatar, email, username } = user;
+  const { loading, signout } = useSignOut();
   return (
-    <section className="p-4 border rounded-md shadow-md bg-slate-50 border-slate-50">
+    <section className="z-50 p-4 border rounded-md shadow-md bg-slate-50 border-slate-50">
       <div className="">
         <div className="flex flex-col items-center gap-1">
           <img className="rounded-full w-14 h-14" src={avatar} alt={username} />
@@ -42,6 +45,7 @@ export default function Dropdown({ user }) {
         <div className="flex flex-col gap-1">
           {list.map((item) => (
             <Link
+              key={item.name}
               href={item.link}
               className="flex items-center gap-3 px-2 py-1 transition-colors rounded-sm hover:bg-slate-950 hover:text-slate-50"
             >
@@ -51,15 +55,18 @@ export default function Dropdown({ user }) {
               </span>
             </Link>
           ))}
-          <Link
+          <span
             href={"/#"}
-            className="flex items-center gap-3 px-2 py-1 transition-colors rounded-sm hover:bg-red-600 hover:text-slate-50"
+            onClick={signout}
+            className="flex items-center gap-3 px-2 py-1 transition-colors rounded-sm cursor-pointer hover:text-red-500 hover:bg-red-50"
           >
             <span>
               <CiLogout size={22} />
             </span>
-            <span className="text-sm text-inherit ">Logout</span>
-          </Link>
+            <span className="text-sm text-inherit ">
+              {loading ? <SpinnerMini/> : "Sign Out"}
+            </span>
+          </span>
         </div>
       </div>
     </section>

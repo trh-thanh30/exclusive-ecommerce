@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import toast from "react-hot-toast";
+import { SIGNUP_ENDPOINT } from "../constants/api";
 
 export default function useSignup() {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,7 +12,7 @@ export default function useSignup() {
     setIsLoading(true);
     setError(null);
     try {
-      const res = await fetch("http://localhost:8000/api/user/signup", {
+      const res = await fetch(SIGNUP_ENDPOINT, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

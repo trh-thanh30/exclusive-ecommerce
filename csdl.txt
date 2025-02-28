@@ -101,6 +101,9 @@
 8. Bảng quản lý số tiền giao hàng -> Shipping
     - id: int -> random (trường khóa chính)
     - name: string
+    - userId
+    - orderId
+    
     - price_ship: int
     - created_at: datetime -> ngày tạo
     - update_at: datetime -> ngày sửa

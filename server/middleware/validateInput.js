@@ -1,14 +1,15 @@
 const validateSignupInput = (data) => {
   const { username, email, password } = data;
-  if (!username) return "Username is required";
-  if (!email) return "Email is required";
-  if (!password) return "Password is required";
+  if(!username || !email || !password) {
+    return "All fields are required";
+  }
   return null; // Không có lỗi
 };
 const validateSigninInput = (data) => {
   const { email, password } = data;
-  if (!email) return "Email is required";
-  if (!password) return "Password is required";
+  if(!email ||!password) {
+    return "All fields are required";
+  }
   return null;
 };
 

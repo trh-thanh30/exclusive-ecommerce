@@ -102,7 +102,7 @@ export default function Header() {
                 {icon.icon}
               </span>
             ))}
-            {currentUser.username ? (
+            {currentUser?.user ? (
               <div className="relative" ref={dropdownRef}>
                 <button
                   type="button"
@@ -127,7 +127,7 @@ export default function Header() {
                       transition={{ duration: 0.2, ease: "easeOut" }}
                       className="absolute right-0 mt-2"
                     >
-                      <Dropdown user={currentUser} />
+                      <Dropdown user={currentUser.user} />
                     </motion.div>
                   )}
                 </AnimatePresence>
