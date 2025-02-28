@@ -1,7 +1,7 @@
 import React from "react";
-import Breadcrumb from "../_components/Breadcrumb";
+import Breadcrumb from "../../_components/Breadcrumb";
 import { FiPhone, FiMail } from "react-icons/fi";
-import Input from "../_components/Input";
+import Input from "../../_components/Input";
 export const metadata = {
   title: "Contact",
   description: "Contact us for more information",

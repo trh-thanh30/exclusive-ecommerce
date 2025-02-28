@@ -12,6 +12,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import ButtonLink from "./ButtonLink";
 import useGetUserWithGoogle from "../hooks/useGetUserWithGoogle";
 import Dropdown from "./Dropdown";
+import useCheckAuth from "../hooks/useCheckAuth";
 
 const navLink = [
   {
@@ -63,6 +64,8 @@ export default function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  const isAuthenticated = useCheckAuth();
+  console.log(isAuthenticated ? "Da dang nhap" : "Chua dang nhap");
   return (
     <>
       <Introduce />

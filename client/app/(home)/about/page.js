@@ -1,5 +1,5 @@
 import React from "react";
-import Breadcrumb from "../_components/Breadcrumb";
+import Breadcrumb from "../../_components/Breadcrumb";
 import Image from "next/image";
 import AboutImg1 from "@/public/about-img1.png";
 
@@ -13,7 +13,7 @@ import {
 import { SlEarphonesAlt } from "react-icons/sl";
 import { GrStatusGood } from "react-icons/gr";
 
-import Oursteam from "../_components/Oursteam";
+import Oursteam from "../../_components/Oursteam";
 
 export const metadata = {
   title: "About",

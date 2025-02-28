@@ -1,18 +1,17 @@
 "use client";
-import { CiLock, CiMail } from "react-icons/ci";
-import React from "react";
+import { CiLock, CiMail, CiUser } from "react-icons/ci";
 import Link from "next/link";
+import Logo from "../../_components/Logo";
+import Input from "../../_components/Input";
+import ButtonIcon from "../../_components/ButtonIcon";
+import Separate from "../../_components/Separate";
+import SpinnerMini from "../../_components/SpinnerMini";
+import useSignup from "../../hooks/useSignup";
+import useEyePassword from "../../hooks/useEyePassword";
+import ImageLeftForm from "../../_components/ImageLeftForm";
+import useSignInWithGoogle from "../../hooks/useSignInWithGoogle";
 
-import Input from "../_components/Input";
-import ButtonIcon from "../_components/ButtonIcon";
-import Separate from "../_components/Separate";
-import ImageLeftForm from "../_components/ImageLeftForm";
-import useEyePassword from "../hooks/useEyePassword";
-import useSignin from "../hooks/useSignin";
-import SpinnerMini from "../_components/SpinnerMini";
-import Logo from "../_components/Logo";
-
-const iconGoogle = (
+const iconGooogle = (
   <svg
     width="24"
     height="24"
@@ -48,17 +47,22 @@ const iconGoogle = (
 
 export default function Page() {
   const sizeIcon = 22;
+  const { isLoading, signup } = useSignup();
   const { password, setPassword, openPassword, eyePassword } = useEyePassword();
-  const { signin, loading } = useSignin();
+  const { signinWithGoogle } = useSignInWithGoogle();
+
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
+    // Chuyển đổi FormData thành Object
     const result = {
+      username: formData.get("username"),
       email: formData.get("email"),
       password: formData.get("password"),
     };
-    await signin(result);
+    await signup(result);
   };
+
   return (
     <div className="flex items-center justify-center">
       <div className="flex items-center w-full gap-12">
@@ -67,25 +71,35 @@ export default function Page() {
         {/* Right Side */}
         <div className="flex flex-col items-center justify-center w-1/2 gap-4 p-4 bg-white">
           <Logo classname={"mt-4 mb-6"} />
-          <h1 className="text-3xl font-medium">Hello Again!</h1>
+          <h1 className="text-3xl font-medium">Sign Up</h1>
           <p className="text-sm font-medium text-center text-primary-400">
-            Welcome back to sign in. As a returning customer, you have access to
-            your previously saved all information.
+            Let’s create your account and Shop like a pro and save money.
           </p>
+
           <form onSubmit={onSubmit} className="flex flex-col gap-6 mt-6">
             <Input
+              id={"username"}
+              name={"username"}
+              type={"text"}
+              placeholder={"Please enter your user name"}
+              disabled={isLoading}
+              icon={<CiUser size={sizeIcon} />}
+            />
+            <Input
+              id={"email"}
               name={"email"}
-              disabled={loading}
               type={"email"}
+              disabled={isLoading}
               placeholder={"Please enter your email"}
               icon={<CiMail size={sizeIcon} />}
             />
             <Input
+              id={"password"}
               name={"password"}
-              placeholder={"Please enter your password"}
-              disabled={loading}
+              disabled={isLoading}
               onChange={(e) => setPassword(e.target.value)}
               type={openPassword ? "text" : "password"}
+              placeholder={"Please enter your password"}
               icon={
                 <div className="flex items-center gap-3">
                   {password ? eyePassword : null}
@@ -93,27 +107,28 @@ export default function Page() {
                 </div>
               }
             />
+
             <div className="mt-6">
               <ButtonIcon
+                disabled={isLoading}
                 type={"submit"}
-                disabled={loading}
-                text={loading ? <SpinnerMini /> : "Sign In"}
-                className={`text-primary-800 border-primary-400 hover:bg-primary-800 hover:border-primary-800 hover:text-white`}
+                text={isLoading ? <SpinnerMini /> : "Sign Up"}
+                className={` text-primary-800 border-primary-400 hover:bg-primary-800 hover:border-primary-800 hover:text-white`}
               />
-
               <Separate />
-
               <ButtonIcon
+                onClick={signinWithGoogle}
                 type={"button"}
                 text={"Sign In with Google"}
-                icon={iconGoogle}
+                icon={iconGooogle}
               />
             </div>
           </form>
+
           <div className="flex items-center gap-1 mt-6 text-sm">
-            <p className=" text-primary-400">Dont't have an account yet?</p>
-            <Link className="text-primary-800 hover:underline" href={"/signup"}>
-              Sign Up
+            <p className=" text-primary-400">Already have an account?</p>
+            <Link className="text-primary-800 hover:underline" href={"/signin"}>
+              Sign In
             </Link>
           </div>
         </div>

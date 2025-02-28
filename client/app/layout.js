@@ -2,10 +2,7 @@ import "./_styles/index.css";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import Header from "./_components/Header";
-import Footer from "./_components/Footer";
 import ClientProvider from "./_providers/ClientProvider";
-
 import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
@@ -46,12 +43,12 @@ export default function RootLayout({ children }) {
               },
             }}
           />
-          {/* Ẩn Header nếu đang ở trang signin/signup */}
-          <Header />
+
+          {/* <Header /> */}
           <div className="flex-1 px-8 py-8">
             <main className="w-full mx-auto max-w-7xl">{children}</main>
           </div>
-          <Footer />
+          {/* <Footer /> */}
         </ClientProvider>
       </body>
     </html>

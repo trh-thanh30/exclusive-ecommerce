@@ -1,5 +1,5 @@
 import React from "react";
-import Breadcrumb from "../_components/Breadcrumb";
+import Breadcrumb from "../../_components/Breadcrumb";
 export const metadata = {
   title: "Blog",
   description: "To read and inform about us",
