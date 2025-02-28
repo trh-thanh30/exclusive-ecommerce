@@ -22,7 +22,7 @@ export default function useSignup() {
       const data = await res.json();
       if (!res.ok) {
         toast.error(data.message);
-        console.log(error);
+        setError(data.message);
       } else {
         toast.success(data.message);
         router.push("/signin");

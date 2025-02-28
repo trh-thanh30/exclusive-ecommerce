@@ -10,6 +10,7 @@ import useSignup from "../../hooks/useSignup";
 import useEyePassword from "../../hooks/useEyePassword";
 import ImageLeftForm from "../../_components/ImageLeftForm";
 import useSignInWithGoogle from "../../hooks/useSignInWithGoogle";
+import { useState } from "react";
 
 const iconGooogle = (
   <svg
@@ -46,10 +47,14 @@ const iconGooogle = (
 );
 
 export default function Page() {
-  const sizeIcon = 22;
-  const { isLoading, signup } = useSignup();
+  const [keyPressed, setKeyPressed] = useState({
+    username: false,
+    email: false,
+    password: false,
+  });
+  const { isLoading, signup, error } = useSignup();
   const { password, setPassword, openPassword, eyePassword } = useEyePassword();
-  const { signinWithGoogle } = useSignInWithGoogle();
+  const sizeIcon = 22;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -62,24 +67,44 @@ export default function Page() {
     };
     await signup(result);
   };
+  const errors = {
+    username: error === "Please enter your username",
+    email: error === "Please enter your email",
+    password: error === "Please enter your password",
+  };
+  const keyDown = (e, filed) => {
+    setKeyPressed((prev) => ({ ...prev, [filed]: true }));
+  };
+  const getInputClassName = (field) =>
+    errors[field] && !keyPressed[field]
+      ? `bg-red-50 border border-red-500 placeholder:text-red-500 text-red-400 focus-within:border-red-500`
+      : ``;
 
+  const getIconClassName = (field) =>
+    errors[field] && !keyPressed[field] ? `text-red-500` : ``;
   return (
     <div className="flex items-center justify-center">
       <div className="flex items-center w-full gap-12">
         {/* Left Side */}
         <ImageLeftForm />
         {/* Right Side */}
-        <div className="flex flex-col items-center justify-center w-1/2 gap-4 p-4 bg-white">
-          <Logo classname={"mt-4 mb-6"} />
-          <h1 className="text-3xl font-medium">Sign Up</h1>
-          <p className="text-sm font-medium text-center text-primary-400">
+        <div className="flex flex-col items-center justify-center w-full gap-2 p-4 bg-white md:gap-4 xl:h-screen md:w-1/2">
+          <Logo classname={"md:mt-4 mt-2 mb-4 md:mb-6"} />
+          <h1 className="text-2xl font-medium md:text-3xl">Sign Up</h1>
+          <p className="text-xs font-medium text-center md:text-sm text-primary-400">
             Let’s create your account and Shop like a pro and save money.
           </p>
 
-          <form onSubmit={onSubmit} className="flex flex-col gap-6 mt-6">
+          <form
+            onSubmit={onSubmit}
+            className="flex flex-col gap-4 mt-4 md:mt-6 xl:gap-6"
+          >
             <Input
               id={"username"}
               name={"username"}
+              iconClassName={getIconClassName("username")}
+              className={getInputClassName("username")}
+              onKeyDown={(e) => keyDown(e, "username")}
               type={"text"}
               placeholder={"Please enter your user name"}
               disabled={isLoading}
@@ -89,6 +114,9 @@ export default function Page() {
               id={"email"}
               name={"email"}
               type={"email"}
+              className={getInputClassName("email")}
+              onKeyDown={(e) => keyDown(e, "email")}
+              iconClassName={getIconClassName("email")}
               disabled={isLoading}
               placeholder={"Please enter your email"}
               icon={<CiMail size={sizeIcon} />}
@@ -97,6 +125,9 @@ export default function Page() {
               id={"password"}
               name={"password"}
               disabled={isLoading}
+              className={getInputClassName("password")}
+              onKeyDown={(e) => keyDown(e, "password")}
+              iconClassName={getIconClassName("password")}
               onChange={(e) => setPassword(e.target.value)}
               type={openPassword ? "text" : "password"}
               placeholder={"Please enter your password"}
@@ -108,7 +139,7 @@ export default function Page() {
               }
             />
 
-            <div className="mt-6">
+            <div className="mt-4 md:mt-6">
               <ButtonIcon
                 disabled={isLoading}
                 type={"submit"}
@@ -117,7 +148,7 @@ export default function Page() {
               />
               <Separate />
               <ButtonIcon
-                onClick={signinWithGoogle}
+                // onClick={signinWithGoogle}
                 type={"button"}
                 text={"Sign In with Google"}
                 icon={iconGooogle}
@@ -125,7 +156,7 @@ export default function Page() {
             </div>
           </form>
 
-          <div className="flex items-center gap-1 mt-6 text-sm">
+          <div className="flex items-center gap-1 mt-4 text-sm md:mt-6">
             <p className=" text-primary-400">Already have an account?</p>
             <Link className="text-primary-800 hover:underline" href={"/signin"}>
               Sign In

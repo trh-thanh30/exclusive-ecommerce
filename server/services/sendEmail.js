@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+
 const sendEmailService = async (email) => {
   const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
@@ -14,32 +15,40 @@ const sendEmailService = async (email) => {
     from: '"The Exclusive Team" <no-reply@yourwebsite.com>',
     to: email,
     subject: "🎉 Welcome to The Exclusive Family! 🎉",
-    text: `Hi there!
-  
-  Welcome to The Exclusive! We're thrilled to have you on board. 
-  Get ready to explore a world of exclusive content and opportunities designed just for you.
-  
-  If you have any questions, feel free to reply to this email or visit our support page.
-  
-  Cheers,
-  The Exclusive Team`,
     html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6;">
-          <h2 style="color: #333;">🎉 Welcome to The Exclusive Family! 🎉</h2>
-          <p>Hi there,</p>
-          <p>We're thrilled to have you on board! At <strong>The Exclusive</strong>, we strive to provide top-notch services and unique experiences for our valued members.</p>
-          <p>Here's what you can do next:</p>
-          <ul style="margin: 10px 0; padding: 0 20px; color: #555;">
-            <li>Explore our exclusive offers and services tailored just for you.</li>
-            <li>Connect with like-minded individuals in our growing community.</li>
-            <li>Stay tuned for regular updates and perks!</li>
-          </ul>
-          <p>If you have any questions, feel free to <a href="mailto:support@yourwebsite.com" style="color: #1a73e8;">contact us</a> or visit our <a href="https://yourwebsite.com/support" style="color: #1a73e8;">support page</a>.</p>
-          <p>Cheers,<br><strong>The Exclusive Team</strong></p>
-          <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
-          <p style="font-size: 0.85em; color: #888;">This is an automated email. Please do not reply directly to this email.</p>
+      <div style="max-width: 600px; margin: auto; font-family: Arial, sans-serif; color: #444;">
+        <div style="text-align: center; padding: 20px;">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS0IFDrfAN8n1cIWJRv8b9NA3FdUvhnrJ0o-w&s" alt="The Exclusive Logo" width="120" style="margin-bottom: 10px;">
+          <h2 style="color: #1a73e8;">Welcome to The Exclusive! 🎊</h2>
+          <p style="font-size: 16px;">We’re thrilled to have you on board! 🚀</p>
         </div>
-      `,
+        <div style="padding: 20px; background-color: #f9f9f9; border-radius: 10px;">
+          <p>🔥 <strong>Here’s what you get:</strong></p>
+          <ul style="padding-left: 20px;">
+            <li>🔹 <b>Exclusive offers and premium content</b> tailored just for you.</li>
+            <li>🔹 Connect with a vibrant community of like-minded individuals.</li>
+            <li>🔹 Stay updated with special perks and exciting news!</li>
+          </ul>
+
+          <div style="text-align: center; margin-top: 20px;">
+            <a href="https://yourwebsite.com" style="background-color: #1a73e8; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-size: 16px;">
+              Explore Now 🌟
+            </a>
+          </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+          <p>If you have any questions, feel free to reach out to us:</p>
+          <p>
+            📧 <a href="mailto:ththanh.dhkm17a1hn@sv.gmail.com" style="color: #1a73e8;">support@yourwebsite.com</a> <br>
+            🌍 <a href="https://hi/support" style="color: #1a73e8;">Visit Support Page</a>
+          </p>
+        </div>
+
+        <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
+        <p style="text-align: center; font-size: 12px; color: #888;">🚀 Thanks for joining! Get ready for an amazing experience!</p>
+      </div>
+    `,
   });
 
   return info;

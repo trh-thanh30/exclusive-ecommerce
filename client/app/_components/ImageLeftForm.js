@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function ImageLeftForm() {
   return (
-    <div className="flex flex-col items-center justify-center w-1/2 h-screen gap-10 p-4 ">
+    <div className="flex-col items-center justify-center hidden h-screen gap-10 md:w-1/2 md:flex ">
       <Image
         src={thumb}
         width={500}
