@@ -1,5 +1,6 @@
-import Breadcrumb from "../_components/Breadcrumb";
-import FormAccount from "../_components/FormAccount";
+import { useSelector } from "react-redux";
+import Breadcrumb from "../../_components/Breadcrumb";
+import FormAccount from "../../_components/FormAccount";
 export const metadata = {
   title: "Account",
   description: "Manage your account and more",
@@ -15,6 +16,8 @@ const breadcrumb = [
   },
 ];
 export default function Page() {
+  const { user } = useSelector((state) => state.user);
+  console.log(user.user);
   return (
     <>
       {/* Header */}

@@ -6,8 +6,10 @@ import {
   CiNoWaitingSign,
   CiUser,
 } from "react-icons/ci";
+import { RxDashboard } from "react-icons/rx";
 import useSignOut from "../hooks/useSignOut";
 import SpinnerMini from "./SpinnerMini";
+import OnlyAdminPrivateRoute from "./OnlyAdminPrivateRoute";
 const list = [
   {
     name: "My Account",
@@ -31,7 +33,7 @@ const list = [
   },
 ];
 export default function Dropdown({ user }) {
-  const { avatar, email, username } = user;
+  const { avatar, email, username, role_name } = user;
   const { loading, signout } = useSignOut();
   return (
     <section className="z-50 p-4 border rounded-md shadow-md bg-slate-50 border-slate-50">
@@ -55,6 +57,21 @@ export default function Dropdown({ user }) {
               </span>
             </Link>
           ))}
+          {role_name === "admin" ? (
+            <Link
+              className="flex items-center gap-3 px-2 py-1 transition-colors rounded-sm hover:bg-slate-950 hover:text-slate-50"
+              href={"/dashboard"}
+            >
+              <span>
+                <RxDashboard size={22} />
+              </span>
+              <span className="text-sm text-inherit text-nowrap">
+                Dashboard
+              </span>
+            </Link>
+          ) : (
+            ""
+          )}
           <span
             href={"/#"}
             onClick={signout}
@@ -64,11 +81,12 @@ export default function Dropdown({ user }) {
               <CiLogout size={22} />
             </span>
             <span className="text-sm text-inherit ">
-              {loading ? <SpinnerMini/> : "Sign Out"}
+              {loading ? <SpinnerMini /> : "Sign Out"}
             </span>
           </span>
         </div>
       </div>
+      {/* <OnlyAdminPrivateRoute /> */}
     </section>
   );
 }

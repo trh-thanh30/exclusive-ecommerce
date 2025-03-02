@@ -16,15 +16,17 @@ export default function useCheckAuth() {
         });
         const data = await res.json();
         if (!data.authenticated) {
+          setIsAuthenticated(false);
           dispatch(signoutSuccess());
           await persistor.purge(); // Xoa localStorage cua redux persit
         }
+        setIsAuthenticated(data.authenticated);
       } catch (error) {
         dispatch(signoutSuccess());
-        await persistor.purge(); 
+        await persistor.purge();
       }
     };
     checkAuth();
   }, [dispatch]);
-  return null;
+  return { isAuthenticated };
 }

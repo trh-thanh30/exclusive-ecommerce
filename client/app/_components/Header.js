@@ -64,8 +64,6 @@ export default function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  const isAuthenticated = useCheckAuth();
-  console.log(isAuthenticated ? "Da dang nhap" : "Chua dang nhap");
   return (
     <>
       <Introduce />

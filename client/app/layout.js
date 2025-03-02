@@ -6,6 +6,7 @@ import ClientProvider from "./_providers/ClientProvider";
 import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -46,7 +47,7 @@ export default function RootLayout({ children }) {
 
           {/* <Header /> */}
           <div className="">
-            <main className="w-full mx-auto max-w-7xl">{children}</main>
+            <main className="w-full h-screen mx-auto">{children}</main>
           </div>
           {/* <Footer /> */}
         </ClientProvider>

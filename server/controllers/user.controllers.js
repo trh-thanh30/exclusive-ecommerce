@@ -59,7 +59,7 @@ const signin = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
     if (!user) return res.status(404).json({ message: "User not found" });
-
+    const role = user.role_name;
     const isMatch = await bcryptjs.compareSync(password, user.password);
     if (!isMatch)
       return res.status(400).json({ message: "Invalid credentials" });
@@ -71,6 +71,10 @@ const signin = async (req, res) => {
     const { password: privatePass, ...rest } = user._doc;
     return res
       .cookie("access_token", token, {
+        httpOnly: true,
+        expires: dateToken,
+      })
+      .cookie("role", role, {
         httpOnly: true,
         expires: dateToken,
       })

@@ -108,7 +108,10 @@ export default function FormAccount() {
             </div>
           </div>
           {/* BUTTON */}
-          <div className="flex items-center justify-end mt-6">
+          <div className="flex items-center justify-end gap-4 mt-6">
+            <button className="p-3 text-sm text-red-500 rounded-md bg-red-50 hover:opacity-95">
+              Delete Account
+            </button>
             <button className="p-3 text-sm rounded-md bg-slate-900 text-slate-50 hover:opacity-95">
               Save Changes
             </button>
