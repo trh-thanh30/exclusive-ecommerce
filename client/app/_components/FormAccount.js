@@ -1,11 +1,14 @@
 "use client";
 import React, { useRef } from "react";
+import { useSelector } from "react-redux";
 
 export default function FormAccount() {
   const useImageRef = useRef();
   const handleClickFile = () => {
     useImageRef.current.click();
   };
+  const { user } = useSelector((state) => state.user);
+  
   return (
     <div className="grid grid-cols-[0.5fr_2fr] mt-16">
       {/* left content */}

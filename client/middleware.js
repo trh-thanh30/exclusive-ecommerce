@@ -5,7 +5,6 @@ export default function middleware(request) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get("access_token")?.value;
   const role = request.cookies.get("role")?.value;
-  console.log(role);
   if (pathname.startsWith("/account") && !token) {
     return NextResponse.redirect(new URL("/signin", request.url));
   }

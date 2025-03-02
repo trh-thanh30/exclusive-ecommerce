@@ -6,13 +6,20 @@ import Input from "./Input";
 import Introduce from "./Introduce";
 
 import { usePathname } from "next/navigation";
-import { CiUser, CiShoppingCart, CiHeart, CiSearch } from "react-icons/ci";
+import {
+  CiUser,
+  CiShoppingCart,
+  CiHeart,
+  CiSearch,
+  CiMenuBurger,
+} from "react-icons/ci";
+import { FaBarsStaggered } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 import ButtonLink from "./ButtonLink";
 import useGetUserWithGoogle from "../hooks/useGetUserWithGoogle";
 import Dropdown from "./Dropdown";
-import useCheckAuth from "../hooks/useCheckAuth";
+import RightSidebar from "./RightSidebar";
 
 const navLink = [
   {
@@ -45,12 +52,13 @@ const navIcon = [
 
 export default function Header() {
   // const { user: userGoogle } = useGetUserWithGoogle();
+  const [dropDown, setDropDown] = useState(false);
+  const [openSideBar, setOpenSideBar] = useState(false);
   const styleIcon =
     "p-1 transition-colors rounded-full hover:bg-black hover:text-primary-50 hover:cursor-pointer";
   const pathname = usePathname();
   const user = useSelector((state) => state.user);
   const currentUser = user.user;
-  const [dropDown, setDropDown] = useState(false);
   const dropdownRef = useRef(null);
   // Hàm xử lý đóng dropdown khi click ra ngoài
   useEffect(() => {
@@ -64,13 +72,16 @@ export default function Header() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+  const handleOpenSidebar = () => {
+    setOpenSideBar((sidebar) => !sidebar);
+  };
   return (
     <>
       <Introduce />
-      <header className="flex items-center justify-between px-8 py-5 border-b border-b-primary-300">
-        <Logo />
+      <header className="flex items-center justify-between p-3 py-5 border-b md:px-8 border-b-primary-300 relative">
+        <Logo logoDefault={true} />
 
-        <ul className="flex items-center gap-10 text-base text-primary-800">
+        <ul className="items-center hidden gap-10 text-base md:flex text-primary-800">
           {navLink.map((link, index) => (
             <li key={index} className="py-1 nav-link">
               {" "}
@@ -88,57 +99,84 @@ export default function Header() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-4">
-          <Input
-            icon={
-              <CiSearch
-                className="rounded-full cursor-pointer hover:bg-primary-200"
-                size={sizeIcon}
-              />
-            }
-          />
+        <div className="flex items-center gap-4 ">
+          <div className="hidden xl:block">
+            <Input
+              icon={
+                <CiSearch
+                  className="rounded-full cursor-pointer hover:bg-primary-200"
+                  size={sizeIcon}
+                />
+              }
+            />
+          </div>
+
           <div className="flex items-center gap-1">
-            {navIcon.map((icon, index) => (
-              <span className={`${styleIcon}`} key={index}>
-                {icon.icon}
-              </span>
-            ))}
-            {currentUser?.user ? (
-              <div className="relative" ref={dropdownRef}>
-                <button
-                  type="button"
-                  onClick={() => setDropDown((perv) => !perv)}
-                  className={`${styleIcon}`}
-                >
-                  <CiUser size={sizeIcon} />
-                </button>
-                <AnimatePresence>
-                  {dropDown && (
-                    <motion.div
-                      initial={{
-                        scale: 0,
-                        opacity: 0,
-                        transformOrigin: "top right",
-                      }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      exit={{
-                        scale: 0,
-                        opacity: 0,
-                      }}
-                      transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="absolute right-0 mt-2"
-                    >
-                      <Dropdown user={currentUser.user} />
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            ) : (
-              <ButtonLink link={"/signup"} text={"Sign Up"} />
-            )}
+            <CiSearch className="block xl:hidden" size={sizeIcon} />
+            <div className="flex">
+              {navIcon.map((icon, index) => (
+                <span className={`${styleIcon}`} key={index}>
+                  {icon.icon}
+                </span>
+              ))}
+              {currentUser?.user ? (
+                <div className="relative" ref={dropdownRef}>
+                  <button
+                    type="button"
+                    onClick={() => setDropDown((perv) => !perv)}
+                    className={`${styleIcon}`}
+                  >
+                    <CiUser size={sizeIcon} />
+                  </button>
+                  <AnimatePresence>
+                    {dropDown && (
+                      <motion.div
+                        initial={{
+                          scale: 0,
+                          opacity: 0,
+                          transformOrigin: "top right",
+                        }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        exit={{
+                          scale: 0,
+                          opacity: 0,
+                        }}
+                        transition={{ duration: 0.2, ease: "easeOut" }}
+                        className="absolute right-0 mt-2 z-50"
+                      >
+                        <Dropdown user={currentUser.user} />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <ButtonLink link={"/signup"} text={"Sign Up"} />
+              )}
+            </div>
+            <CiMenuBurger
+              onClick={handleOpenSidebar}
+              size={sizeIcon}
+              className="block md:hidden cursor-pointer"
+            />
           </div>
         </div>
       </header>
+      <AnimatePresence>
+        {openSideBar && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+            className="fixed top-0 right-0 w-64 h-full bg-white shadow-2xl z-50 rounded-l-2xl rounded-bl-2xl block md:hidden"
+          >
+            <RightSidebar
+              navLink={navLink}
+              onClose={() => setOpenSideBar(false)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

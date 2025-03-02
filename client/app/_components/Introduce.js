@@ -14,12 +14,15 @@ const options = [
 
 export default function Introduce() {
   return (
-    <div className="flex items-center justify-between p-4 text-xs text-center bg-black text-primary-50">
-      <div className="flex-1 text-center">
-        <span className="">
+    <div className="flex items-center justify-between p-3 bg-neutral-900 md:p-4 ">
+      <div className="flex-1 text-left md:text-center">
+        <span className="text-xs text-left text-primary-50 md:text-sm ">
           Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!
         </span>{" "}
-        <Link href={"/"} className="hover:underline">
+        <Link
+          href={"/"}
+          className="text-xs hover:underline md:text-sm text-primary-50"
+        >
           Shop Now
         </Link>
       </div>

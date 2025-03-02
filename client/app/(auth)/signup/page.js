@@ -46,11 +46,11 @@ export default function Page() {
   };
   const getInputClassName = (field) =>
     errors[field] && !keyPressed[field]
-      ? `bg-red-50 border border-red-500 placeholder:text-red-500 text-red-400 focus-within:border-red-500`
+      ? `bg-error-50 border border-error-500 placeholder:text-error-500 text-error-400 focus-within:border-error-500`
       : ``;
 
   const getIconClassName = (field) =>
-    errors[field] && !keyPressed[field] ? `text-red-500` : ``;
+    errors[field] && !keyPressed[field] ? `text-error-500` : ``;
   return (
     <div className="flex items-center justify-center">
       <div className="flex items-center w-full gap-12">
