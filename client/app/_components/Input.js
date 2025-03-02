@@ -14,7 +14,7 @@ export default function Input({
   iconClassName,
 }) {
   const inputStyle =
-    "text-sm outline-none w-full pr-12 px-3 py-2 transition-colors border rounded-lg border-primary-400 focus-within:border-primary-800 focus-within:shadow-lg focus-within:shadow-primary-200";
+    "md:text-sm text-xs outline-none w-full pr-12 px-3 py-2 transition-colors border rounded-lg border-primary-400 focus-within:border-primary-800 focus-within:shadow-lg focus-within:shadow-primary-200";
   return (
     <div
       className={`relative flex items-center ${

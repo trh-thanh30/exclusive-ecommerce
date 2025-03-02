@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React from "react";
-
+import { IoCloseOutline } from "react-icons/io5";
+import { sizeIconPrimary } from "../constants/icons";
 const options = [
   {
     name: "English",
@@ -12,7 +13,7 @@ const options = [
   },
 ];
 
-export default function Introduce() {
+export default function Introduce({ setOffOffIntro }) {
   return (
     <div className="flex items-center justify-between p-3 bg-neutral-900 md:p-4 ">
       <div className="flex-1 text-left md:text-center">
@@ -26,16 +27,24 @@ export default function Introduce() {
           Shop Now
         </Link>
       </div>
-      <select
-        className="ml-auto text-xs bg-transparent border-none outline-none cursor-pointer text-primary-50"
-        id=""
-      >
-        {options.map((option, index) => (
-          <option className="bg-black" key={index} value={option.value}>
-            {option.name}
-          </option>
-        ))}
-      </select>
+      <div className="ml-auto flex items-center gap-1">
+        <select
+          className=" text-xs bg-transparent border-none outline-none cursor-pointer text-primary-50"
+          id=""
+        >
+          {options.map((option, index) => (
+            <option className="bg-black" key={index} value={option.value}>
+              {option.name}
+            </option>
+          ))}
+        </select>
+        <IoCloseOutline
+          onClick={() => setOffOffIntro(true)}
+          color="#fff"
+          size={sizeIconPrimary}
+          cursor={"pointer"}
+        />
+      </div>
     </div>
   );
 }

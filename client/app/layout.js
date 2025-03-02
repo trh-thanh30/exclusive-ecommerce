@@ -46,7 +46,7 @@ export default function RootLayout({ children }) {
           />
 
           {/* <Header /> */}
-          <div className="">
+          <div>
             <main className="w-full h-screen mx-auto">{children}</main>
           </div>
           {/* <Footer /> */}

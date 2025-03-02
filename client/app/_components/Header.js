@@ -54,6 +54,7 @@ export default function Header() {
   // const { user: userGoogle } = useGetUserWithGoogle();
   const [dropDown, setDropDown] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
+  const [offIntro, setOffOffIntro] = useState(false);
   const styleIcon =
     "p-1 transition-colors rounded-full hover:bg-black hover:text-primary-50 hover:cursor-pointer";
   const pathname = usePathname();
@@ -77,7 +78,7 @@ export default function Header() {
   };
   return (
     <>
-      <Introduce />
+      {!offIntro ? <Introduce setOffOffIntro={setOffOffIntro} /> : ""}
       <header className="flex items-center justify-between p-3 py-5 border-b md:px-8 border-b-primary-300 relative">
         <Logo logoDefault={true} />
 

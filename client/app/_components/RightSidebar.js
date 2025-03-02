@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect, useRef } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { CiShoppingCart, CiHeart } from "react-icons/ci";
@@ -8,12 +9,29 @@ import { usePathname } from "next/navigation";
 
 export default function RightSidebar({ onClose, navLink }) {
   const pathname = usePathname();
+  const sidebarRef = useRef(null);
+  // Hàm xử lý đóng dropdown khi click ra ngoài
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        onClose();
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
-    <div className="fixed top-0 right-0 w-80 h-full bg-primary-50 shadow-2xl z-50 transition-transform duration-300 rounded-l-2xl rounded-bl-2xl p-4 block md:hidden">
-      <button className="w-full flex justify-end" onClick={onClose}>
+    <div
+      ref={sidebarRef}
+      className="fixed top-0 right-0 w-72 h-full bg-primary-50 shadow-2xl z-50 transition-transform duration-300 rounded-l-2xl rounded-bl-2xl p-3 block md:hidden overflow-y-scroll"
+    >
+      <button className="w-full flex justify-end py-2" onClick={onClose}>
         <FaArrowRightLong size={sizeIconPrimary} />
       </button>
-      <div className="mt-5 flex flex-col gap-4 text-sm font-medium text-primary-900">
+      <div className="mt-3 flex flex-col gap-4 text-sm font-medium text-primary-900">
         <Link className="flex items-center justify-between " href={"#"}>
           <div className="flex items-center gap-1">
             <CiShoppingCart size={25} />
