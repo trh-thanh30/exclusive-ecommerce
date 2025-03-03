@@ -2,14 +2,20 @@
 import React, { useEffect, useRef } from "react";
 import { FaChevronRight } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
-import { CiShoppingCart, CiHeart } from "react-icons/ci";
+import { CiShoppingCart, CiHeart, CiLogout } from "react-icons/ci";
 import { sizeIconPrimary } from "../constants/icons";
-import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
+import Link from "next/link";
+import useSignOut from "../hooks/useSignOut";
+import SpinnerMini from "./SpinnerMini";
+import ButtonLink from "./ButtonLink";
 
 export default function RightSidebar({ onClose, navLink }) {
   const pathname = usePathname();
   const sidebarRef = useRef(null);
+  const { user } = useSelector((state) => state.user);
+  const { loading, signout } = useSignOut();
   // Hàm xử lý đóng dropdown khi click ra ngoài
   useEffect(() => {
     function handleClickOutside(event) {
@@ -26,12 +32,12 @@ export default function RightSidebar({ onClose, navLink }) {
   return (
     <div
       ref={sidebarRef}
-      className="fixed top-0 right-0 w-72 h-full bg-primary-50 shadow-2xl z-50 transition-transform duration-300 rounded-l-2xl rounded-bl-2xl p-3 block md:hidden overflow-y-scroll"
+      className="fixed top-0 right-0 z-50 block h-full p-3 overflow-y-scroll transition-transform duration-300 shadow-2xl w-72 bg-primary-50 rounded-l-2xl rounded-bl-2xl md:hidden"
     >
-      <button className="w-full flex justify-end py-2" onClick={onClose}>
+      <button className="flex justify-end w-full py-2" onClick={onClose}>
         <FaArrowRightLong size={sizeIconPrimary} />
       </button>
-      <div className="mt-3 flex flex-col gap-4 text-sm font-medium text-primary-900">
+      <div className="flex flex-col gap-4 mt-3 text-sm font-medium text-primary-900">
         <Link className="flex items-center justify-between " href={"#"}>
           <div className="flex items-center gap-1">
             <CiShoppingCart size={25} />
@@ -62,6 +68,25 @@ export default function RightSidebar({ onClose, navLink }) {
           <Link href={"#"}>Baby’s & Toys</Link>
           <Link href={"#"}>Groceries & Pets</Link>
           <Link href={"#"}>Health & Beauty</Link>
+          {user?.user ? (
+            <div
+              onClick={signout}
+              className="flex items-center justify-center gap-1 px-2 py-1 text-xs text-red-500 transition-colors rounded-sm cursor-pointer bg-red-50"
+            >
+              <span>
+                <CiLogout size={20} />
+              </span>
+              <span className="text-sm text-inherit ">
+                {loading ? <SpinnerMini /> : "Sign Out"}
+              </span>
+            </div>
+          ) : (
+            <ButtonLink
+              link={"/signin"}
+              className={"text-center"}
+              text={"Sign In"}
+            />
+          )}
         </ul>
         <hr className="w-full max-w-4xl mx-auto my-1 md:my-5 border-primary-600" />
         {navLink.map((link, index) => (

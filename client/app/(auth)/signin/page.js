@@ -47,8 +47,8 @@ export default function Page() {
         {/* Left Side */}
         <ImageLeftForm />
         {/* Right Side */}
-        <div className="flex flex-col items-center justify-center w-full h-screen gap-2 p-4 bg-white md:gap-4 md:w-1/2">
-          <Logo classname={"md:mt-4 mt-2 mb-4 md:mb-6"} />
+        <div className="flex flex-col items-center justify-center w-full min-h-screen gap-2 p-4 bg-white md:gap-4 md:w-1/2">
+          <Logo logoDefault={true} classname={"md:mt-4 mt-2 mb-4 md:mb-6"} />
           <h1 className="text-2xl font-medium md:text-3xl">Hello Again!</h1>
           <p className="text-xs font-medium text-center md:text-sm text-primary-400">
             Welcome back to sign in. As a returning customer, you have access to

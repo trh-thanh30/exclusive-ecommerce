@@ -1,123 +1,73 @@
-"use client";
-import React, { useRef } from "react";
-import { useSelector } from "react-redux";
+"use client"
+import { useRef } from "react";
 
 export default function FormAccount() {
-  const useImageRef = useRef();
-  const handleClickFile = () => {
-    useImageRef.current.click();
-  };
-  const { user } = useSelector((state) => state.user);
-  
+  const imageRef = useRef();
+  const handleClickFile = () => imageRef.current.click();
+  const warp_content  = "flex flex-col gap-1";
+  const label_style = "md:text-sm text-xs";
+  const input_style = "p-2 border rounded-md md:text-sm text-xs focus-within:border-primary-800 outline-none focus-within:shadow-lg focus-within:shadow-primary-200";
   return (
-    <div className="grid grid-cols-[0.5fr_2fr] mt-16">
-      {/* left content */}
+    <div className="grid grid-cols-1 md:grid-cols-[0.5fr_2fr] md:gap-6 gap-4 md:mt-8 mt-4 md:px-8">
+      {/* Sidebar */}
       <div>
-        <p className="text-base font-medium">Manage My Account</p>
-        <ul className="flex flex-col gap-1 mt-3 ml-4 text-sm text-slate-600">
+        <p className="md:text-base text-sm font-medium">Manage My Account</p>
+        <ul className="flex flex-col gap-1 md:mt-3 mt-2 md:text-sm text-xs text-primary-600">
           <li>My Profile</li>
           <li>Address Book</li>
           <li>My Payment Options</li>
         </ul>
-        <p className="mt-6 text-base font-medium">My Orders</p>
-        <ul className="flex flex-col gap-2 mt-3 ml-4 text-sm text-slate-600">
+        <p className="md:mt-6 mt-4 md:text-base text-sm font-medium">My Orders</p>
+        <ul className="flex flex-col gap-2 md:mt-3 mt-2 md:text-sm text-xs text-primary-600">
           <li>My Returns</li>
           <li>My Cancellations</li>
         </ul>
       </div>
-      {/* right content */}
-      <div className="rounded-md shadow-sm p-9 bg-slate-50">
-        <h2 className="text-xl font-medium">Edit Your Profile</h2>
-        <form action="" className="mt-4">
-          <input type="file" accept="image/*" ref={useImageRef} hidden />
-          <div className="flex items-center justify-center">
+      {/* Form */}
+      <div className="p-4 md:p-9 bg-slate-50 rounded-md shadow-sm">
+        <h2 className="md:text-xl text-base font-medium">Edit Your Profile</h2>
+        <form className="md:mt-4 mt-2">
+          <input type="file" accept="image/*" ref={imageRef} hidden />
+          <div className="flex justify-center">
             <img
               onClick={handleClickFile}
-              className="object-cover w-40 h-40 mb-3 rounded-full cursor-pointer"
+              className="w-32 h-32 md:w-40 md:h-40 rounded-full cursor-pointer"
               src="https://cdn-icons-png.flaticon.com/512/6596/6596121.png"
-              alt=""
+              alt="Profile"
             />
           </div>
-          {/* NAME */}
-          <div className="flex items-center gap-12">
-            <div className="flex flex-col w-full">
-              <label className="mb-2 text-sm" htmlFor="First Name">
-                First Name
-              </label>
-              <input
-                className="w-full p-2 text-sm border rounded-md outline-none focus-within:border-slate-900 text-slate-500"
-                type="text"
-                name="First Name"
-              />
+          {/* Inputs */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:mt-6 mt-4">
+            <div className={warp_content}>
+              <label className={label_style}>First Name</label>
+              <input className={input_style} type="text" />
             </div>
-            <div className="flex flex-col w-full">
-              <label className="mb-2 text-sm" htmlFor="Last Name">
-                Last Name
-              </label>
-              <input
-                className="w-full p-2 text-sm border rounded-md outline-none focus-within:border-slate-900 text-slate-500"
-                type="text"
-                name="Last Name"
-              />
+            <div className={warp_content}>
+              <label className={label_style}>Last Name</label>
+              <input className={input_style}type="text" />
             </div>
           </div>
-          {/* EMAIL AND ADDRESS */}
-          <div className="flex items-center gap-12 mt-6">
-            <div className="flex flex-col w-full">
-              <label className="mb-2 text-sm" htmlFor="First Name">
-                Email
-              </label>
-              <input
-                className="w-full p-2 text-sm border rounded-md outline-none focus-within:border-slate-900 text-slate-500"
-                type="text"
-                name="First Name"
-              />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:mt-6 mt-4">
+            <div className={warp_content}>
+              <label className={label_style}>Email</label>
+              <input className={input_style} type="email" />
             </div>
-            <div className="flex flex-col w-full">
-              <label className="mb-2 text-sm" htmlFor="Last Name">
-                Address
-              </label>
-              <input
-                className="w-full p-2 text-sm border rounded-md outline-none focus-within:border-slate-900 text-slate-500"
-                type="text"
-                name="Last Name"
-              />
+            <div className={warp_content}>
+              <label className={label_style}>Address</label>
+              <input className={input_style} type="text" />
             </div>
           </div>
-          {/* PASSWORD OLD AND NEW */}
-          <div className="flex flex-col mt-6">
-            <label className="mb-2 text-sm" htmlFor="Password Changes">
-              Password Changes
-            </label>
-            <div className="flex flex-col gap-4">
-              <input
-                className="w-full p-2 text-sm border rounded-md outline-none focus-within:border-slate-900 text-slate-500"
-                type="password"
-                placeholder="Current Passwod"
-                name=""
-              />
-              <input
-                className="w-full p-2 text-sm border rounded-md outline-none focus-within:border-slate-900 text-slate-500"
-                type="password"
-                placeholder="New Passwod"
-                name=""
-              />
-              <input
-                className="w-full p-2 text-sm border rounded-md outline-none focus-within:border-slate-900 text-slate-500"
-                type="password"
-                name=""
-                placeholder="Confirm New Passwod"
-              />
-            </div>
+          {/* Passwords */}
+          <div className="flex flex-col md:mt-6 mt-4 gap-4 ">
+            <label className={label_style}>Password Changes</label>
+            <input className={input_style} type="password" placeholder="Current Password" />
+            <input className={input_style} type="password" placeholder="New Password" />
+            <input className={input_style} type="password" placeholder="Confirm New Password" />
           </div>
-          {/* BUTTON */}
-          <div className="flex items-center justify-end gap-4 mt-6">
-            <button className="p-3 text-sm text-red-500 rounded-md bg-red-50 hover:opacity-95">
-              Delete Account
-            </button>
-            <button className="p-3 text-sm rounded-md bg-slate-900 text-slate-50 hover:opacity-95">
-              Save Changes
-            </button>
+          {/* Buttons */}
+          <div className="flex flex-row justify-end gap-4 mt-6">
+            <button className="md:p-3 p-2 text-xs md:text-sm text-error-500 bg-red-50 rounded-md">Delete Account</button>
+            <button className="md:p-3 p-2 text-xs md:text-sm bg-primary-900 text-white rounded-md">Save Changes</button>
           </div>
         </form>
       </div>

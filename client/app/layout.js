@@ -44,12 +44,9 @@ export default function RootLayout({ children }) {
               },
             }}
           />
-
-          {/* <Header /> */}
           <div>
             <main className="w-full h-screen mx-auto">{children}</main>
           </div>
-          {/* <Footer /> */}
         </ClientProvider>
       </body>
     </html>

@@ -18,7 +18,7 @@ export default function Footer() {
           services
         </p>
 
-        <h2 className="mt-3 text-xl font-bold text-center md:mt-5 md:text-3xl">
+        <h2 className="mt-3 text-base font-bold text-center md:mt-5 md:text-3xl">
           Request More Information
         </h2>
         <p className="max-w-lg mx-auto mt-3 text-xs text-center md:mt-5 md:text-sm text-primary-400">

@@ -8,7 +8,7 @@ export default function HomeLayOut({ children }) {
   return (
     <>
       <Header />
-      <div className="flex-1 md:px-8 md:py-8 px-3 py-3 mt-4">
+      <div className="flex-1 px-3 py-3 mt-5 md:px-8 md:py-8 md:mt-8 ">
         <main>{children}</main>
       </div>
       <Footer />

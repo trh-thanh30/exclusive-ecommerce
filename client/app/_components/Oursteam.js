@@ -52,11 +52,11 @@ const oursteam = [
 ];
 export default function Oursteam() {
   return (
-    <ul className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+    <ul className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
       {oursteam.map((team) => (
         <li
           key={team.name}
-          className="flex flex-col items-center gap-2 md:p-6 p-4 transition-transform border rounded-md bg-primary-50 border-primary-200 hover:scale-105 hover:shadow-lg"
+          className="flex flex-col items-center gap-2 p-4 transition-transform border rounded-md md:p-6 bg-primary-50 border-primary-200 hover:scale-105 hover:shadow-lg"
         >
           <Image
             placeholder="blur"
@@ -64,11 +64,11 @@ export default function Oursteam() {
             src={team.image}
             alt={team.name}
           />
-          <h3 className="md:text-lg text-sm font-semibold text-primary-800">
+          <h3 className="text-sm font-semibold md:text-lg text-primary-800">
             {team.name}
           </h3>
           <p className="text-sm text-gray-500">{team.role}</p>
-          <div className="flex gap-4 md:mt-4 mt-2">
+          <div className="flex gap-4 mt-2 md:mt-4">
             {Object.keys(team.iconSocial).map((key) => (
               <Link
                 href={key}

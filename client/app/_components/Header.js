@@ -13,7 +13,6 @@ import {
   CiSearch,
   CiMenuBurger,
 } from "react-icons/ci";
-import { FaBarsStaggered } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { AnimatePresence, motion } from "framer-motion";
 import ButtonLink from "./ButtonLink";
@@ -54,6 +53,7 @@ export default function Header() {
   // const { user: userGoogle } = useGetUserWithGoogle();
   const [dropDown, setDropDown] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
+  const [openSearchInpt, setOpenSearchInpt] = useState(false);
   const [offIntro, setOffOffIntro] = useState(false);
   const styleIcon =
     "p-1 transition-colors rounded-full hover:bg-black hover:text-primary-50 hover:cursor-pointer";
@@ -76,10 +76,13 @@ export default function Header() {
   const handleOpenSidebar = () => {
     setOpenSideBar((sidebar) => !sidebar);
   };
+  const handleOpenSearch = () => {
+    setOpenSearchInpt((search) => !search);
+  };
   return (
     <>
       {!offIntro ? <Introduce setOffOffIntro={setOffOffIntro} /> : ""}
-      <header className="flex items-center justify-between p-3 py-5 border-b md:px-8 border-b-primary-300 relative">
+      <header className="relative flex items-center justify-between p-3 py-5 border-b md:px-8 border-b-primary-300">
         <Logo logoDefault={true} />
 
         <ul className="items-center hidden gap-10 text-base md:flex text-primary-800">
@@ -113,12 +116,16 @@ export default function Header() {
           </div>
 
           <div className="flex items-center gap-1">
-            <CiSearch className="block xl:hidden" size={sizeIcon} />
-            <div className="flex">
+            <div className="flex items-center">
+              <CiSearch
+                onClick={handleOpenSearch}
+                className={`block xl:hidden ${styleIcon}`}
+                size={26}
+              />
               {navIcon.map((icon, index) => (
-                <span className={`${styleIcon}`} key={index}>
+                <button className={`${styleIcon}`} key={index}>
                   {icon.icon}
-                </span>
+                </button>
               ))}
               {currentUser?.user ? (
                 <div className="relative" ref={dropdownRef}>
@@ -143,7 +150,7 @@ export default function Header() {
                           opacity: 0,
                         }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="absolute right-0 mt-2 z-50"
+                        className="absolute right-0 z-50 mt-2"
                       >
                         <Dropdown user={currentUser.user} />
                       </motion.div>
@@ -157,10 +164,36 @@ export default function Header() {
             <CiMenuBurger
               onClick={handleOpenSidebar}
               size={sizeIcon}
-              className="block md:hidden cursor-pointer"
+              className="block cursor-pointer md:hidden"
             />
           </div>
         </div>
+        <AnimatePresence>
+          {openSearchInpt && (
+            <motion.div
+              initial={{ y: "-50%" }}
+              animate={{ y: 0 }}
+              exit={{ y: "-50%" }}
+              transition={{ duration: 0.2, ease: "easeInOut" }}
+              className="absolute left-0 z-50 block w-full top-full md:hidden"
+            >
+              <Input
+                fullWidth={true}
+                placeholder={"Search some things..."}
+                className={
+                  "w-full p-2 outline-none border border-primary-400 text-xs rounded-none "
+                }
+                icon={
+                  <CiSearch
+                    className="rounded-full cursor-pointer hover:bg-primary-200 "
+                    size={sizeIcon}
+                  />
+                }
+                autoFocus
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </header>
       <AnimatePresence>
         {openSideBar && (
@@ -168,8 +201,8 @@ export default function Header() {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed top-0 right-0 w-64 h-full bg-white shadow-2xl z-50 rounded-l-2xl rounded-bl-2xl block md:hidden"
+            transition={{ duration: 0.3, ease: "easeIn" }}
+            className="fixed top-0 right-0 z-50 block w-64 h-full bg-white shadow-2xl rounded-l-2xl rounded-bl-2xl md:hidden"
           >
             <RightSidebar
               navLink={navLink}

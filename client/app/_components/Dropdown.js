@@ -9,7 +9,7 @@ import {
 import { RxDashboard } from "react-icons/rx";
 import useSignOut from "../hooks/useSignOut";
 import SpinnerMini from "./SpinnerMini";
-import OnlyAdminPrivateRoute from "./OnlyAdminPrivateRoute";
+
 const list = [
   {
     name: "My Account",
@@ -73,7 +73,6 @@ export default function Dropdown({ user }) {
             ""
           )}
           <span
-            href={"/#"}
             onClick={signout}
             className="flex items-center gap-3 px-2 py-1 transition-colors rounded-sm cursor-pointer hover:text-red-500 hover:bg-red-50"
           >

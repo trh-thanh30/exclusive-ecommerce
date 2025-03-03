@@ -13,8 +13,6 @@ import useSignInWithGoogle from "../../hooks/useSignInWithGoogle";
 import { useState } from "react";
 import { iconGooogle, sizeIconPrimary } from "@/app/constants/icons";
 
-
-
 export default function Page() {
   const [keyPressed, setKeyPressed] = useState({
     username: false,
@@ -23,7 +21,6 @@ export default function Page() {
   });
   const { isLoading, signup, error } = useSignup();
   const { password, setPassword, openPassword, eyePassword } = useEyePassword();
-  
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -57,8 +54,8 @@ export default function Page() {
         {/* Left Side */}
         <ImageLeftForm />
         {/* Right Side */}
-        <div className="flex flex-col items-center justify-center w-full h-screen gap-2 p-4 bg-white md:gap-4 md:w-1/2">
-          <Logo classname={"md:mt-4 mt-2 mb-4 md:mb-6"} />
+        <div className="flex flex-col items-center justify-center w-full min-h-screen gap-2 p-4 bg-white md:gap-4 md:w-1/2">
+          <Logo logoDefault={true} classname={"md:mt-4 mt-2 mb-4 md:mb-6"} />
           <h1 className="text-2xl font-medium md:text-3xl">Sign Up</h1>
           <p className="text-xs font-medium text-center md:text-sm text-primary-400">
             Let’s create your account and Shop like a pro and save money.
@@ -126,7 +123,7 @@ export default function Page() {
             </div>
           </form>
 
-          <div className="flex items-center gap-1 mt-4 text-sm md:mt-6">
+          <div className="flex items-center gap-1 mt-1 text-xs md:text-sm md:mt-2 ">
             <p className=" text-primary-400">Already have an account?</p>
             <Link className="text-primary-800 hover:underline" href={"/signin"}>
               Sign In
