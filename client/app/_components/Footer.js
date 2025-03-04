@@ -11,7 +11,7 @@ export default function Footer() {
   const iconStyle =
     "flex items-center justify-center md:w-10 md:h-10 w-8 h-8 transition border rounded-full border-primary-400 hover:bg-primary-50 hover:text-primary-900";
   return (
-    <footer className="py-10 md:mt-20 mt-10 text-white md:py-12 bg-neutral-900">
+    <footer className="py-10 mt-10 text-white md:mt-20 md:py-12 bg-neutral-900">
       <div className="px-8 md:px-10">
         <p className="text-xs tracking-widest text-center uppercase md:text-sm text-primary-400">
           The best of luxury brand values, high quality products, and innovative

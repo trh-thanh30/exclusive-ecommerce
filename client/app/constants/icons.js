@@ -32,3 +32,4 @@ export const iconGooogle = (
   </svg>
 );
 export const sizeIconPrimary = 22;
+export const sizeIconSecondary = 16;
