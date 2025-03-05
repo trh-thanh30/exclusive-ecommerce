@@ -3,3 +3,6 @@ export const SIGNIN_ENDPOINT = `${API_URL}/user/signin`;
 export const SIGNUP_ENDPOINT = `${API_URL}/user/signup`;
 export const SIGNOUT_ENDPOINT = `${API_URL}/user/logout`;
 export const CHECHAUTH_ENDPOINT = `${API_URL}/user/check-auth`;
+export const BLOGS_ENDPOINT = `${API_URL}/blog`;
+export const CUSTOMERS_ENDPOINT = `${API_URL}/user/get-user`
+export const PRODUCTS_ENDPOINT = `${API_URL}/product`;

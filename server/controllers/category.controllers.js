@@ -9,18 +9,21 @@ const createCategory = async (req, res) => {
         .json({ message: "You are not allowed to create a category!!!" });
     }
     const { title } = req.body;
-    if (!title) {
-      return res.status(400).json({ message: "Title is required" });
+    if (!title || title.trim() === "") {
+      return res
+        .status(400)
+        .json({ message: "Title is required and cannot be empty" });
     }
-    const hasTitle = Category.findOne({ title });
+    const hasTitle = await Category.findOne({ title });
     if (hasTitle)
-      return res.status(200).json({ message: "Category already exists!!!" });
+      return res.status(400).json({ message: "Title already exists" });
     const newCategory = new Category({ title });
     await newCategory.save();
     return res
       .status(201)
       .json({ message: "Category created successfully!!!" });
   } catch (error) {
+    console.log(error)
     return res.status(400).json({ message: error.message });
   }
 };
@@ -77,7 +80,7 @@ const getCategory = async (req, res) => {
 const getAllCategory = async (req, res) => {
   try {
     const categories = await Category.find();
-    return res.status(200).json(categoriess);
+    return res.status(200).json(categories);
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

@@ -12,19 +12,20 @@ export default function Input({
   fullWidth,
   onKeyDown,
   iconClassName,
+  textSize = "text-sm", // Thêm prop textSize
 }) {
-  const inputStyle =
-    "md:text-sm text-xs outline-none w-full pr-12 px-3 py-2 transition-colors border rounded-lg border-primary-400 focus-within:border-primary-800 focus-within:shadow-lg focus-within:shadow-primary-200";
+  const inputStyle = `outline-none w-full pr-12 px-3 py-2 transition-colors border rounded-lg border-primary-400 focus-within:border-primary-800 focus-within:shadow-lg focus-within:shadow-primary-200 md:${textSize} text-xs`;
+
   return (
     <div
       className={`relative flex items-center ${
-        fullWidth ? "w-full" : "xl:w-[400px] md:w-[340px] w-[300px]"
+        fullWidth ? "w-full" : "xl:w-[340px] md:w-[340px] w-[300px]"
       } ${isTextArea ? "w-full" : ""}`}
     >
       {isTextArea ? (
         <textarea
           disabled={disabled}
-          className={` ${className} ${inputStyle}`}
+          className={`${className} ${inputStyle}`}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
@@ -37,7 +38,7 @@ export default function Input({
           disabled={disabled}
           onKeyDown={onKeyDown}
           type={type}
-          className={`${inputStyle}  ${className} `}
+          className={`${inputStyle} ${className}`}
           placeholder={placeholder}
           value={value}
           onChange={onChange}

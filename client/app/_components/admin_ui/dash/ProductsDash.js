@@ -1,12 +1,13 @@
 "use client";
 import { sizeIconSecondary } from "@/app/constants/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
 import ModalNewProducts from "../modal/ModalNewProducts";
-import TableUi from "../table/TableUi";
+import { PRODUCTS_ENDPOINT } from "@/app/constants/api";
+import TableProductUi from "../table/TableProductsUi";
 const tableHeader = [
   {
-    name: "Img",
+    name: "Image",
   },
   {
     name: "Product Name",
@@ -28,13 +29,36 @@ const tableHeader = [
   },
   {
     name: "Created At",
-  }
+  },
+  {
+    name: "Action",
+  },
 ];
 export default function ProductsDash() {
   const [openModal, setOpenModal] = useState();
+  const [products, setProducts] = useState([]);
+  const [paginations, setPaginations] = useState([]);
+  const [loading, setLoading] = useState(true);
   const handleOpenModal = () => {
     setOpenModal((open) => !open);
   };
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`${PRODUCTS_ENDPOINT}`, {
+        method: "GET",
+      });
+      const data = await res.json();
+      setPaginations(data.pagination);
+      setProducts(data.products);
+      setLoading(false);
+    } catch (error) {
+      console.log(error.message);
+    }
+  };
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   return (
     <>
       <div className="p-6">
@@ -48,8 +72,14 @@ export default function ProductsDash() {
             <CiCirclePlus size={sizeIconSecondary} />
           </button>
         </div>
-        <div className="relative flex flex-col w-full h-full mt-5 overflow-scroll text-gray-700 bg-white rounded-lg shadow-md bg-clip-border">
-          <TableUi tableHeader={tableHeader}  />
+        <div className="flex flex-col w-full min-h-screen mt-6 bg-white rounded-lg shadow-md bg-clip-border">
+          <TableProductUi
+            openModal={handleOpenModal}
+            loading={loading}
+            data={products}
+            tableHeader={tableHeader}
+            paginations={paginations}
+          />
         </div>
       </div>
       {openModal ? <ModalNewProducts onClose={handleOpenModal} /> : ""}

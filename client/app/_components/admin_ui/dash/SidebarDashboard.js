@@ -21,7 +21,7 @@ export default function SidebarDashboard() {
   const tab = location.get("tab");
   const { loading, signout } = useSignOut();
   return (
-    <div className="flex flex-col w-64 min-h-screen bg-white shadow-md p-7 ">
+    <div className="flex flex-col bg-white shadow-md min-w-64 p-7 ">
       <Logo logoDefault={true} />
       <nav className="flex flex-col flex-grow gap-4 mt-8">
         {/* DASHBOARD HOME */}

@@ -15,10 +15,9 @@ export default function Page() {
   const tab = loaction.get("tab");
   return (
     <div className="flex min-h-screen">
-      <div className="">
-        <SidebarDashboard />
-      </div>
-      <div className="flex-1 bg-primary-50">
+      <SidebarDashboard />
+
+      <div className="flex-1 overflow-hidden bg-primary-50">
         <HeaderDash page={tab} />
         {tab === "dash" && <Dash />}
         {tab === "products" && <ProductsDash />}
