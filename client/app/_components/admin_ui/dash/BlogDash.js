@@ -1,10 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { BLOGS_ENDPOINT } from "@/app/constants/api";
+import React, {  useState } from "react";
 import { sizeIconSecondary } from "@/app/constants/icons";
 import { CiCirclePlus } from "react-icons/ci";
 import TableBlogUi from "../table/TableBlogUi";
 import ModalNewBlog from "../modal/ModalNewBlog";
+import useFetchBlog from "@/app/hooks/useFetchBlog";
 const tableHeader = [
   {
     name: "Image",
@@ -35,31 +35,11 @@ const tableHeader = [
   },
 ];
 export default function ConversatiDash() {
-  const [loading, setLoading] = useState(true);
-  const [blogs, setBlogs] = useState([]);
-  const [pagination, setPagination] = useState([]);
+  const { loading, blogs, pagination } = useFetchBlog();
   const [openModal, setOpenModal] = useState();
   const handleOpenModal = () => {
     setOpenModal((open) => !open);
   };
-  const fetchBlogs = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(BLOGS_ENDPOINT, {
-        method: "GET",
-      });
-      const data = await res.json();
-      setBlogs(data.blogs);
-      setPagination(data.pagination);
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchBlogs();
-  }, []);
   return (
     <>
       <div className="p-6">

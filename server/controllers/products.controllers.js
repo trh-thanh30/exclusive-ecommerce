@@ -114,9 +114,16 @@ const getAllProducts = async (req, res) => {
     }
     const skip = (page - 1) * limit;
     const products = await query.skip(skip).limit(limit);
+    let totalAvgRating = 0;
+    for (let i = 0; i < products.length; i++) {
+      totalAvgRating =
+        +(totalAvgRating + +products[i].totalRating) /
+        products[i].totalRating.length;
+    }
     const totalProducts = await Product.countDocuments(query._conditions);
     return res.status(200).json({
       products,
+      totalAvgRating,
       pagination: {
         currentPage: page,
         totalPages: Math.ceil(totalProducts / limit),

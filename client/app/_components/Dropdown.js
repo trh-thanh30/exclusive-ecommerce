@@ -2,11 +2,11 @@ import Link from "next/link";
 import {
   CiLogout,
   CiShoppingCart,
-  CiStar,
-  CiNoWaitingSign,
+  CiHeart,
   CiUser,
 } from "react-icons/ci";
-import { RxDashboard } from "react-icons/rx";
+import { CiBoxList } from "react-icons/ci";
+
 import useSignOut from "../hooks/useSignOut";
 import SpinnerMini from "./SpinnerMini";
 
@@ -22,13 +22,8 @@ const list = [
     link: "#",
   },
   {
-    name: "My Cancellations",
-    icon: <CiNoWaitingSign size={22} />,
-    link: "#",
-  },
-  {
-    name: "My Reviews",
-    icon: <CiStar size={22} />,
+    name: "My Wishlist",
+    icon: <CiHeart size={22} />,
     link: "#",
   },
 ];
@@ -49,7 +44,7 @@ export default function Dropdown({ user }) {
             <Link
               key={item.name}
               href={item.link}
-              className="flex items-center gap-3 px-2 py-1 transition-colors rounded-sm hover:bg-slate-950 hover:text-slate-50"
+              className="flex items-center gap-3 px-2 py-1 transition-colors rounded-sm text-primary-800 hover:bg-slate-950 hover:text-slate-50"
             >
               <span>{item.icon}</span>
               <span className="text-sm text-inherit text-nowrap">
@@ -63,7 +58,7 @@ export default function Dropdown({ user }) {
               href={"/dashboard"}
             >
               <span>
-                <RxDashboard size={22} />
+                <CiBoxList  size={22} />
               </span>
               <span className="text-sm text-inherit text-nowrap">
                 Dashboard
@@ -72,6 +67,8 @@ export default function Dropdown({ user }) {
           ) : (
             ""
           )}
+          
+        <hr className="w-full mx-auto my-1 border-primary-300" />
           <span
             onClick={signout}
             className="flex items-center gap-3 px-2 py-1 transition-colors rounded-sm cursor-pointer hover:text-red-500 hover:bg-red-50"
@@ -85,7 +82,6 @@ export default function Dropdown({ user }) {
           </span>
         </div>
       </div>
-      {/* <OnlyAdminPrivateRoute /> */}
     </section>
   );
 }

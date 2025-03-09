@@ -3,7 +3,7 @@ import { IoBagHandleOutline } from "react-icons/io5";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Input from "../../Input";
 import Spinner from "../../Spinner";
-export default function TableBlogUi({
+export default function CategoriesTableUi({
   tableHeader,
   data,
   loading,
@@ -17,23 +17,23 @@ export default function TableBlogUi({
   };
   return (
     <>
-      {!data.length && !loading ? (
+      {!data?.length && !loading ? (
         <>
           <div className="flex flex-col items-center justify-center min-h-screen gap-4">
             <div className="p-10 rounded-full bg-primary-300">
               <IoBagHandleOutline color="#fff" size={60} />
             </div>
             <span className="text-xl font-medium text-primary-800">
-              No Blog Yet?
+              No Categories Yet?
             </span>
             <p className="text-sm text-primary-400">
-              Add blog to your store and start selling to see orders here.
+              Add categories to your store and start selling to see orders here.
             </p>
             <button
               onClick={openModal}
               className="p-3 text-sm rounded-md bg-neutral-800 text-neutral-50"
             >
-              Adding new blog
+              Adding new category
             </button>
           </div>
         </>
@@ -43,7 +43,7 @@ export default function TableBlogUi({
           <div className="w-full p-4">
             <div className="flex items-center justify-between mb-1">
               <p className="text-sm font-medium text-primary-800">
-                Blogs Items
+                Categories Items
               </p>
               <div className="flex items-center gap-2">
                 <Input
@@ -75,7 +75,6 @@ export default function TableBlogUi({
                   ))}
                 </tr>
               </thead>
-
               <tbody>
                 {loading ? (
                   <td colSpan={tableHeader.length}>
@@ -90,32 +89,14 @@ export default function TableBlogUi({
                       className="transition-colors hover:bg-primary-100"
                     >
                       <td className="p-4">
-                        <img
-                          className="w-10 h-10 rounded-full"
-                          src={data.images[0]}
-                          alt=""
-                        />
+                        <p className="text-xs font-medium text-slate-900">
+                          {truncateText(data._id, 40)}
+                        </p>
                       </td>
                       <td className="p-4">
                         <p className="text-xs font-medium text-slate-900">
                           {truncateText(data.title, 25)}
                         </p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-xs">{data.category}</p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-xs ">{data.numViews}</p>
-                      </td>
-
-                      <td className="p-4">
-                        <p className="text-xs">{data.userLikes.length}</p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-xs">{data.userDislikes.length}</p>
-                      </td>
-                      <td className="p-4">
-                        <p className="text-xs">{data.author}</p>
                       </td>
                       <td className="p-4">
                         <p className="text-xs">{data.createdAt}</p>
@@ -152,14 +133,14 @@ export default function TableBlogUi({
             {/* PAGINATION */}
             <div className="flex items-center gap-1 text-xs text-primary-800">
               <p className="text-xs text-primary-800">
-                {paginations.currentPage} of {paginations.totalPage} pages:
+                {paginations.currentPage} of {paginations.totalPages} pages:
               </p>
               <select
                 className="p-1 text-xs border rounded-lg outline-none border-primary-400 text-primary-800"
                 id="limit"
               >
                 {Array.from(
-                  { length: paginations.totalPage },
+                  { length: paginations.totalPages },
                   (_, index) => index + 1
                 ).map((value) => (
                   <option key={value} value={value}>
@@ -167,7 +148,6 @@ export default function TableBlogUi({
                   </option>
                 ))}
               </select>
-
               <button className="p-2 rounded-full hover:bg-primary-200">
                 <MdKeyboardArrowLeft />
               </button>

@@ -16,7 +16,7 @@ import SpinnerMini from "../../SpinnerMini";
 
 export default function SidebarDashboard() {
   const styleLink =
-    "flex items-center rounded-lg font-medium gap-4 text-sm p-3 hover:bg-neutral-900 hover:text-neutral-50 transition-colors";
+    "flex items-center rounded-lg font-medium gap-4 text-md p-3 hover:bg-neutral-900 hover:text-neutral-50 transition-colors";
   const location = useSearchParams();
   const tab = location.get("tab");
   const { loading, signout } = useSignOut();
@@ -26,9 +26,9 @@ export default function SidebarDashboard() {
       <nav className="flex flex-col flex-grow gap-4 mt-8">
         {/* DASHBOARD HOME */}
         <Link
-          href={"/dashboard?tab=dash"}
+          href={"/dashboard?tab=dashboard"}
           className={`${styleLink} ${
-            tab === "dash" ? "bg-neutral-900 text-neutral-50" : ""
+            tab === "dashboard" ? "bg-neutral-900 text-neutral-50" : ""
           }`}
         >
           <FaThLarge />
@@ -82,7 +82,7 @@ export default function SidebarDashboard() {
           <span>Customers</span>
         </Link>
 
-        {/* CONVERSATIONS */}
+        {/* BLOGS */}
         <Link
           href={"/dashboard?tab=blog"}
           className={`relative ${styleLink} ${

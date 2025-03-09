@@ -85,7 +85,7 @@ export default function Header() {
       <header className="relative flex items-center justify-between p-3 py-5 border-b md:px-8 border-b-primary-300">
         <Logo logoDefault={true} />
 
-        <ul className="items-center hidden gap-10 text-base md:flex text-primary-800">
+        <ul className="items-center hidden gap-10 text-sm font-medium md:flex text-primary-800">
           {navLink.map((link, index) => (
             <li key={index} className="py-1 nav-link">
               {" "}

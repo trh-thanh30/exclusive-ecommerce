@@ -61,9 +61,14 @@ const getAllBlogs = async (req, res) => {
       };
     }
     const blogs = await Blog.find(query).skip(skip).limit(limit);
+    let totalNumViews = 0;
+    for (let i = 0; i < blogs.length; i++) {
+      totalNumViews += blogs[i].numViews;
+    }
     return res.status(200).json({
       message: "Blogs retrieved successfully",
       blogs,
+      totalNumViews,
       pagination: {
         currentPage: page,
         totalPage: Math.ceil((await Blog.countDocuments(query)) / limit),

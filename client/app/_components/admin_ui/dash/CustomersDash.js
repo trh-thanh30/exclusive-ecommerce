@@ -3,6 +3,7 @@ import { sizeIconSecondary } from "@/app/constants/icons";
 import React, { useEffect, useState } from "react";
 import { FaUsers } from "react-icons/fa";
 import TableCustomerUi from "../table/TableCustomerUi";
+import useFetchCustomer from "@/app/hooks/useFetchCustomer";
 const tableHeader = [
   {
     name: "avatar",
@@ -25,32 +26,12 @@ const tableHeader = [
   {
     name: "created at",
   },
+  {
+    name: "action",
+  }
 ];
 export default function CustomersDash() {
-  const [loading, setLoading] = useState(true);
-  const [customer, setCustomer] = useState([]);
-  const [pagination, setPagination] = useState([]);
-  const fetchCustomers = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(CUSTOMERS_ENDPOINT, {
-        method: "GET",
-        credentials: "include",
-      });
-      const data = await res.json();
-      console.log(data);
-      setCustomer(data.data.users);
-      setPagination(data.data.pagination);
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchCustomers();
-  }, []);
-  console.log(customer);
+  const {loading, customer, pagination} = useFetchCustomer();
   return (
     <div className="p-6">
       <div className="flex items-center justify-between text-primary-800">

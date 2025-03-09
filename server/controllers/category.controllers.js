@@ -23,7 +23,7 @@ const createCategory = async (req, res) => {
       .status(201)
       .json({ message: "Category created successfully!!!" });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     return res.status(400).json({ message: error.message });
   }
 };
@@ -79,8 +79,26 @@ const getCategory = async (req, res) => {
 };
 const getAllCategory = async (req, res) => {
   try {
-    const categories = await Category.find();
-    return res.status(200).json(categories);
+    let { page, limit, search } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
+    const skip = (page - 1) * limit;
+    let query = {};
+    if (search) {
+      query = {
+        $or: [{ title: { $regex: search, $options: "i" } }],
+      };
+    }
+    const categories = await Category.find().skip(skip).limit(limit);
+    return res.status(200).json({
+      categories: categories,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil((await Category.countDocuments(query)) / limit),
+        totalCategories: await Category.countDocuments(query),
+        pageSize: limit,
+      },
+    });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

@@ -1,10 +1,10 @@
 "use client";
 import { sizeIconSecondary } from "@/app/constants/icons";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { CiCirclePlus } from "react-icons/ci";
 import ModalNewProducts from "../modal/ModalNewProducts";
-import { PRODUCTS_ENDPOINT } from "@/app/constants/api";
 import TableProductUi from "../table/TableProductsUi";
+import useFetchProducts from "@/app/hooks/useFetchProducts";
 const tableHeader = [
   {
     name: "Image",
@@ -36,29 +36,10 @@ const tableHeader = [
 ];
 export default function ProductsDash() {
   const [openModal, setOpenModal] = useState();
-  const [products, setProducts] = useState([]);
-  const [paginations, setPaginations] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const { loading, products, paginations } = useFetchProducts();
   const handleOpenModal = () => {
     setOpenModal((open) => !open);
   };
-  const fetchProducts = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${PRODUCTS_ENDPOINT}`, {
-        method: "GET",
-      });
-      const data = await res.json();
-      setPaginations(data.pagination);
-      setProducts(data.products);
-      setLoading(false);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-  useEffect(() => {
-    fetchProducts();
-  }, []);
   return (
     <>
       <div className="p-6">

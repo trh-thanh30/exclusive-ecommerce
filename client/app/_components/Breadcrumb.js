@@ -5,7 +5,6 @@ import React from "react";
 
 export default function Breadcrumb({ items, className }) {
   const pathname = usePathname();
-  console.log(pathname);
   return (
     <ul className={`flex items-center text-xs md:text-sm ${className}`}>
       {items.map((item, index) => (

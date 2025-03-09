@@ -6,3 +6,6 @@ export const CHECHAUTH_ENDPOINT = `${API_URL}/user/check-auth`;
 export const BLOGS_ENDPOINT = `${API_URL}/blog`;
 export const CUSTOMERS_ENDPOINT = `${API_URL}/user/get-user`
 export const PRODUCTS_ENDPOINT = `${API_URL}/product`;
+export const CATEGORIES_ENDPOINT = `${API_URL}/category`;
+export const GETUSERID_ENDPOINT = `${API_URL}/user/get-user`;
+export const UPDATE_USER_ENDPOINT = `${API_URL}/user/update-user`;

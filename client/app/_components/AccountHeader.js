@@ -17,7 +17,7 @@ export default function AccountHeader() {
   return (
     <div className="flex items-center justify-between">
       <Breadcrumb items={breadcrumb} />
-      <div className="flex items-center gap-1 md:text-sm text-xs text-primary-500">
+      <div className="flex items-center gap-1 text-xs md:text-sm text-primary-500">
         <span>Welcome! </span>{" "}
         <span className="text-primary-800">{user?.user?.username}</span>
       </div>
