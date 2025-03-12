@@ -4,6 +4,7 @@ const blogSchema = new mongoose.Schema(
     title: {
       type: String,
       require: [true, "Please enter blog title"],
+      unique: true,
     },
     description: {
       type: String,
@@ -40,13 +41,17 @@ const blogSchema = new mongoose.Schema(
     images: [
       {
         type: String,
-        default:
-          "https://cloud.z.com/vn/wp-content/uploads/2023/11/how-to-write-a-blog-post.jpeg",
       },
     ],
     author: {
       type: String,
       default: "Admin",
+    },
+    slug: {
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
     },
   },
   { toJson: { virtual: true }, toObject: { virtual: true }, timestamps: true }

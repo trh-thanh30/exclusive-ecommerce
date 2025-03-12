@@ -1,14 +1,17 @@
+const { default: slugify } = require("slugify");
 const Blog = require("../models/blog.models");
 
 const createBlog = async (req, res) => {
   const { role_name } = req.user;
-  const { title, description, category } = req.body;
+  const { title, description, category, slug } = req.body;
   if (role_name !== "admin")
     return res
       .status(401)
       .json({ message: "You are not allowed to create bolg" });
   if (!title || !description || !category)
     return res.status(403).json({ message: "Please enter all fills" });
+  const hasBlog = await Blog.findOne({ title });
+  if (hasBlog) return res.status(403).json({ message: "Blog already exists. Please try again!!" });
   try {
     const images = req.files.map((file) => file.path);
     const blog = new Blog({
@@ -16,6 +19,7 @@ const createBlog = async (req, res) => {
       description,
       category,
       images,
+      slug: slug || slugify(title),
     });
     await blog.save();
     return res

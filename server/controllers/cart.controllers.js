@@ -21,7 +21,6 @@ const addToCart = async (req, res) => {
       object.priceAfterQuantity = getPrice.price * cart[i].quantity;
       products.push(object);
     }
-    console.log(products);
     let cartTotal = 0;
     for (let i = 0; i < products.length; i++) {
       cartTotal += products[i].price * products[i].quantity;
@@ -67,7 +66,6 @@ const applyCoupon = async (req, res) => {
       totalAfterDiscount,
     });
   } catch (error) {
-    console.log(error);
     return res.status(400).json({ message: error.message });
   }
 };

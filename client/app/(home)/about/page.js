@@ -2,46 +2,17 @@ import React from "react";
 import Breadcrumb from "../../_components/Breadcrumb";
 import Image from "next/image";
 import AboutImg1 from "@/public/about-img1.png";
-import {
-  CiShop,
-  CiDollar,
-  CiBag1,
-  CiCoins1,
-  CiDeliveryTruck,
-} from "react-icons/ci";
-import { SlEarphonesAlt } from "react-icons/sl";
-import { GrStatusGood } from "react-icons/gr";
-import Oursteam from "../../_components/Oursteam";
 import Achivment from "@/app/_components/Achivment";
+import Service from "@/app/_components/Service";
+import Oursteam from "@/app/_components/Oursteam";
 
 export const metadata = {
   title: "About",
   description: "This is the about page of our website",
 };
-
-const sizeIconLarge = 24;
-
 const breadcrumb = [
   { name: "Home", href: "/" },
   { name: "About", href: "/about" },
-];
-
-const services = [
-  {
-    title: "FREE AND FAST DELIVERY",
-    description: "Free delivery for all orders over $140",
-    icon: <CiDeliveryTruck size={sizeIconLarge} />,
-  },
-  {
-    title: "24/7 CUSTOMER SERVICE",
-    description: "Friendly 24/7 customer support",
-    icon: <SlEarphonesAlt size={sizeIconLarge} />,
-  },
-  {
-    title: "MONEY BACK GUARANTEE",
-    description: "We return money within 30 days",
-    icon: <GrStatusGood size={sizeIconLarge} />,
-  },
 ];
 
 export default function Page() {
@@ -73,29 +44,9 @@ export default function Page() {
             className="w-full rounded-sm md:w-auto"
           />
         </div>
-
         <Achivment />
-
         <Oursteam />
-
-        <ul className="flex flex-col items-center justify-around gap-4 xl:flex-row md:gap-6">
-          {services.map((service) => (
-            <li
-              key={service.title}
-              className="flex flex-col items-center text-center"
-            >
-              <span className="flex items-center justify-center w-10 h-10 mb-2 rounded-full md:w-12 md:h-12 md:mb-4 bg-primary-900 text-primary-50">
-                {service.icon}
-              </span>
-              <h3 className="text-base font-bold md:text-xl">
-                {service.title}
-              </h3>
-              <p className="mt-0 text-xs md:mt-2 md:text-sm">
-                {service.description}
-              </p>
-            </li>
-          ))}
-        </ul>
+        <Service />
       </div>
     </>
   );

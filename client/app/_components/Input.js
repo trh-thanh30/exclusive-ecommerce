@@ -8,6 +8,7 @@ export default function Input({
   name,
   type = "text",
   disabled,
+  defaultValue,
   isTextArea = false,
   fullWidth,
   onKeyDown,
@@ -28,6 +29,7 @@ export default function Input({
           className={`${className} ${inputStyle}`}
           placeholder={placeholder}
           value={value}
+          defaultValue={defaultValue}
           onChange={onChange}
           id={id}
           name={name}
@@ -37,6 +39,7 @@ export default function Input({
         <input
           disabled={disabled}
           onKeyDown={onKeyDown}
+          defaultValue={defaultValue}
           type={type}
           className={`${inputStyle} ${className}`}
           placeholder={placeholder}

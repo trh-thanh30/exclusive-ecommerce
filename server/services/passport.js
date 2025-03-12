@@ -12,7 +12,6 @@ passport.use(
       scope: ["email", "profile"],
     },
     async function (accessToken, refreshToken, profile, done) {
-      console.log(profile);
       try {
         let user = await User.findOne({ googleId: profile.id });
         const role = await Role.findOne({ role_name: "user" });

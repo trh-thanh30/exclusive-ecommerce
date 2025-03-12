@@ -9,7 +9,6 @@ export default function useSignInWithGoogle() {
       toast.success("Sign in sucessfully");
     } catch (error) {
       toast.error("Failed to sign in with Google");
-      console.error(error);
     }
   };
   return { signinWithGoogle };

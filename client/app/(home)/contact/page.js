@@ -18,7 +18,6 @@ export default function Page() {
   const textStyle = `xl:text-sm text-xs text-primary-900`;
   const { loading, formData, handleChange, handleSubmitContact } =
     useCreateContact();
-  console.log(formData);
   return (
     <>
       <Breadcrumb items={breadcrumb} />

@@ -237,7 +237,6 @@ const updateUser = async (req, res) => {
     const user = await User.findByIdAndUpdate(id, userUpdate, { new: true });
     return res.status(200).json({ user: user });
   } catch (error) {
-    console.log(error);
     return res.status(400).json({ message: error.message });
   }
 };

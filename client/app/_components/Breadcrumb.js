@@ -6,7 +6,7 @@ import React from "react";
 export default function Breadcrumb({ items, className }) {
   const pathname = usePathname();
   return (
-    <ul className={`flex items-center text-xs md:text-sm ${className}`}>
+    <ul className={`flex items-center text-xs md:text-sm ${className} md:mt-7 mt-5`}>
       {items.map((item, index) => (
         <li key={index}>
           {index > 0 && <span className="mx-2 text-primary-400">/</span>}

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { PRODUCTS_ENDPOINT } from "../constants/api";
+import toast from "react-hot-toast";
 export default function useFetchProducts() {
   const [products, setProducts] = useState([]);
   const [paginations, setPaginations] = useState([]);
@@ -17,7 +18,7 @@ export default function useFetchProducts() {
         setProducts(data.products);
         setLoading(false);
       } catch (error) {
-        console.log(error.message);
+        toast.error(error.message);
       }
     };
     fetchProducts();

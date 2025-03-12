@@ -16,7 +16,14 @@ const router = express.Router();
 router.post(
   "/create-blog",
   verifyToken,
-  cloudinaryFileUploader.array("images", 10),
+  (req, res, next) => {
+    cloudinaryFileUploader.array("images", 10)(req, res, (err) => {
+      if (err) {
+        return res.status(500).json({ message: "Upload failed", error: err });
+      }
+      next();
+    });
+  },
   createBlog
 );
 // PUT

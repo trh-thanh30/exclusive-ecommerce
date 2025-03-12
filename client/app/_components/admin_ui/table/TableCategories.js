@@ -67,7 +67,7 @@ export default function CategoriesTableUi({
               <thead>
                 <tr className="uppercase border-b text-primary-600 border-primary-300 bg-primary-50">
                   {tableHeader.map((item) => (
-                    <th key={item.name} class="p-4">
+                    <th key={item.name} className="p-4">
                       <p className="text-sm font-medium text-primary-400">
                         {item.name}
                       </p>

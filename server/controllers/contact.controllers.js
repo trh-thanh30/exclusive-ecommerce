@@ -5,7 +5,7 @@ const createContact = async (req, res) => {
   try {
     const { note, subject_name } = req.body;
     const userId = req.user.id;
-    console.log(userId);
+  
     if (!subject_name || !note) {
       return res.status(400).json({ message: "Missing required fields" });
     }

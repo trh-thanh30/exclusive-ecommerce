@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { CATEGORIES_ENDPOINT } from "../constants/api";
+import toast from "react-hot-toast";
 export default function useFetchCategories() {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
@@ -13,12 +14,11 @@ export default function useFetchCategories() {
           method: "GET",
         });
         const data = await res.json();
-        console.log(data);
         setCategories(data.categories);
         setPagination(data.pagination);
         setLoading(false);
       } catch (error) {
-        console.log(error.message);
+        toast.error(error.message);
       }
     };
     fetchCategories();

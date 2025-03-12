@@ -237,11 +237,9 @@ const rating = async (req, res) => {
     }
     const getAllRatings = await Product.findById(productId);
     let totalRatings = getAllRatings.ratings.length;
-    console.log(totalRatings);
     let sumRatings = getAllRatings.ratings
       .map((item) => item.star)
       .reduce((a, b) => a + b, 0);
-    console.log(sumRatings);
     let avgRating = Math.round(sumRatings / totalRatings);
     let finalProduct = await Product.findByIdAndUpdate(
       productId,

@@ -1,6 +1,7 @@
-"use client"
-import  { useEffect, useState } from "react";
+"use client";
+import { useEffect, useState } from "react";
 import { CUSTOMERS_ENDPOINT } from "../constants/api";
+import toast from "react-hot-toast";
 
 export default function useFetchCustomer() {
   const [loading, setLoading] = useState(true);
@@ -15,11 +16,10 @@ export default function useFetchCustomer() {
           credentials: "include",
         });
         const data = await res.json();
-        console.log(data);
         setCustomer(data.data.users);
         setPagination(data.data.pagination);
       } catch (error) {
-        console.log(error.message);
+        toast.error(error.message);
       } finally {
         setLoading(false);
       }
