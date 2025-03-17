@@ -59,7 +59,7 @@ export default function ModalNewBlog({ onClose, fetchBlogs, modModal, data }) {
       setblogItem(item);
     }, []);
   });
-  console.log(blogItem)
+
   const handleSubmitUpdate = async (e) => {};
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 bg-neutral-900">

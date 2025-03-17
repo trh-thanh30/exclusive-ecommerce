@@ -103,11 +103,11 @@ export default function Page() {
               />
             </div>
           </form>
-          <div className="flex items-center gap-1 mt-6 text-sm">
+          <div className="flex items-center gap-1 mt-1 text-xs md:mt-2 md:text-sm">
             <p className=" text-primary-400">Dont't have an account yet?</p>
             <Link className="text-primary-800 hover:underline" href={"/signup"}>
               Sign Up
-            </Link>
+          </Link>
           </div>
         </div>
       </div>

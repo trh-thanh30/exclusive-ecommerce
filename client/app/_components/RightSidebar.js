@@ -1,6 +1,6 @@
 "use client";
-import React, { useEffect, useRef } from "react";
-import { FaChevronRight } from "react-icons/fa";
+import React, { useEffect, useRef, useState } from "react";
+import { FaAngleDown, FaAngleRight, FaChevronRight } from "react-icons/fa";
 import { FaArrowRightLong } from "react-icons/fa6";
 import { CiShoppingCart, CiHeart, CiLogout } from "react-icons/ci";
 import { sizeIconPrimary } from "../constants/icons";
@@ -10,13 +10,34 @@ import Link from "next/link";
 import useSignOut from "../hooks/useSignOut";
 import SpinnerMini from "./SpinnerMini";
 import ButtonLink from "./ButtonLink";
-
+const categories = [
+  {
+    name: "Woman's Fashion",
+    link: "#",
+    subcategories: ["T-Shirts", "Jeans", "Shoes", "Accessories", "T-Shirts"],
+  },
+  {
+    name: "Men's Fashion",
+    link: "#",
+    subcategories: ["T-Shirts", "Jeans", "Shoes", "Accessories"],
+  },
+  { name: "Electronics", link: "#" },
+  { name: "Home & Lifestyle", link: "#" },
+  { name: "Medicine", link: "#" },
+  { name: "Sports & Outdoor", link: "#" },
+  { name: "Baby's & Toys", link: "#" },
+  { name: "Groceries & Pets", link: "#" },
+  { name: "Health & Beauty", link: "#" },
+];
 export default function RightSidebar({ onClose, navLink }) {
   const pathname = usePathname();
   const sidebarRef = useRef(null);
   const { user } = useSelector((state) => state.user);
   const { loading, signout } = useSignOut();
-  // Hàm xử lý đóng dropdown khi click ra ngoài
+  const [openCategory, setOpenCategory] = useState(null);
+  const toggleDropdown = (index) => {
+    setOpenCategory(openCategory === index ? null : index);
+  };
   useEffect(() => {
     function handleClickOutside(event) {
       if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
@@ -53,21 +74,46 @@ export default function RightSidebar({ onClose, navLink }) {
           <span>2</span>
         </Link>
         <ul className="flex flex-col gap-4">
-          <div className="flex items-center justify-between">
-            <li>Woman’s Fashion</li>
-            <FaChevronRight />
-          </div>
-          <li className="flex items-center justify-between">
-            <li>Men’s Fashion</li>
-            <FaChevronRight />
-          </li>
-          <Link href={"#"}>Electronics</Link>
-          <Link href={"#"}>Home & Lifestyle</Link>
-          <Link href={"#"}>Medicine</Link>
-          <Link href={"#"}>Sports & Outdoor</Link>
-          <Link href={"#"}>Baby’s & Toys</Link>
-          <Link href={"#"}>Groceries & Pets</Link>
-          <Link href={"#"}>Health & Beauty</Link>
+          {categories.map((category, index) => (
+            <li key={index}>
+              <Link
+                href={category.link}
+                className="flex items-center justify-between py-2 text-sm font-medium cursor-pointer text-primary-900"
+                onClick={() => toggleDropdown(index)}
+              >
+                {category.name}
+                <div className="transition-all duration-300">
+                  {category.subcategories ? (
+                    openCategory === index ? (
+                      <span className="">
+                        <FaAngleDown />
+                      </span>
+                    ) : (
+                      <span className="">
+                        <FaAngleRight />
+                      </span>
+                    )
+                  ) : null}
+                </div>
+              </Link>
+              <ul
+                className={`pl-5 space-y-1 overflow-hidden transition-all duration-300 border-dotted list-disc ${
+                  openCategory === index
+                    ? "max-h-screen opacity-100 translate-y-0 "
+                    : "max-h-0 opacity-0 -translate-y-1"
+                }`}
+              >
+                {category.subcategories?.map((sub, subIndex) => (
+                  <li
+                    key={subIndex}
+                    className="py-1 text-xs cursor-pointer xl:text-sm text-primary-800"
+                  >
+                    {sub}
+                  </li>
+                ))}
+              </ul>
+            </li>
+          ))}
           {user?.user ? (
             <div
               onClick={signout}

@@ -48,4 +48,23 @@
 .nav-link:hover::before {
   width: 100%; /* Khi hover, border mở rộng đầy đủ */
 }
+.swiper-button-prev {
+  position: absolute !important;
+  left: 0 !important;
+  top: 50% !important;
+}
+.swiper-button-next {
+  position: absolute !important;
+  right: 0 !important;
+  top: 50% !important;
+}
+.swiper-button-next,
+.swiper-button-prev {
+  color: #111827 !important;
+}
+.swiper-button-next::after,
+.swiper-button-prev::after {
+  font-size: 20px !important;
+}
+
 

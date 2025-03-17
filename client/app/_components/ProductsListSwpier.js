@@ -1,10 +1,12 @@
-import React from "react";
+import React, { } from "react";
 import Link from "next/link";
-import { FaHeart, FaEye, FaAngleRight } from "react-icons/fa";
+import { FaHeart, FaEye, } from "react-icons/fa";
 import { FiShoppingCart } from "react-icons/fi";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
+import useResponsiveEvent from "../hooks/useResponsiveEvent";
+import { FaCartPlus } from "react-icons/fa6";
 const products = [
   {
     id: 1,
@@ -74,9 +76,27 @@ const products = [
   },
 ];
 export default function ProductsListSwpier() {
+  const isMobileScreen = useResponsiveEvent();
   return (
     <Swiper
       slidesPerView={5}
+      breakpoints={{
+        0: {
+          slidesPerView: 1,
+        },
+        380: {
+          slidesPerView: 2,
+        },
+        639: {
+          slidesPerView: 3,
+        },
+        865: {
+          slidesPerView: 4,
+        },
+        1000: {
+          slidesPerView: 5,
+        },
+      }}
       spaceBetween={16}
       pagination={{
         clickable: true,
@@ -87,38 +107,43 @@ export default function ProductsListSwpier() {
         <SwiperSlide key={product.id}>
           <div
             key={product.id}
-            className="relative p-4 bg-white rounded-md group"
+            className="relative p-4 bg-white rounded-md group hover:shadow-md"
           >
             <span className="absolute top-0 left-0 px-2 py-1 text-xs rounded-sm text-primary-50 bg-primary-900">
               {product.discount}
             </span>
-            <Link href={"#"}>
+            <Link href={`/product/${product.id}`}>
               <img
                 src={product.image}
                 alt={product.name}
-                className="object-contain w-full mt-3 rounded-md h-44"
+                className="object-contain w-full mt-3 transition-transform rounded-md h-44 hover:scale-105"
               />
             </Link>
-            <div className="absolute flex items-center gap-2 transition opacity-0 top-2 right-2 group-hover:opacity-100">
+            <div className="absolute flex items-center gap-2 transition opacity-100 md:opacity-0 top-2 right-2 group-hover:opacity-100">
               <FaHeart className="cursor-pointer text-primary-600 hover:text-error-500" />
               <FaEye className="cursor-pointer text-primary-600 hover:text-primary-900" />
             </div>
-            <h3 className="mt-4 text-sm font-semibold text-primary-900 text-nowrap">
+            <h3 className="mt-4 text-xs font-semibold md:text-sm text-primary-900 text-nowrap">
               {product.name}
             </h3>
-            <div className="flex items-center gap-1 mt-2 text-sm">
+            <div className="flex items-center gap-1 mt-2 text-xs md:text-sm">
               <span className="text-primary-900">{product.price}</span>
               <span className="text-primary-400">{product.oldPrice}</span>
             </div>
-            <div className="flex items-center mt-1 text-yellow-500">
-              {"★".repeat(Math.round(product.rating))}
-              <span className="ml-1 text-xs text-gray-500">
-                ({product.reviews})
-              </span>
+            <div className="flex items-center justify-between mt-1">
+              <div className="flex items-center text-yellow-500">
+                {"★".repeat(Math.round(product.rating))}
+                <span className="ml-1 text-xs text-gray-500">
+                  ({product.reviews})
+                </span>
+              </div>
+              <button className="flex items-center p-2 text-sm rounded-full md:hidden bg-primary-900 text-primary-50">
+                <FaCartPlus />
+              </button>
             </div>
 
             {/* Add to Cart Button */}
-            <button className="absolute bottom-0 left-0 right-0 flex items-center justify-center w-full gap-1 py-1 text-sm transition rounded-sm opacity-0 text-primary-50 bg-primary-900 group-hover:opacity-100">
+            <button className="absolute bottom-0 left-0 right-0 items-center justify-center hidden w-full gap-1 py-2 text-sm transition rounded-sm opacity-0 md:flex text-primary-50 bg-primary-900 group-hover:opacity-100">
               <FiShoppingCart />
               <span>Add to Cart</span>
             </button>

@@ -2,16 +2,11 @@ import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
-import { FaStar, FaStarHalfAlt } from "react-icons/fa"; // Thêm FaStarHalfAlt
+import { Navigation } from "swiper/modules";
+import { Pagination } from "swiper/modules";
+import StarRating from "./StarRating";
 
 const evaluate = [
-  {
-    id: 1,
-    name: "Sarah M.",
-    star: 5,
-    comment:
-      "I'm blown away by the quality and style of the clothes I received from Shop.co. From casual wear to elegant dresses, every piece I've bought has exceeded my expectations.",
-  },
   {
     id: 2,
     name: "Alex K.",
@@ -57,28 +52,24 @@ export default function CustomerEvaluate() {
       : text;
   };
   return (
-    <div className="mt-20 mb-20">
-      <h2 className="pl-1 mb-10 text-3xl font-medium border-l-8 rounded-sm text-primary-900 border-l-primary-900">
+    <div className="my-10 md:my-20">
+      <h2 className="pl-1 text-base font-medium border-l-2 rounded-sm md:border-l-8 text-nowrap md:text-xl xl:text-3xl text-primary-900 border-l-primary-900 mb-7 md:mb-10">
         OUR HAPPY CUSTOMERS
       </h2>
       <Swiper
-        slidesPerView={4}
-        spaceBetween={20}
-        pagination={{ clickable: true }}
-        className=" mySwiper"
+        navigation={true}
+        modules={[Navigation, Pagination]}
+        className="mySwiper"
+        pagination={{
+          dynamicBullets: true,
+        }}
       >
         {evaluate.map((e) => (
-          <SwiperSlide key={e.id} >
-            <div className="h-[210px] p-6 border rounded-md border-primary-300">
+          <SwiperSlide key={e.id}>
+            <div className="flex flex-col items-center justify-center">
               {/* Hiển thị sao */}
-              <div className="flex mb-3">
-                {Array.from({ length: Math.floor(e.star) }).map((_, i) => (
-                  <FaStar key={i} color="#FBBF24" />
-                ))}
-                {e.star % 1 !== 0 && <FaStarHalfAlt color="#FBBF24" />}
-              </div>
 
-              <div className="flex items-center gap-2 mb-4">
+              <div className="flex items-center gap-2 mb-1 md:mb-4">
                 <img
                   className="rounded-full w-7 h-7"
                   src="https://static.vecteezy.com/system/resources/previews/009/292/244/non_2x/default-avatar-icon-of-social-media-user-vector.jpg"
@@ -88,7 +79,13 @@ export default function CustomerEvaluate() {
                   {e.name}
                 </p>
               </div>
-              <p className="text-xs text-primary-600">"{truncateText(e.comment, 200)}"</p>
+              <StarRating
+                className={`mb-1 text-xs md:mb-3 md:text-sm`}
+                start={e.star}
+              />
+              <p className="md:text-sm italic text-xs text-center md:w-[400px] w-[242px] h-full  text-primary-600 mb-5 md:mb-10">
+                "{e.comment}"
+              </p>
             </div>
           </SwiperSlide>
         ))}

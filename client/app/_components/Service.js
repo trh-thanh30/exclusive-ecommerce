@@ -23,7 +23,7 @@ const services = [
 ];
 export default function Service() {
   return (
-    <ul className="flex flex-col items-center justify-around gap-4 xl:flex-row md:gap-6">
+    <ul className="flex flex-col items-center justify-around gap-4 md:flex-row md:gap-6">
       {services.map((service) => (
         <li
           key={service.title}

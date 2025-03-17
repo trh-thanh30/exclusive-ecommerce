@@ -15,7 +15,7 @@ export default function ButtonIcon({
       <button
         type={type}
         disabled={disabled}
-        className={`text-sm font-semibold flex-1 h-full w-fit`}
+        className={`md:text-sm text-xs font-semibold flex-1 h-full w-fit`}
         onClick={onClick}
       >
         {text}

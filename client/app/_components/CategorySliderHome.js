@@ -47,21 +47,20 @@ const slides = [
 ];
 
 export default function CategorySlider() {
-  const [currentSlide, setCurrentSlide] = useState(0);
   const [openCategory, setOpenCategory] = useState(null);
   const toggleDropdown = (index) => {
     setOpenCategory(openCategory === index ? null : index);
   };
   return (
-    <div className="flex items-center gap-11">
+    <div className="flex items-center gap-8 xl:gap-11">
       {/* Sidebar */}
-      <aside className="w-1/4 p-4 border-r border-r-gray-300">
+      <aside className="hidden w-1/4 p-2 border-r xl:p-4 border-r-gray-300 md:block">
         <ul>
           {categories.map((category, index) => (
             <li key={index}>
               <Link
                 href={category.link}
-                className="flex items-center justify-between py-2 text-sm font-medium cursor-pointer hover:text-primary-900 text-primary-700"
+                className="flex items-center justify-between py-2 text-xs font-medium cursor-pointer xl:text-sm hover:text-primary-900 text-primary-700"
                 onClick={() => toggleDropdown(index)}
               >
                 {category.name}
@@ -69,11 +68,11 @@ export default function CategorySlider() {
                   {category.subcategories ? (
                     openCategory === index ? (
                       <span className="">
-                        <FaAngleDown size={16} />
+                        <FaAngleDown  />
                       </span>
                     ) : (
                       <span className="">
-                        <FaAngleRight size={16} />
+                        <FaAngleRight  />
                       </span>
                     )
                   ) : null}
@@ -89,7 +88,7 @@ export default function CategorySlider() {
                 {category.subcategories?.map((sub, subIndex) => (
                   <li
                     key={subIndex}
-                    className="py-1 text-sm cursor-pointer text-primary-600 hover:text-primary-900"
+                    className="py-1 text-xs cursor-pointer xl:text-sm text-primary-600 hover:text-primary-900"
                   >
                     {sub}
                   </li>
@@ -100,7 +99,7 @@ export default function CategorySlider() {
         </ul>
       </aside>
       {/* Slider */}
-      <div className="w-3/4">
+      <div className="w-full md:w-3/4">
         <Swiper
           // spaceBetween={30}
           effect={"fade"}
@@ -113,13 +112,13 @@ export default function CategorySlider() {
         >
           <SwiperSlide>
             <img
-              className="w-full object-cover h-[400px]"
+              className="w-full object-cover xl:h-[400px] md:h-[350px] h-[210px] rounded-md"
               src="https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             />
           </SwiperSlide>
           <SwiperSlide>
             <img
-              className="w-full object-cover h-[400px]"
+              className="w-full object-cover xl:h-[400px] md:h-[350px] h-[210px] rounded-md"
               src="https://d1csarkz8obe9u.cloudfront.net/posterpreviews/ecommerce-youtube-thumbnail-design-template-1eb328fdc02797a2d8b84235c90582a7_screen.jpg?ts=1593855677"
             />
           </SwiperSlide>

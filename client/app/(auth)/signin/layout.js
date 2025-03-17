@@ -3,5 +3,5 @@ export const metadata = {
   description: "Sign in to your account",
 };
 export default function SigninLayOut({ children }) {
-  return <div>{children}</div>;
+  return <>{children}</>;
 }

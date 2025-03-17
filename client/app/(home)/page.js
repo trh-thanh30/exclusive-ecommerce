@@ -52,20 +52,39 @@ export default function Page() {
     <>
       <CategorySlider />
       <ProductList name={"Flash Sales"} haveTime={true} link={"#"} />
-      <hr className="w-full mx-auto my-4 md:my-14 border-primary-300" />
-      {/* Categories list */}   
+      <hr className="w-full mx-auto my-8 md:my-14 border-primary-300" />
+      {/* Categories list */}
       <div>
-        <ProductsListHeader haveTime={false} name={"Browse By Category"} link={"#"} />
+        <ProductsListHeader
+          haveTime={false}
+          name={"Browse By Category"}
+          link={"#"}
+        />
         <Swiper
+          key={categories.length}
           slidesPerView={5}
           spaceBetween={16}
           pagination={{
             clickable: true,
           }}
-          className="mt-10 mySwiper"
+          breakpoints={{
+            320: {
+              slidesPerView: 2,
+            },
+            639: {
+              slidesPerView: 3,
+            },
+            865: {
+              slidesPerView: 4,
+            },
+            1000: {
+              slidesPerView: 5,
+            },
+          }}
+          className="mySwiper"
         >
           {categories.map((item) => (
-            <SwiperSlide key={item.id}>
+            <SwiperSlide key={item.name}>
               <div className="border rounded-sm border-primary-300">
                 <div className="flex flex-col items-center justify-center gap-4 px-8 py-6 transition-colors group hover:bg-primary-900 hover:text-primary-50 hover:cursor-pointer">
                   <span>{item.icon}</span>
@@ -78,10 +97,10 @@ export default function Page() {
           ))}
         </Swiper>
       </div>
-      <ProductList name={"Best Selling Products"} haveTime={false} link={"#"}/>
-      <ProductList name={"Explore Our Products"} haveTime={false} link={"#"}/>
-      <CustomerEvaluate/>
-      <Service/>
+      <ProductList name={"Best Selling Products"} haveTime={false} link={"#"} />
+      <ProductList name={"Explore Our Products"} haveTime={false} link={"#"} />
+      <CustomerEvaluate />
+      <Service />
     </>
   );
 }

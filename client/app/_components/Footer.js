@@ -39,7 +39,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <p className="text-xs text-center md:text-sm text-primary-400">
-          © 2019 Exclusive Media, Inc
+          © {new Date().getFullYear()} Exclusive Media, Inc
         </p>
 
         <hr className="w-full max-w-5xl mx-auto my-4 md:my-5 border-primary-600" />

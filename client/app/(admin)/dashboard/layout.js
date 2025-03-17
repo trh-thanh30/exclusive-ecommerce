@@ -3,6 +3,6 @@ export const metadata = {
     description: "Manage your account and more",
   };
   export default function DashboardLayOut({ children }) {
-    return <div>{children}</div>;
+    return <>{children}</>;
   }
   

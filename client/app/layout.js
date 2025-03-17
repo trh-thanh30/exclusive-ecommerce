@@ -6,7 +6,6 @@ import ClientProvider from "./_providers/ClientProvider";
 import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 
-
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -27,7 +26,7 @@ export default function RootLayout({ children }) {
         <title>{metadata.title.default}</title>
         <meta name="description" content={metadata.description} />
       </head>
-      <body className={`${poppins.className} bg-primary-100`}>
+      <body className={`${poppins.className} bg-primary-50`}>
         <ClientProvider>
           <Toaster
             position="top-center"
@@ -44,9 +43,9 @@ export default function RootLayout({ children }) {
               },
             }}
           />
-          <div>
-            <main className="w-full h-screen mx-auto">{children}</main>
-          </div>
+          <>
+            <main className="w-full mx-auto min-h-svh">{children}</main>
+          </>
         </ClientProvider>
       </body>
     </html>

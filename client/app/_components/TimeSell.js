@@ -26,24 +26,24 @@ export default function TimeSell() {
     return () => clearInterval(interval);
   }, []);
   return (
-    <div className="flex items-center gap-4">
+    <div className="items-center hidden gap-2 md:flex md:gap-4">
       <p className="flex flex-col gap-1">
         <span className="text-xs text-primary-900">Hours</span>
-        <span className="text-2xl font-semibold">
+        <span className="text-xs font-semibold md:text-2xl">
           {String(timeLeft.hours).padStart(2, "0")}
         </span>
       </p>
-      <span className="text-3xl font-medium text-primary-500">:</span>
+      <span className="text-xs font-medium md:text-3xl text-primary-500">:</span>
       <p className="flex flex-col gap-1">
         <span className="text-xs text-primary-900">Minutes</span>
-        <span className="text-2xl font-semibold">
+        <span className="text-xs font-semibold md:text-2xl">
           {String(timeLeft.minutes).padStart(2, "0")}
         </span>
       </p>
-      <span className="text-3xl font-medium text-primary-500">:</span>
+      <span className="text-xs font-medium md:text-3xl text-primary-500">:</span>
       <p className="flex flex-col gap-1">
         <span className="text-xs text-primary-900">Seconds</span>
-        <span className="text-2xl font-semibold">
+        <span className="text-xs font-semibold md:text-2xl">
           {String(timeLeft.seconds).padStart(2, "0")}
         </span>
       </p>
