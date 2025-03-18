@@ -6,7 +6,7 @@ export default function DropDownHeart() {
     <>
       <div className="flex items-center justify-between text-xs md:text-sm">
         <span className="">You have 2 items</span>
-        <Link href={"#"} className="text-primary-600">
+        <Link href={"/wishlist"} className="transition-colors text-primary-600 hover:underline hover:text-primary-900">
           See all
         </Link>
       </div>

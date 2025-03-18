@@ -177,7 +177,7 @@ export default function Header() {
                 <button onClick={handleOpenCart} className={`${styleIcon}`}>
                   <CiShoppingCart size={sizeIcon} />
                 </button>
-                <div className="absolute right-0 w-4 h-4 text-[10px] text-center rounded-full md:-right-1 -top-1 bg-primary-900 text-primary-50">
+                <div className="absolute w-4 h-4 text-xs text-center rounded-full -right-1 -top-1 bg-primary-900 text-primary-50">
                   2
                 </div>
               </div>
@@ -224,6 +224,7 @@ export default function Header() {
             />
           </div>
         </div>
+        {/* Open search input */}
         <AnimatePresence>
           {openSearchInpt && (
             <motion.div

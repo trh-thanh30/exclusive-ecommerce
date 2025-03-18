@@ -12,14 +12,14 @@ const list = [
     link: "/account",
   },
   {
-    name: "My Order",
+    name: "My Cart",
     icon: <CiShoppingCart size={22} />,
-    link: "#",
+    link: "/cart",
   },
   {
     name: "My Wishlist",
     icon: <CiHeart size={22} />,
-    link: "#",
+    link: "/wishlist",
   },
 ];
 export default function Dropdown({ user }) {

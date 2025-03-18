@@ -4,6 +4,8 @@ import { GoPlus } from "react-icons/go";
 import { FiMinus } from "react-icons/fi";
 import { IoMdClose } from "react-icons/io";
 import Link from "next/link";
+import { sizeIconPrimary } from "../constants/icons";
+import { FaArrowRightLong } from "react-icons/fa6";
 export default function RightCart({ onClose }) {
   const sidebarCart = useRef(null);
   useEffect(() => {
@@ -23,8 +25,11 @@ export default function RightCart({ onClose }) {
       ref={sidebarCart}
       className="fixed top-0 right-0 z-50 flex flex-col h-full p-3 shadow-2xl w-72 bg-primary-50 rounded-l-2xl"
     >
+      <button className="flex justify-end w-full py-2" onClick={onClose}>
+        <FaArrowRightLong size={sizeIconPrimary} />
+      </button>
       {/* Header */}
-      <div className="flex items-center justify-between mt-10">
+      <div className="flex items-center justify-between mt-3 md:mt-4">
         <h1 className="text-xl font-medium">Cart</h1>
         <span className="text-sm text-primary-500">2</span>
       </div>

@@ -7,7 +7,7 @@ import { FaAngleRight } from "react-icons/fa6";
 export default function Breadcrumb({ items, className }) {
   const pathname = usePathname();
   return (
-    <ul className={`flex items-center text-sm ${className}`}>
+    <ul className={`flex items-center text-xs md:text-sm ${className}`}>
       {items.map((item, index) => (
         <li key={index} className="flex items-center">
           {index > 0 && (
