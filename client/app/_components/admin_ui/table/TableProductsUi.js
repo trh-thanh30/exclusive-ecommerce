@@ -4,20 +4,44 @@ import { MdOutlineStarPurple500 } from "react-icons/md";
 import { IoBagHandleOutline } from "react-icons/io5";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import Input from "../../Input";
-import SpinnerMini from "../../SpinnerMini";
 import Spinner from "../../Spinner";
+import { truncateText } from "@/app/constants/truncateText";
+import { useState } from "react";
+import { CiEdit, CiTrash } from "react-icons/ci";
+import { formatDate } from "date-fns";
 export default function TableProductUi({
   tableHeader,
   data,
   loading,
   openModal,
+  handleDelete,
   paginations,
+  setQuery,
+  query,
 }) {
-  const truncateText = (text, maxLength) => {
-    return text.length > maxLength
-      ? text.substring(0, maxLength) + "..."
-      : text;
+  const [edit, setEdit] = useState(null);
+
+  const toggleEdit = (id) => {
+    setEdit(edit === id ? null : id);
   };
+
+  const handleChangePagination = (e) => {
+    setQuery({ ...query, [e.target.name]: e.target.value });
+  };
+  const handlePrev = () => {
+    setQuery({ ...query, page: parseInt(query.page) - 1 });
+  };
+  const handleNext = () => {
+    setQuery({ ...query, page: parseInt(query.page) + 1 });
+  };
+  const handleChangeSort = (e) => {
+    setQuery({ ...query, sort: e.target.value });
+  };
+  const handleSearch = (e) => {
+    setQuery({ ...query, search: e.target.value });
+  };
+  console.log(data);
+
   return (
     <>
       {!data.length && !loading ? (
@@ -51,14 +75,23 @@ export default function TableProductUi({
                 <Input
                   textSize="text-xs"
                   placeholder={"Search product..."}
+                  name={"search"}
+                  id={"search"}
+                  onChange={handleSearch}
                   icon={<HiSearch />}
                 />
                 <select
                   className="py-[7px] px-2 text-xs border rounded-lg outline-none border-primary-400 text-primary-800"
-                  id="fillter"
+                  id="sort"
+                  name="sort"
+                  onChange={handleChangeSort}
                 >
-                  <option value="a-z">Sort by name(A-Z)</option>
-                  <option value="z-a">Sort by name(Z-A)</option>
+                  <option value="title">Sort by name(A-Z)</option>
+                  <option value="-title">Sort by name(Z-A)</option>
+                  <option value="price">Sort by price(1-10)</option>
+                  <option value="-price">Sort by price(10-1)</option>
+                  <option value="createdAt">Sort by date(newest)</option>
+                  <option value="-createdAt">Sort by date(oldest)</option>
                 </select>
               </div>
             </div>
@@ -66,7 +99,7 @@ export default function TableProductUi({
           <div className="flex-grow overflow-auto">
             <table className="w-full text-left border table-auto min-w-max text-slate-800 border-b-primary-300">
               <thead>
-                <tr className="uppercase border-b text-primary-600 border-primary-300 bg-primary-50">
+                <tr className="uppercase border-b text-primary-600 border-primary-300 bg-primary-50 ">
                   {tableHeader.map((item) => (
                     <th key={item.name} className="p-4">
                       <p className="text-sm font-medium text-primary-400">
@@ -77,16 +110,20 @@ export default function TableProductUi({
                 </tr>
               </thead>
               {loading ? (
-                <td colSpan={tableHeader.length}>
-                  <div className="w-full">
-                    <Spinner />
-                  </div>
-                </td>
+                <tbody className="h-screen">
+                  <tr>
+                    <td colSpan={tableHeader.length}>
+                      <div className="w-full">
+                        <Spinner />
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
               ) : (
-                <tbody>
+                <tbody className="max-h-screen">
                   {data.map((data) => (
                     <tr
-                      key={data.id}
+                      key={data._id}
                       className="transition-colors hover:bg-primary-100"
                     >
                       <td className="p-4">
@@ -102,7 +139,7 @@ export default function TableProductUi({
                         </p>
                       </td>
                       <td className="p-4">
-                        <p className="text-xs">{data.category}</p>
+                        <p className="text-xs">{data?.category?.title}</p>
                       </td>
                       <td className="p-4">
                         <p className="flex items-center text-xs">
@@ -124,12 +161,33 @@ export default function TableProductUi({
                         </p>
                       </td>
                       <td className="p-4">
-                        <p className="text-xs">{data.createdAt}</p>
+                        <p className="text-xs">
+                          {formatDate(data.createdAt, "MM/dd/yyyy")}
+                        </p>
                       </td>
                       <td className="p-2">
-                        <button className="p-2 transition-colors rounded-full hover:bg-primary-200">
+                        <button
+                          onClick={() => toggleEdit(data._id)}
+                          className="p-2 transition-colors rounded-full hover:bg-primary-200"
+                        >
                           <HiOutlineDotsVertical />
                         </button>
+                        {edit === data._id && (
+                          <div className="absolute z-10 p-2 mt-1 transition-colors bg-white border rounded shadow-sm right-8">
+                            <button
+                              onClick={() => {}}
+                              className="flex items-center w-full gap-2 py-2 pl-1 pr-4 text-sm text-left text-primary-900 hover:bg-primary-100"
+                            >
+                              <CiEdit /> Edit
+                            </button>
+                            <button
+                              onClick={() => handleDelete(data._id)}
+                              className="flex items-center w-full gap-2 py-2 pl-1 pr-4 text-sm text-error-500 hover:bg-error-50"
+                            >
+                              <CiTrash /> Delete
+                            </button>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -144,8 +202,11 @@ export default function TableProductUi({
               <select
                 className="p-1 text-xs border rounded-lg outline-none border-primary-400 text-primary-800"
                 id="limit"
+                name="limit"
+                onChange={handleChangePagination}
               >
-                {Array.from({ length: 20 }, (_, index) => index + 1).map(
+                <option value="">-- Limit the products --</option>
+                {Array.from({ length: 10 }, (_, index) => index + 1).map(
                   (value) => (
                     <option key={value} value={value}>
                       {value}
@@ -161,7 +222,9 @@ export default function TableProductUi({
               </p>
               <select
                 className="p-1 text-xs border rounded-lg outline-none border-primary-400 text-primary-800"
-                id="limit"
+                id="page"
+                name="page"
+                onChange={handleChangePagination}
               >
                 {Array.from(
                   { length: paginations.totalPages },
@@ -173,11 +236,19 @@ export default function TableProductUi({
                 ))}
               </select>
 
-              <button className="p-2 rounded-full hover:bg-primary-200">
+              <button
+                onClick={handlePrev}
+                className="p-2 rounded-full hover:bg-primary-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={paginations.currentPage === 1}
+              >
                 <MdKeyboardArrowLeft />
               </button>
               <span>{paginations.currentPage}</span>
-              <button className="p-2 rounded-full hover:bg-primary-200">
+              <button
+                onClick={handleNext}
+                disabled={paginations.currentPage === paginations.totalPages}
+                className="p-2 rounded-full hover:bg-primary-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 <MdKeyboardArrowRight />
               </button>
             </div>

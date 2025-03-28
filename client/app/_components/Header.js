@@ -21,6 +21,7 @@ import RightSidebar from "./RightSidebar";
 import DropDownHeart from "./DropDownHeart";
 import RightCart from "./RightCart";
 
+
 const navLink = [
   {
     href: "/",
@@ -57,6 +58,7 @@ export default function Header() {
   const currentUser = user.user;
   const dropdownRef = useRef(null);
   const dropdownHeartRef = useRef(null);
+  const wishlist = useSelector((state) => state.wishlist.wishlist);
 
   // Hàm xử lý đóng dropdown khi click ra ngoài
   useEffect(() => {
@@ -100,7 +102,7 @@ export default function Header() {
   return (
     <>
       {!offIntro ? <Introduce setOffOffIntro={setOffOffIntro} /> : ""}
-      <header className="sticky top-[-2px] z-50 flex items-center justify-between p-3 py-5 border-b shadow-neutral-50 bg-neutral-50 md:px-8 border-b-neutral-100">
+      <header className="sticky top-[-2px] z-50 flex items-center justify-between px-3 py-5 border-b shadow-neutral-50 bg-primary-50 md:px-12 border-b-neutral-100">
         <Logo logoDefault={true} />
 
         <ul className="items-center hidden gap-10 text-sm font-medium md:flex text-primary-800">
@@ -124,6 +126,7 @@ export default function Header() {
         <div className="flex items-center gap-4 ">
           <div className="hidden xl:block">
             <Input
+              placeholder={"Search something..."}
               icon={
                 <CiSearch
                   className="rounded-full cursor-pointer hover:bg-primary-200"
@@ -147,7 +150,7 @@ export default function Header() {
                 </button>
                 {/* Them vao se hien ra con khong thi se khong hioen */}
                 <div className="absolute w-4 h-4 text-xs text-center rounded-full -right-1 -top-1 bg-primary-900 text-primary-50">
-                  2
+                  {wishlist.length}
                 </div>
                 {/* Dropdown xuất hiện khi click */}
                 <AnimatePresence>
@@ -164,7 +167,7 @@ export default function Header() {
                         opacity: 0,
                       }}
                       transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="absolute right-0 z-50 w-56 p-2 mt-2 overflow-x-scroll bg-white border rounded-md shadow-md md:p-4 border-slate-50 md:w-96"
+                      className="absolute right-0 z-50 w-56  p-3 mt-2 overflow-y-scroll bg-white border rounded-md shadow-md md:p-4 border-slate-50 sm:w-[460px]"
                     >
                       <DropDownHeart />
                     </motion.div>

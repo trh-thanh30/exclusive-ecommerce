@@ -11,7 +11,10 @@ const createBlog = async (req, res) => {
   if (!title || !description || !category)
     return res.status(403).json({ message: "Please enter all fills" });
   const hasBlog = await Blog.findOne({ title });
-  if (hasBlog) return res.status(403).json({ message: "Blog already exists. Please try again!!" });
+  if (hasBlog)
+    return res
+      .status(403)
+      .json({ message: "Blog already exists. Please try again!!" });
   try {
     const images = req.files.map((file) => file.path);
     const blog = new Blog({
@@ -50,7 +53,7 @@ const updateBlog = async (req, res) => {
 };
 const getAllBlogs = async (req, res) => {
   try {
-    let { page, limit, search } = req.query;
+    let { page, limit, search, category } = req.query;
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 5;
     const skip = (page - 1) * limit;
@@ -63,6 +66,9 @@ const getAllBlogs = async (req, res) => {
           { category: { $regex: search, $options: "i" } },
         ],
       };
+    }
+    if (category) {
+      query.category = category;
     }
     const blogs = await Blog.find(query).skip(skip).limit(limit);
     let totalNumViews = 0;

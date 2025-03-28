@@ -36,10 +36,12 @@ export default function RootLayout({ children }) {
               success: { duration: 3000 },
               error: { duration: 4000 },
               style: {
-                fontSize: "14px",
+                fontSize: "12px",
+                fontWeight: "500",
                 color: "#9CA3AF",
-                maxWidth: "500px",
-                padding: "16px 24px",
+             
+                maxWidth: "400px",
+                padding: "14px 20px",
               },
             }}
           />

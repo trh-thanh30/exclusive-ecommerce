@@ -21,16 +21,21 @@ const productsSchema = new mongoose.Schema(
       required: true,
       min: 0,
     },
-    size: {
-      type: String,
-      enum: ["S", "M", "L", "XL", "XXL"],
-    },
-    color: {
-      type: String,
-      required: true,
-    },
+    size: [
+      {
+        type: String,
+        enum: ["S", "M", "L", "XL", "XXL"],
+      },
+    ],
+    color: [
+      {
+        type: String,
+        required: true,
+      },
+    ],
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category",
       required: true,
     },
     quantity: {

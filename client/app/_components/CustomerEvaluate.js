@@ -46,11 +46,7 @@ const evaluate = [
 ];
 
 export default function CustomerEvaluate() {
-  const truncateText = (text, maxLength) => {
-    return text.length > maxLength
-      ? text.substring(0, maxLength) + "..."
-      : text;
-  };
+ 
   return (
     <div className="my-10 md:my-20">
       <h2 className="pl-1 text-base font-medium border-l-2 rounded-sm md:border-l-8 text-nowrap md:text-xl xl:text-3xl text-primary-900 border-l-primary-900 mb-7 md:mb-10">

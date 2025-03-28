@@ -1,3 +1,5 @@
+const { default: mongoose } = require("mongoose");
+const Category = require("../models/category.models");
 const Product = require("../models/products.models");
 const slugify = require("slugify");
 const createProducts = async (req, res) => {
@@ -39,13 +41,17 @@ const createProducts = async (req, res) => {
         .status(401)
         .json({ message: "Please enter product brand name" });
     const images = req.files.map((file) => file.path);
+    const findCategory = await Category.findOne({ title: category });
+    if (!findCategory) {
+      return res.status(402).json({ message: "No category found" });
+    }
     const product = new Product({
       title,
       description,
       slug: slug || slugify(title),
       price,
       color,
-      category,
+      category: findCategory._id,
       quantity,
       brand,
       sold,
@@ -70,7 +76,7 @@ const getAllProducts = async (req, res) => {
       "page",
       "sort",
       "limit",
-      "order",
+      "category",
       "fields",
       "search",
     ];
@@ -80,13 +86,24 @@ const getAllProducts = async (req, res) => {
       /\b(gte|gt|lte|lt)\b/g,
       (match) => `$${match}`
     );
-    let query = Product.find(JSON.parse(queryString));
+    let query = Product.find(JSON.parse(queryString)).populate(
+      "category",
+      "title"
+    );
     // Sorting
     if (req.query.sort) {
       const sortBy = req.query.sort.split(",").join(",");
       query = query.sort(sortBy);
     } else {
       query = query.sort("-createdAt");
+    }
+    // get product with category
+    if (req.query.category) {
+      const category = await Category.findOne({ title: req.query.category });
+      if (!category) {
+        return res.status(404).json({ message: "No category found" });
+      }
+      query = query.find({ category: category._id });
     }
 
     // Limiting the fields
@@ -105,7 +122,7 @@ const getAllProducts = async (req, res) => {
         $or: [
           { title: new RegExp(search, "i") },
           { description: new RegExp(search, "i") },
-          { category: new RegExp(search, "i") },
+          { "category.title": new RegExp(search, "i") },
           { brand: new RegExp(search, "i") },
           { color: new RegExp(search, "i") },
           { size: new RegExp(search, "i") },

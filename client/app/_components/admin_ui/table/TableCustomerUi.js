@@ -55,11 +55,15 @@ export default function TableCustomerUi({
 
           <tbody>
             {loading ? (
-              <td colSpan={tableHeader.length}>
-                <div className="w-full">
-                  <Spinner />
-                </div>
-              </td>
+              <tbody>
+                <tr>
+                  <td colSpan={tableHeader.length}>
+                    <div className="w-full">
+                      <Spinner />
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
             ) : (
               data?.map((data) => (
                 <tr

@@ -8,6 +8,7 @@ import useFetchBlog from "@/app/hooks/useFetchBlog";
 import toast from "react-hot-toast";
 import { DELETE_BLOG_ENDPOINT } from "@/app/constants/api";
 import Swal from "sweetalert2";
+import useAlertDelete from "@/app/hooks/useAlertDelete";
 const tableHeader = [
   {
     name: "Image",
@@ -41,49 +42,32 @@ export default function ConversatiDash() {
   const { loading, blogs, pagination, fetchBlogs } = useFetchBlog();
   const [openModal, setOpenModal] = useState();
   const [modModal, setModModal] = useState("");
-  
+
   const handleOpenModal = (mode) => {
     setOpenModal((open) => !open);
     setModModal(mode);
   };
-  const alertDeleteBlog = (id) => {
-    Swal.fire({
-      title: "Are you sure?",
-      text: "You want to delete your account?",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#34D399",
-      cancelButtonColor: "#F56565",
-      confirmButtonText: "Yes, delete it!",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success",
-        });
-        const handleDeleteAcount = async () => {
-          try {
-            const res = await fetch(`${DELETE_BLOG_ENDPOINT}/${id}`, {
-              method: "DELETE",
-              credentials: "include",
-            });
-            const data = await res.json();
-            if (!res.ok) {
-              toast.error(data.message);
-            } else {
-              toast.success("Blog deleted successfully");
-              fetchBlogs();
-            }
-          } catch (error) {
-            toast.error(error.message);
-          }
-        };
-        handleDeleteAcount();
-      }
-    });
-  };
 
+  const { alertDelete } = useAlertDelete({
+    functionDelete: async (id) => {
+      try {
+        const res = await fetch(`${DELETE_BLOG_ENDPOINT}/${id}`, {
+          method: "DELETE",
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          toast.error(data.message);
+        } else {
+          toast.success("Blog deleted successfully");
+          fetchBlogs();
+        }
+      } catch (error) {
+        toast.error(error.message);
+      }
+    },
+    textDelete: "this blog",
+  });
   return (
     <>
       <div className="p-6">
@@ -99,7 +83,7 @@ export default function ConversatiDash() {
         </div>
         <div className="flex flex-col w-full min-h-screen mt-6 bg-white rounded-lg shadow-md bg-clip-border">
           <TableBlogUi
-            handleDelete={alertDeleteBlog}
+            handleDelete={alertDelete}
             openModal={handleOpenModal}
             modModal={modModal}
             loading={loading}

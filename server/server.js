@@ -13,6 +13,7 @@ const gooleRouters = require("./routers/google.router");
 const contactRouters = require("./routers/contact.router");
 const categoryRouters = require("./routers/category.router");
 const productRouters = require("./routers/products.router");
+const blogCategoryRouters = require("./routers/blog-category.router");
 const blogRouters = require("./routers/blog.router");
 const brandRouters = require("./routers/brand.router");
 const couponRouters = require("./routers/coupon.router");
@@ -63,6 +64,9 @@ app.use("/api/category", categoryRouters);
 
 /* PRODUCTS ROUTER */
 app.use("/api/product", productRouters);
+
+/* BLOG-CATEGORIES ROUTER */
+app.use("/api/blog-category", blogCategoryRouters);
 
 /* BLOG ROUTER */
 app.use("/api/blog", blogRouters);

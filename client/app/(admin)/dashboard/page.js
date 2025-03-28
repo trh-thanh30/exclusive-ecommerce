@@ -7,15 +7,17 @@ import HeaderDash from "@/app/_components/admin_ui/dash/HeaderDash";
 import OrdersDash from "@/app/_components/admin_ui/dash/OrdersDash";
 import ProductsDash from "@/app/_components/admin_ui/dash/ProductsDash";
 import SidebarDashboard from "@/app/_components/admin_ui/dash/SidebarDashboard";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Page() {
   const loaction = useSearchParams();
   const tab = loaction.get("tab");
+  const router = useRouter();
+
   useEffect(() => {
     if (!tab) {
-      location.href = "/dashboard?tab=dashboard";
+      router.push("/dashboard?tab=dashboard");
     }
   }, [tab]);
   return (

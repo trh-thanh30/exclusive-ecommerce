@@ -3,10 +3,10 @@ const User = require("../models/user.models");
 
 const createContact = async (req, res) => {
   try {
-    const { note, subject_name } = req.body;
+    const { note } = req.body;
     const userId = req.user.id;
-  
-    if (!subject_name || !note) {
+
+    if (!note) {
       return res.status(400).json({ message: "Missing required fields" });
     }
     const userInfo = await User.findById(userId).select("-password");
@@ -16,7 +16,6 @@ const createContact = async (req, res) => {
     }
     const contact = new Contact({
       userInformations: userInfo,
-      subject_name,
       note,
     });
     await contact.save();
@@ -43,7 +42,6 @@ const getAllContacts = async (req, res) => {
     if (search) {
       query = {
         $or: [
-          { subject_name: new RegExp(search, "i") },
           { username: new RegExp(search, "i") },
           { email: new RegExp(search, "i") },
           { note: new RegExp(search, "i") },
@@ -112,7 +110,7 @@ const updateContact = async (req, res) => {
     if (!contact) return res.status(403).json({ messgae: "Contact not found" });
     if (!id)
       return res.status(403).json({ messgae: "Contact ID not provided" });
-    const { note, status, subject_name } = req.body;
+    const { note, status } = req.body;
     const ALLOWED_STATUS = [
       "Not processed yet",
       "Processing",
@@ -124,7 +122,6 @@ const updateContact = async (req, res) => {
     }
     if (note) contact.note = note;
     if (status) contact.status = status;
-    if (subject_name) contact.subject_name = subject_name;
     await contact.save();
     return res
       .status(200)

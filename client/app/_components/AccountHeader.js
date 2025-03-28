@@ -15,12 +15,12 @@ const breadcrumb = [
 export default function AccountHeader() {
   const { user } = useSelector((state) => state.user);
   return (
-    <div className="flex items-center justify-between">
+    <>
       <Breadcrumb items={breadcrumb} />
-      <div className="flex items-center gap-1 text-xs md:text-sm text-primary-500">
+      <div className="flex items-center justify-end w-full gap-1 mt-10 text-xs md:mt-16 md:text-sm text-primary-500">
         <span>Welcome! </span>{" "}
-        <span className="text-primary-800">{user?.user?.username}</span>
+        <h1 className="font-medium text-primary-800">{user?.user?.username}</h1>
       </div>
-    </div>
+    </>
   );
 }

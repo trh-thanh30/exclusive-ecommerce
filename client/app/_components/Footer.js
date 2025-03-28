@@ -11,8 +11,8 @@ export default function Footer() {
   const iconStyle =
     "flex items-center justify-center md:w-10 md:h-10 w-8 h-8 transition border rounded-full border-primary-400 hover:bg-primary-50 hover:text-primary-900";
   return (
-    <footer className="py-10 mt-10 text-white md:mt-20 md:py-12 bg-neutral-900">
-      <div className="px-8 md:px-10">
+    <footer className="py-10 text-white md:py-12 bg-neutral-900">
+      <div className="px-8 md:px-12">
         <p className="text-xs tracking-widest text-center uppercase md:text-sm text-primary-400">
           The best of luxury brand values, high quality products, and innovative
           services
@@ -42,34 +42,9 @@ export default function Footer() {
           © {new Date().getFullYear()} Exclusive Media, Inc
         </p>
 
-        <hr className="w-full max-w-5xl mx-auto my-4 md:my-5 border-primary-600" />
-
-        <div className="flex flex-col items-center justify-between gap-6 text-sm xl:flex-row">
+        <hr className="w-full max-w-6xl mx-auto my-4 md:my-5 border-primary-600" />
+        <div className="flex flex-col items-center justify-between w-full gap-6 mt-2 text-sm xl:flex-row">
           <Logo />
-          {/* Menu Footer */}
-
-          <ul className="flex flex-col items-center justify-center flex-grow gap-2 text-xs md:flex-row md:gap-11 md:text-sm">
-            <li>
-              <Link href="#" className="hover:underline">
-                Team
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                Terms Of Use
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                Publications
-              </Link>
-            </li>
-            <li>
-              <Link href="#" className="hover:underline">
-                Privacy Policy
-              </Link>
-            </li>
-          </ul>
 
           {/* Social Media */}
           <div className="flex gap-4">
@@ -87,6 +62,28 @@ export default function Footer() {
             </Link>
           </div>
         </div>
+        <ul className="flex flex-col items-center justify-center gap-2 mx-auto mt-6 text-xs xl:mt-1 md:flex-row md:gap-11 md:text-sm">
+          <li>
+            <Link href="#" className="hover:underline">
+              Team
+            </Link>
+          </li>
+          <li>
+            <Link href="#" className="hover:underline">
+              Terms Of Use
+            </Link>
+          </li>
+          <li>
+            <Link href="#" className="hover:underline">
+              Publications
+            </Link>
+          </li>
+          <li>
+            <Link href="#" className="hover:underline">
+              Privacy Policy
+            </Link>
+          </li>
+        </ul>
       </div>
     </footer>
   );

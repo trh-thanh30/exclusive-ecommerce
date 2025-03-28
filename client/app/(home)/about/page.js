@@ -42,6 +42,7 @@ export default function Page() {
             width={500}
             alt="About Us"
             className="w-full rounded-sm md:w-auto"
+            
           />
         </div>
         <Achivment />

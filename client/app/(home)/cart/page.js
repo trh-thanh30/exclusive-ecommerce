@@ -31,13 +31,14 @@ const cartItems = [
   },
 ];
 export default function Page() {
+  
   return (
     <>
       {/* Header */}
       <h1 className="mt-1 text-3xl font-medium text-center md:mt-3 md:text-4xl text-primary-900">
         Cart
       </h1>
-      <div className="flex items-center justify-center gap-5 mt-6 sm:gap-10 md:gap-28 md:mt-11 text-nowrap">
+      <div className="flex items-center justify-center gap-3 mt-6 sm:gap-10 md:gap-28 md:mt-11 text-nowrap">
         {/* 1 */}
         <div className="flex flex-col items-center gap-1 md:flex-row md:gap-2">
           <span className="flex items-center justify-center w-8 h-8 text-xs rounded-full md:text-sm bg-primary-900 text-primary-50 ">
@@ -129,7 +130,7 @@ export default function Page() {
           <h1 className="font-medium text-balance">Cart summary</h1>
           <div className="flex flex-col gap-3 mt-4">
             {/* Free Shipping */}
-            <label className="flex items-center justify-between p-3 text-sm border rounded-lg cursor-pointer border-primary-200">
+            <label className="flex items-center justify-between p-3 text-xs border rounded-lg cursor-pointer md:text-sm border-primary-200">
               <div className="flex items-center gap-2">
                 <input
                   type="radio"
@@ -143,7 +144,7 @@ export default function Page() {
             </label>
 
             {/* Experss Sipping */}
-            <label className="flex items-center justify-between p-3 text-sm border rounded-lg cursor-pointer border-primary-200">
+            <label className="flex items-center justify-between p-3 text-xs border rounded-lg cursor-pointer md:text-sm border-primary-200">
               <div className="flex items-center gap-2">
                 <input
                   type="radio"

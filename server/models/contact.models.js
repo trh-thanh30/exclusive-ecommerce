@@ -6,10 +6,7 @@ const contactSchema = new mongoose.Schema(
       ref: "User",
       required: true,
     },
-    subject_name: {
-      type: String,
-      required: true,
-    },
+
     note: {
       type: String,
       required: true,

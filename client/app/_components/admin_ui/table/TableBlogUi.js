@@ -5,6 +5,7 @@ import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
 import { CiEdit, CiTrash } from "react-icons/ci";
 import Input from "../../Input";
 import Spinner from "../../Spinner";
+import { truncateText } from "@/app/constants/truncateText";
 
 export default function TableBlogUi({
   tableHeader,
@@ -15,12 +16,6 @@ export default function TableBlogUi({
   handleDelete,
 }) {
   const [activeDropdown, setActiveDropdown] = useState(null);
-
-  const truncateText = (text, maxLength) => {
-    return text.length > maxLength
-      ? text.substring(0, maxLength) + "..."
-      : text;
-  };
 
   const toggleDropdown = (id) => {
     setActiveDropdown(activeDropdown === id ? null : id);
@@ -90,11 +85,15 @@ export default function TableBlogUi({
 
               <tbody>
                 {loading ? (
-                  <td colSpan={tableHeader.length}>
-                    <div className="w-full">
-                      <Spinner />
-                    </div>
-                  </td>
+                  <tbody>
+                    <tr>
+                      <td colSpan={tableHeader.length}>
+                        <div className="w-full">
+                          <Spinner />
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
                 ) : (
                   data?.map((data) => (
                     <tr

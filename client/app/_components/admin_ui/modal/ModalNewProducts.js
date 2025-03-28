@@ -1,8 +1,77 @@
-import React from "react";
-import { MdClose } from "react-icons/md";
+import React, { useState } from "react";
+import { MdAdd, MdClose } from "react-icons/md";
 import Input from "../../Input";
-export default function ModalNewProducts({ onClose }) {
+import useCreateProduct from "@/app/hooks/useCreateProduct";
+import SpinnerMini from "../../SpinnerMini";
+import { CREATE_PRODUCT_ENDPOINT } from "@/app/constants/api";
+import toast from "react-hot-toast";
+import useFetchCategories from "@/app/hooks/useFetchCategories";
+export default function ModalNewProducts({ onClose, fetchProducts }) {
   const styleLabel = "text-sm font-medium text-primary-900 mb-1";
+  const [addNewInputColor, setNewInputColor] = useState([""]);
+  const { categories } = useFetchCategories();
+  const handleAddInputColor = () => {
+    setNewInputColor([...addNewInputColor, ""]);
+  };
+  const {
+    formData,
+    handleChanges,
+    loading,
+    previewImages,
+    setLoading,
+    handleChangesFiles,
+    setFormData,
+    handleChangesColor,
+  } = useCreateProduct();
+  console.log(formData);
+  const handleSubmitProduct = async (e) => {
+    e.preventDefault();
+    const form = new FormData();
+    form.append("title", formData.title);
+    form.append("description", formData.description);
+    form.append("price", formData.price);
+    form.append("quantity", formData.quantity);
+    form.append("category", formData.category);
+    form.append("brand", formData.brand);
+    formData.color.forEach((color, i) => {
+      form.append(`color`, color);
+    });
+    formData.images.forEach((image, index) => {
+      form.append(`images`, image);
+    });
+    setLoading(true);
+
+    try {
+      const res = await fetch(CREATE_PRODUCT_ENDPOINT, {
+        method: "POST",
+        credentials: "include",
+        body: form,
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.message);
+        setLoading(false);
+      } else {
+        toast.success(data.message);
+        setLoading(false);
+        setFormData({
+          title: "",
+          description: "",
+          price: "",
+          quantity: "",
+          category: "",
+          brand: "",
+          color: [],
+          images: [],
+        });
+        onClose();
+        await fetchProducts();
+      }
+    } catch (error) {
+      toast.error(error.message);
+      setLoading(false);
+    }
+  };
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 bg-neutral-900">
       <div className="w-2/3 max-h-screen p-6 overflow-y-scroll bg-white rounded-lg shadow-lg">
@@ -16,7 +85,7 @@ export default function ModalNewProducts({ onClose }) {
           </button>
         </div>
 
-        <form>
+        <form onSubmit={handleSubmitProduct}>
           <div className="grid grid-cols-2 gap-4">
             {/* Title name product */}
             <div>
@@ -26,6 +95,7 @@ export default function ModalNewProducts({ onClose }) {
               <Input
                 type="text"
                 name={"title"}
+                onChange={handleChanges}
                 id={"title"}
                 fullWidth={true}
                 placeholder="Enter product name"
@@ -39,6 +109,7 @@ export default function ModalNewProducts({ onClose }) {
               </label>
               <Input
                 type="number"
+                onChange={handleChanges}
                 name="price"
                 id={"price"}
                 fullWidth={true}
@@ -54,6 +125,7 @@ export default function ModalNewProducts({ onClose }) {
               <Input
                 type="text"
                 isTextArea={true}
+                onChange={handleChanges}
                 fullWidth={true}
                 name="description"
                 id="description"
@@ -70,46 +142,68 @@ export default function ModalNewProducts({ onClose }) {
                 fullWidth={true}
                 type="number"
                 name="quantity"
+                onChange={handleChanges}
                 id={"quantity"}
                 placeholder="Enter quantity"
               />
             </div>
 
             {/* Colors */}
-            <div>
-              <label htmlFor="color" className={`${styleLabel}`}>
+            <div className="relative group">
+              <label htmlFor="color" className={`${styleLabel}   block`}>
                 Color
               </label>
-              <Input
-                type="text"
-                name="color"
-                fullWidth={true}
-                id={"color"}
-                placeholder="Enter color"
-              />
+              <span
+                onClick={handleAddInputColor}
+                className="absolute right-0 flex items-center gap-1 p-1 text-xs transition-all rounded-full opacity-0 hover:cursor-pointer hover:opacity-90 -top-1 group-hover:opacity-100 bg-primary-900 text-primary-50"
+              >
+                Add new color
+                <MdAdd />
+              </span>
+              {addNewInputColor.map((input, index) => (
+                <Input
+                  type="text"
+                  className={"mb-2"}
+                  key={index}
+                  onKeyDown={handleChangesColor}
+                  name={`color`}
+                  id={`color`}
+                  fullWidth={true}
+                  placeholder="Enter color"
+                />
+              ))}
             </div>
 
             {/* Category */}
-            <div>
+            <div className="flex flex-col">
               <label htmlFor="category" className={`${styleLabel}`}>
                 Category
               </label>
-              <Input
-                type="text"
+              <select
+                className="p-2 text-sm border rounded-lg outline-none border-primary-400 text-primary-800"
+                id="category"
                 name="category"
-                id={"category"}
-                fullWidth={true}
-                placeholder="Enter category"
-              />
+                onChange={handleChanges}
+              >
+                <option className="text-xs text-primary-400">
+                  -----Select a category-----
+                </option>
+                {categories.map((category) => (
+                  <option key={category._id} value={category.title}>
+                    {category.title}
+                  </option>
+                ))}
+              </select>
             </div>
 
-            {/* Thương hiệu */}
+            {/* Brand */}
             <div>
               <label htmlFor="brand" className={`${styleLabel}`}>
                 Brand
               </label>
               <Input
                 type="text"
+                onChange={handleChanges}
                 name="brand"
                 id={"brand"}
                 fullWidth={true}
@@ -122,27 +216,24 @@ export default function ModalNewProducts({ onClose }) {
               <label className={`${styleLabel}`}>Product Images</label>
               <input
                 type="file"
+                onChange={handleChangesFiles}
+                id="images"
+                accept="image/*"
+                name="images"
                 multiple
                 className="w-full p-2 mt-1 border border-gray-300 rounded-lg"
               />
             </div>
           </div>
           <div className="flex items-center gap-2 my-2">
-            <img
-              src="https://halomobile.vn/wp-content/uploads/2023/06/iphone-15-pro-max-xanh-halo-mobile.png"
-              alt=""
-              className="h-24 p-1 border rounded-lg w-26 border-primary-300"
-            />
-            <img
-              src="https://halomobile.vn/wp-content/uploads/2023/06/iphone-15-pro-max-xanh-halo-mobile.png"
-              className="h-24 p-1 border rounded-lg w-26 border-primary-300"
-              alt=""
-            />
-            <img
-              src="https://halomobile.vn/wp-content/uploads/2023/06/iphone-15-pro-max-xanh-halo-mobile.png"
-              className="h-24 p-1 border rounded-lg w-26 border-primary-300"
-              alt=""
-            />
+            {previewImages.map((img, index) => (
+              <img
+                key={index}
+                src={img}
+                alt={`Image ${index + 1}`}
+                className="h-24 p-1 border rounded-lg w-26 border-primary-300"
+              />
+            ))}
           </div>
 
           <div className="flex justify-end gap-2 mt-6">
@@ -157,7 +248,7 @@ export default function ModalNewProducts({ onClose }) {
               type="submit"
               className="px-4 py-2 text-sm rounded-lg text-primary-50 bg-primary-900 hover:opacity-95"
             >
-              Save Product
+              {loading ? <SpinnerMini /> : "Created Product"}
             </button>
           </div>
         </form>

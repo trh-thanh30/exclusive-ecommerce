@@ -1,9 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import { MdClose } from "react-icons/md";
 import Input from "../../Input";
+import toast from "react-hot-toast";
+import { CREATE_CATEGORY_ENDPOINT } from "@/app/constants/api";
 
-export default function ModalNewCategory({ onClose }) {
+export default function ModalNewCategory({ onClose, fetchCategories }) {
   const styleLabel = "text-sm font-medium text-primary-900 mb-1";
+  const [title, setTitle] = useState("");
+  const onChangeTitle = (e) => {
+    setTitle(e.target.value);
+  };
+  const handleCreatedCategory = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch(CREATE_CATEGORY_ENDPOINT, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ title }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        toast.error(data.message);
+      } else {
+        toast.success(data.message);
+        onClose();
+        setTitle("");
+        await fetchCategories();
+      }
+    } catch (error) {
+      toast.error(error.message);
+    }
+  };
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 bg-neutral-900">
       <div className="w-2/3 max-h-screen p-6 overflow-y-scroll bg-white rounded-lg shadow-lg">
@@ -17,19 +47,20 @@ export default function ModalNewCategory({ onClose }) {
           </button>
         </div>
 
-        <form>
+        <form onSubmit={handleCreatedCategory}>
           <div>
             {/* Title name product */}
             <div className="flex flex-col gap-1">
               <label htmlFor="title" className={`${styleLabel}`}>
-                Blog Name
+                Category Title
               </label>
               <Input
                 type="text"
                 name={"title"}
                 id={"title"}
+                onChange={onChangeTitle}
                 fullWidth={true}
-                placeholder="Enter product name"
+                placeholder="Enter category title"
               />
             </div>
           </div>
@@ -46,7 +77,7 @@ export default function ModalNewCategory({ onClose }) {
               type="submit"
               className="px-4 py-2 text-sm rounded-lg text-primary-50 bg-primary-900 hover:opacity-95"
             >
-              Save Blog
+              Created Category
             </button>
           </div>
         </form>

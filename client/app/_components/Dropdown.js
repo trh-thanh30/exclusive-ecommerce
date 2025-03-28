@@ -17,7 +17,7 @@ const list = [
     link: "/cart",
   },
   {
-    name: "My Wishlist",
+    name: "My Favorites List",
     icon: <CiHeart size={22} />,
     link: "/wishlist",
   },
@@ -29,8 +29,8 @@ export default function Dropdown({ user }) {
     <>
       <div className="flex flex-col items-center gap-1">
         <img className="rounded-full w-14 h-14" src={avatar} alt={username} />
-        <span className="text-xs text-slate-600">{username}</span>
-        <span className="text-sm text-slate-700">{email}</span>
+        <span className="text-xs font-medium text-slate-600">{username}</span>
+        <span className="text-sm text-slate-400">{email}</span>
       </div>
       <span className="flex items-center w-full my-2 border border-primary-200"></span>
       <div className="flex flex-col gap-1">

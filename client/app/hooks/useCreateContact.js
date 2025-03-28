@@ -7,11 +7,8 @@ import { CREATE_CONTACT_ENDPOINT } from "../constants/api";
 export default function useCreateContact() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
-    firstname: "",
-    lastname: "",
-    phone_number: "",
+    username: "",
     email: "",
-    subject_name: "",
     note: "",
   });
   const handleChange = (e) => {
@@ -36,7 +33,11 @@ export default function useCreateContact() {
       }
       toast.success(data.message);
       setLoading(false);
-      setFormData({});
+      setFormData({
+        username: "",
+        email: "",
+        note: "",
+      });
     } catch (error) {
       toast.error(error.message);
     }

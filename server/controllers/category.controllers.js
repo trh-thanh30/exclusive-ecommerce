@@ -78,7 +78,7 @@ const getCategory = async (req, res) => {
 };
 const getAllCategory = async (req, res) => {
   try {
-    let { page, limit, search } = req.query;
+    let { page, limit, search, sort } = req.query;
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 10;
     const skip = (page - 1) * limit;
@@ -88,7 +88,11 @@ const getAllCategory = async (req, res) => {
         $or: [{ title: { $regex: search, $options: "i" } }],
       };
     }
-    const categories = await Category.find().skip(skip).limit(limit);
+    const sortBy = sort ? sort.split(",").join("") : "createdAt";
+    const categories = await Category.find(query)
+      .sort(sortBy)
+      .skip(skip)
+      .limit(limit);
     return res.status(200).json({
       categories: categories,
       pagination: {
