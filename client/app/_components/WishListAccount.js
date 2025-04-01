@@ -1,13 +1,11 @@
 import React from "react";
 import { IoCloseOutline } from "react-icons/io5";
-import useWishlist from "../hooks/useWishlist";
 import Image from "next/image";
-import { useSelector } from "react-redux";
 import Link from "next/link";
+import { useWishlist } from "../context/WishlistContext";
 
 export default function WishListAccount() {
-  const { wishlist } = useSelector((state) => state.wishlist);
-  const { addToWishList } = useWishlist();
+  const { addToWishList, wishlist } = useWishlist();
   if (wishlist?.length === 0)
     return (
       <div className="flex flex-col ">

@@ -60,7 +60,7 @@ export default function Header() {
   const dropdownHeartRef = useRef(null);
   const wishlist = useSelector((state) => state.wishlist.wishlist);
 
-  // Hàm xử lý đóng dropdown khi click ra ngoài
+ 
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -167,7 +167,7 @@ export default function Header() {
                         opacity: 0,
                       }}
                       transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="absolute right-0 z-50 w-56  p-3 mt-2 overflow-y-scroll bg-white border rounded-md shadow-md md:p-4 border-slate-50 sm:w-[460px]"
+                      className="absolute right-0 z-50 w-56 p-3 mt-2 overflow-y-scroll bg-white border rounded-md shadow-md md:p-4 border-slate-50 sm:w-[500px]"
                     >
                       <DropDownHeart />
                     </motion.div>
@@ -209,7 +209,7 @@ export default function Header() {
                           opacity: 0,
                         }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="absolute right-0 z-50 p-4 mt-2 bg-white border rounded-md shadow-md border-slate-50"
+                        className="absolute right-0 z-50 px-6 py-4 mt-2 bg-white border rounded-md shadow-md border-slate-50"
                       >
                         <Dropdown user={currentUser.user} />
                       </motion.div>
@@ -280,7 +280,7 @@ export default function Header() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: "easeIn" }}
-            className="fixed top-0 right-0 z-50 block h-full bg-white shadow-2xl w-72 rounded-l-2xl rounded-bl-2xl"
+            className="fixed top-0 right-0 z-50 block h-full bg-white shadow-2xl w-[300px] md:w-96 rounded-l-2xl rounded-bl-2xl"
           >
             <RightCart onClose={() => setOpenCart(false)} />
           </motion.div>

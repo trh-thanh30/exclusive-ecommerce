@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
+@plugin "daisyui";
 @layer components {
   .spinner {
     margin: 3.2rem auto 1.6rem;
@@ -66,5 +66,3 @@
 .swiper-button-prev::after {
   font-size: 20px !important;
 }
-
-

@@ -2,6 +2,7 @@ const { default: mongoose } = require("mongoose");
 const Category = require("../models/category.models");
 const Product = require("../models/products.models");
 const slugify = require("slugify");
+const User = require("../models/user.models");
 const createProducts = async (req, res) => {
   try {
     const { role_name } = req.user;
@@ -156,7 +157,7 @@ const getProduct = async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) return res.status(404).json({ message: "Product ID not found" });
-    const product = await Product.findById(id);
+    const product = await Product.findById(id).populate("ratings.postedBy");
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }

@@ -7,37 +7,62 @@ const addToCart = async (req, res) => {
   try {
     const { id } = req.user;
     const { cart } = req.body;
-    let products = [];
+    if (!cart || !Array.isArray(cart) || cart.length === 0) {
+      return res.status(400).json({ message: "Cart is empty or invalid" });
+    }
     const user = await User.findById(id);
-    await Cart.deleteOne({ user: user.id });
+    if (!user)
+      return res
+        .status(404)
+        .json({ message: "Please sign in or sign up to add to cart!!! " });
+    let existingCart = await Cart.findOne({ user: user.id });
+    if (!existingCart) {
+      existingCart = new Cart({
+        user: user.id,
+        products: [],
+        totalPriceCart: 0,
+      });
+    }
     for (let i = 0; i < cart.length; i++) {
-      let object = {};
-      object.product = cart[i]._id;
-      object.quantity = cart[i].quantity;
-      object.color = cart[i].color;
-      object.size = cart[i].size;
-      let getPrice = await Product.findById(cart[i]._id).select("price").exec();
-      object.price = getPrice.price;
-      object.priceAfterQuantity = getPrice.price * cart[i].quantity;
-      products.push(object);
+      let { _id, quantity, color, size } = cart[i];
+      quantity = parseInt(quantity);
+      let getPrice = await Product.findById(_id).select("price").exec();
+      if (!getPrice) return;
+      let productIndex = existingCart.products.findIndex(
+        (item) =>
+          item.product.toString() === _id &&
+          item.color === color &&
+          item.size === size
+      );
+      if (productIndex !== -1) {
+        existingCart.products[productIndex].quantity += quantity;
+        existingCart.products[productIndex].priceAfterQuantity =
+          getPrice.price * existingCart.products[productIndex].quantity;
+      } else {
+        existingCart.products.push({
+          product: _id,
+          quantity,
+          color,
+          size,
+          price: getPrice.price,
+          priceAfterQuantity: getPrice.price * quantity,
+        });
+      }
+      existingCart.totalPriceCart = existingCart.products.reduce(
+        (total, item) => total + item.priceAfterQuantity,
+        0
+      );
+      await existingCart.save();
+      return res.status(200).json({
+        message: "Product added to cart successfully",
+        cart: existingCart,
+      });
     }
-    let cartTotal = 0;
-    for (let i = 0; i < products.length; i++) {
-      cartTotal += products[i].price * products[i].quantity;
-    }
-    const newCart = new Cart({
-      user: user.id,
-      products: products,
-      totalPriceCart: cartTotal,
-    });
-    await newCart.save();
-    return res
-      .status(201)
-      .json({ message: "Product added to cart successfully", newCart });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
 };
+
 const applyCoupon = async (req, res) => {
   try {
     const { id } = req.user;
@@ -78,7 +103,7 @@ const getCart = async (req, res) => {
       "products.product"
     );
     if (!cart) return res.status(404).json({ message: "Cart not found" });
-    return res.status(200).json({ cart });
+    return res.status(200).json({ cart, cartLength: cart.products.length });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

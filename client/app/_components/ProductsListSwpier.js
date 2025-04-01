@@ -14,7 +14,7 @@ export default function ProductsListSwpier() {
         0: {
           slidesPerView: 1,
         },
-        380: {
+        320: {
           slidesPerView: 2,
         },
         639: {
@@ -34,7 +34,7 @@ export default function ProductsListSwpier() {
       className="mySwiper"
     >
       {products.map((product) => (
-        <SwiperSlide key={product.id}>
+        <SwiperSlide key={product._id}>
           <ProductCart product={product} />
         </SwiperSlide>
       ))}

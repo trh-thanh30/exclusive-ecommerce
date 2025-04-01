@@ -6,11 +6,11 @@ const wishLists = async (req, res) => {
     const { id } = req.user;
     const { productId } = req.body;
     const user = await User.findById(id);
-    const allreadyAddToWishList = user.wishList.find(
+    const alreadyAddToWishList = user.wishList.find(
       (id) => id.toString() === productId
     );
-    let allreadyAdd = true;
-    if (allreadyAddToWishList) {
+    let alreadyAdd = true;
+    if (alreadyAddToWishList) {
       await User.findByIdAndUpdate(
         id,
         {
@@ -23,7 +23,7 @@ const wishLists = async (req, res) => {
       return res.status(200).json({
         message: "Product removed from your favorites list!!!",
         productId: productId,
-        allreadyAdd: false,
+        alreadyAdd: false,
       });
     } else {
       await User.findByIdAndUpdate(
@@ -36,11 +36,11 @@ const wishLists = async (req, res) => {
       return res.status(200).json({
         message: "Product added to your favorites list!!!",
         productId: productId,
-        allreadyAdd: true,
+        alreadyAdd: true,
       });
     }
   } catch (error) {
-    return res.status(400).json({ messge: error.message });
+    return res.status(400).json({ message: error.message });
   }
 };
 const getAllWishLists = async (req, res) => {
@@ -49,8 +49,8 @@ const getAllWishLists = async (req, res) => {
     const user = await User.findById(id);
 
     if (user.wishList.length === 0 || !user) {
-      return res.status(500).json({
-        messaage: "You don't have any products in your favorites list yet!!!",
+      return res.status(404).json({
+        message: "You don't have any products in your favorites list yet!!!",
       });
     }
     // Pagination
@@ -75,4 +75,15 @@ const getAllWishLists = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
-module.exports = { wishLists, getAllWishLists };
+const removeAllWishLists = async (req, res) => {
+  try {
+    const { id } = req.user;
+    await User.findByIdAndUpdate(id, { wishList: [] }, { new: true });
+    return res
+      .status(200)
+      .json({ message: "All products removed from your favorites list!!!" });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+module.exports = { wishLists, getAllWishLists, removeAllWishLists };

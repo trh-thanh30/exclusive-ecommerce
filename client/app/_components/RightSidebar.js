@@ -59,14 +59,14 @@ export default function RightSidebar({ onClose, navLink }) {
         <FaArrowRightLong size={sizeIconPrimary} />
       </button>
       <div className="flex flex-col gap-4 mt-3 text-sm font-medium text-primary-900">
-        <Link className="flex items-center justify-between " href={"#"}>
+        <Link className="flex items-center justify-between " href={"/cart"}>
           <div className="flex items-center gap-1">
             <CiShoppingCart size={25} />
-            <span>Order</span>
+            <span>Cart</span>
           </div>
           <span>2</span>
         </Link>
-        <Link className="flex items-center justify-between" href={"#"}>
+        <Link className="flex items-center justify-between" href={"/wishlist"}>
           <div className="flex items-center gap-1">
             <CiHeart size={25} />
             <span>Favorite</span>

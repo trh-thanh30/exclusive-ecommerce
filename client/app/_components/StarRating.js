@@ -7,7 +7,7 @@ export default function StarRating({ start, className }) {
   const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0); // Số sao rỗng
 
   return (
-    <div className={`flex ${className}`}>
+    <div className={`flex ${className} md:text-sm text-xs`}>
       {/* Hiển thị sao đầy */}
       {Array.from({ length: fullStars }).map((_, i) => (
         <FaStar key={i} color="#FBBF24" />

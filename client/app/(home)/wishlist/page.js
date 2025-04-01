@@ -1,8 +1,7 @@
 "use client";
 import Breadcrumb from "@/app/_components/Breadcrumb";
-import SpinnerDoot from "@/app/_components/SpinnerDoot";
 import { truncateText } from "@/app/constants/truncateText";
-import useWishlist from "@/app/hooks/useWishlist";
+import { useWishlist } from "@/app/context/WishlistContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect } from "react";
@@ -10,16 +9,14 @@ import { CiHeart } from "react-icons/ci";
 import { FaHeart } from "react-icons/fa6";
 import { GoTrash } from "react-icons/go";
 import { MdKeyboardArrowLeft } from "react-icons/md";
-import { useSelector } from "react-redux";
 
 const breadcrumb = [
   { name: "Home", href: "/" },
   { name: "wishlist", href: "/wishlist" },
 ];
 export default function Page() {
-  const { wishlist } = useSelector((state) => state.wishlist);
-  const { addToWishList } = useWishlist();
-  console.log(wishlist)
+  const { addToWishList, wishlist, removeAllWishlist } = useWishlist();
+
   if (wishlist?.length === 0)
     return (
       <>
@@ -66,7 +63,10 @@ export default function Page() {
             </p>
           </div>
 
-          <button className="px-4 py-2 text-xs transition-colors bg-white border rounded-full md:text-sm md:px-7 border-primary-900 text-primary-900 hover:bg-primary-900 hover:text-primary-50">
+          <button
+            onClick={removeAllWishlist}
+            className="px-4 py-2 text-xs transition-colors bg-white border rounded-full md:text-sm md:px-7 border-primary-900 text-primary-900 hover:bg-primary-900 hover:text-primary-50"
+          >
             Delete All
           </button>
         </div>
@@ -96,7 +96,9 @@ export default function Page() {
                 </h2>
               </div>
               <div className="flex items-center gap-2 text-xs font-medium md:text-base ">
-                <span className="text-primary-400">{product.category.title}</span>
+                <span className="text-primary-400">
+                  {product.category.title}
+                </span>
                 <span className="h-5 border border-primary-300"></span>
                 <span
                   className={` ${

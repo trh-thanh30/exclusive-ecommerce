@@ -3,10 +3,10 @@ import Link from "next/link";
 import React from "react";
 import { truncateText } from "../constants/truncateText";
 import { CiHeart } from "react-icons/ci";
-import { useSelector } from "react-redux";
+import { useWishlist } from "../context/WishlistContext";
 
 export default function DropDownHeart() {
-  const { wishlist } = useSelector((state) => state.wishlist);
+  const { wishlist } = useWishlist();
   if (wishlist.length === 0)
     return (
       <div className="flex flex-col items-center justify-center">
@@ -70,9 +70,12 @@ export default function DropDownHeart() {
         ))}
       </div>
       <div className="flex justify-end pb-3 mt-2 md:mt-3">
-        <button className="p-2 text-xs md:p-3 rounded-3xl text-primary-50 bg-primary-900">
+        <Link
+          href="/cart"
+          className="p-2 text-xs md:p-3 rounded-3xl text-primary-50 bg-primary-900"
+        >
           Check Out All
-        </button>
+        </Link>
       </div>
     </div>
   );

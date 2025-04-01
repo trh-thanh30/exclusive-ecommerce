@@ -20,5 +20,6 @@ export const DELETE_PRODUCT_ENDPOINT = `${API_URL}/product`;
 export const WISLIST_ENDPOINT = `${API_URL}/wishlists`;
 export const DELETE_CATEGORY_ENDPOINT = `${API_URL}/category/delete-category`;
 export const CREATE_CATEGORY_ENDPOINT = `${API_URL}/category/`;
+export const CART_ENDPOINT = `${API_URL}/cart/`;
 export const LOCATION =
   "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3724.761385426313!2d107.30948297379636!3d21.002199988693175!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x314b01caebdc09c1%3A0xc8d584ca6992b9cb!2zQ2FvIFPGoW4!5e0!3m2!1sen!2sus!4v1742453375430!5m2!1sen!2sus";
