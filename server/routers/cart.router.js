@@ -5,6 +5,8 @@ const {
   applyCoupon,
   getCart,
   emptyCart,
+  updatedQuantity,
+  removeCart,
 } = require("../controllers/cart.controllers");
 const router = express.Router();
 // POST
@@ -14,4 +16,8 @@ router.post("/", verifyToken, addToCart);
 router.get("/", verifyToken, getCart);
 // DELETE
 router.delete("/", verifyToken, emptyCart);
+
+// PATCH
+router.patch("/update-quantity", verifyToken, updatedQuantity);
+router.patch("/remove-cart", verifyToken, removeCart);
 module.exports = router;

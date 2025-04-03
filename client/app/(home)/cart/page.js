@@ -1,7 +1,9 @@
 "use client";
+import CartEmpty from "@/app/_components/cart/CartEmpty";
 import Checkout from "@/app/_components/cart/Checkout";
 import OrderComplete from "@/app/_components/cart/OrderComplete";
 import ShoppingCart from "@/app/_components/cart/ShoppingCart";
+import { useCart } from "@/app/context/CartContext";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
@@ -44,6 +46,18 @@ export default function Page() {
       router.push("/cart?cart=shopping-cart");
     }
   }, [cart]);
+  const {
+    loading,
+    carts,
+    cartLength,
+    totalPriceCarts,
+    handleChangeQuantity,
+    handleRemoveItem,
+    handleFetchCarts,
+  } = useCart();
+  useEffect(() => {
+    handleFetchCarts();
+  }, []);
   return (
     <>
       {/* Header */}
@@ -111,9 +125,25 @@ export default function Page() {
       </div>
 
       {/* Body */}
-      {cart === "shopping-cart" && <ShoppingCart cartItems={cartItems} />}
-      {cart === "checkout" && <Checkout />}
-      {cart === "order-complete" && <OrderComplete />}
+      <>
+        {cartLength ? (
+          <>
+            {cart === "shopping-cart" && (
+              <ShoppingCart
+                carts={carts}
+                cartItems={cartItems}
+                handleRemoveItem={handleRemoveItem}
+                handleChangeQuantity={handleChangeQuantity}
+                totalPriceCarts={totalPriceCarts}
+              />
+            )}
+            {cart === "checkout" && <Checkout />}
+            {cart === "order-complete" && <OrderComplete />}
+          </>
+        ) : (
+          <CartEmpty className={"md:mt-20 mt-10"}/>
+        )}
+      </>
     </>
   );
 }

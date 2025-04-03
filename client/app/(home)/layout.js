@@ -1,7 +1,7 @@
 "use client";
 import Footer from "../_components/Footer";
 import Header from "../_components/Header";
-import { CartProvider } from "../context/CardContext";
+import { CartProvider } from "../context/CartContext";
 import { WishlistProvider } from "../context/WishlistContext";
 import useCheckAuth from "../hooks/useCheckAuth";
 

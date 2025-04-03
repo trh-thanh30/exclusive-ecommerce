@@ -17,7 +17,7 @@ import Reviews from "@/app/_components/Reviews";
 import ProductDescription from "@/app/_components/ProductDescription";
 import { useWishlist } from "@/app/context/WishlistContext";
 import toast from "react-hot-toast";
-import { useCart } from "@/app/context/CardContext";
+import { useCart } from "@/app/context/CartContext";
 
 export default function ProductDetails() {
   const params = useParams();

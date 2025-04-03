@@ -1,12 +1,18 @@
+import Image from "next/image";
 import React from "react";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { HiOutlineTrash } from "react-icons/hi2";
-export default function ShoppingCart({ cartItems }) {
+export default function ShoppingCart({
+  carts,
+  handleRemoveItem,
+  handleChangeQuantity,
+  totalPriceCarts,
+}) {
   return (
     <>
-      <div className="md:mt-20 mt-10 md:gap-8 gap-6 grid grid-cols-1 md:grid-cols-[1.2fr_0.6fr]">
+      <div className="md:mt-20 mt-10 md:gap-8 gap-6 grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-[1.2fr_0.6fr]">
         {/* Table left */}
-        <table>
+        <table className="h-fit">
           <thead className="text-base text-primary-900">
             <tr className="text-left border-b border-b-gray-400">
               <th className="font-medium">Product</th>
@@ -16,44 +22,85 @@ export default function ShoppingCart({ cartItems }) {
             </tr>
           </thead>
           <tbody>
-            {cartItems.map((item) => (
-              <tr key={item.id} className="border-b border-gray-300 ">
+            {carts.map((item, index) => (
+              <tr key={item._id} className="border-b border-gray-300">
                 {/* Products Line */}
-                <td className="flex items-center gap-1 py-2 sm:gap-2">
-                  <img
-                    src={item.image}
-                    alt={item.name}
+                <td className="flex items-center gap-3 py-2 sm:gap-2">
+                  <Image
+                    width={500}
+                    height={500}
+                    loading="lazy"
+                    src={item.product.images[0]}
+                    alt={item.product.title}
                     className="w-16 h-16 md:w-20 md:h-20"
                   />
-                  <div className="flex flex-col gap-2 text-sm sm:gap-1">
-                    <h2 className="font-medium text-primary-900">
-                      {item.name}
+                  <div className="flex flex-col gap-2 text-xs md:text-sm sm:gap-1">
+                    <h2 className="font-medium text-primary-900 ">
+                      {item.product.title}
                     </h2>
                     <p className="text-xs text-gray-400">Color: {item.color}</p>
-                    <button className="flex items-center gap-1 text-sm transition-colors text-primary-500 hover:text-error-500">
-                      <HiOutlineTrash /> Remove
+                    <button
+                      onClick={() => handleRemoveItem(item._id)}
+                      className="flex items-center gap-1 text-sm transition-colors text-primary-600 hover:text-error-500"
+                    >
+                      <HiOutlineTrash />
+                      Remove
                     </button>
-                    <div className="flex items-center justify-between w-20 p-1 text-sm border rounded-md sm:p-2 sm:w-24 text-primary-900 border-primary-400 sm:hidden">
-                      <FiPlus className="w-4 h-4 transition-colors rounded-full hover:cursor-pointer hover:bg-primary-900 hover:text-primary-50" />
-                      <span className="">{item.quantity}</span>
-                      <FiMinus className="w-4 h-4 transition-colors rounded-full hover:cursor-pointer hover:bg-primary-900 hover:text-primary-50" />
+                    <div className="flex items-center justify-between w-20 p-2 text-sm border rounded-md sm:p-2 sm:w-24 text-primary-900 border-primary-400 sm:hidden">
+                      <button
+                        disabled={item.quantity === 1}
+                        onClick={() =>
+                          handleChangeQuantity(index, "decrement", item._id)
+                        }
+                        className="flex items-center justify-center w-4 h-4 transition-colors rounded-full hover:cursor-pointer hover:bg-primary-900 hover:text-primary-50 disabled:cursor-not-allowed hover:disabled:bg-primary-200"
+                      >
+                        <FiMinus size={20} />
+                      </button>
+
+                      <span className="text-xs">{item.quantity}</span>
+                      <button
+                        disabled={item.quantity === item.product.quantity}
+                        onClick={() =>
+                          handleChangeQuantity(index, "increment", item._id)
+                        }
+                        className="flex items-center justify-center w-4 h-4 transition-colors rounded-full hover:cursor-pointer hover:bg-primary-900 hover:text-primary-50 disabled:cursor-not-allowed hover:disabled:bg-primary-200"
+                      >
+                        <FiPlus size={20} />
+                      </button>
                     </div>
                   </div>
                 </td>
                 {/* Quantity Line */}
                 <td className="hidden sm:table-cell">
-                  <div className="flex items-center justify-between w-24 p-2 text-sm border rounded-md text-primary-900 border-primary-400">
-                    <FiMinus className="w-4 h-4 transition-colors rounded-full hover:cursor-pointer hover:bg-primary-900 hover:text-primary-50" />
-                    <span className="">{item.quantity}</span>
-                    <FiPlus className="w-4 h-4 transition-colors rounded-full hover:cursor-pointer hover:bg-primary-900 hover:text-primary-50" />
+                  <div className="flex items-center justify-between w-24 px-2 py-3 text-sm border rounded-md text-primary-900 border-primary-400">
+                    <button
+                      disabled={item.quantity === 1}
+                      onClick={() =>
+                        handleChangeQuantity(index, "decrement", item._id)
+                      }
+                      className="flex items-center justify-center w-4 h-4 transition-colors rounded-full hover:cursor-pointer hover:bg-primary-900 hover:text-primary-50 disabled:cursor-not-allowed hover:disabled:bg-primary-200"
+                    >
+                      <FiMinus size={20} />
+                    </button>
+
+                    <span className="text-xs">{item.quantity}</span>
+                    <button
+                      disabled={item.quantity === item.product.quantity}
+                      onClick={() =>
+                        handleChangeQuantity(index, "increment", item._id)
+                      }
+                      className="flex items-center justify-center w-4 h-4 transition-colors rounded-full hover:cursor-pointer hover:bg-primary-900 hover:text-primary-50 disabled:cursor-not-allowed hover:disabled:bg-primary-200"
+                    >
+                      <FiPlus size={20} />
+                    </button>
                   </div>
                 </td>
                 {/* Price Line */}
-                <td className="text-sm text-primary-900">
+                <td className="text-xs md:text-sm text-primary-900 ">
                   ${item.price.toFixed(2)}
                 </td>
                 {/* Subtotal Line */}
-                <td className="text-sm font-semibold">
+                <td className="text-xs font-semibold md:text-sm">
                   ${(item.price * item.quantity).toFixed(2)}
                 </td>
               </tr>
@@ -67,38 +114,38 @@ export default function ShoppingCart({ cartItems }) {
             {/* Free Shipping */}
             <label className="flex items-center justify-between p-3 text-xs border rounded-lg cursor-pointer md:text-sm border-primary-200">
               <div className="flex items-center gap-2">
-                <input
-                  type="radio"
-                  name="shipping"
-                  // checked={shipping === 0}
-                  // onChange={() => setShipping(0)}
-                />
+                <input type="radio" name="shipping" />
                 <span>Free shipping</span>
               </div>
               <span className="font-medium">$0.00</span>
             </label>
 
             {/* Experss Sipping */}
-            <label className="flex items-center justify-between p-3 text-xs border rounded-lg cursor-pointer md:text-sm border-primary-200">
+            <label
+              className={`flex items-center justify-between p-3 text-xs border rounded-lg cursor-pointer md:text-sm border-primary-200
+              ${true ? "bg-gray-200 opacity-50 pointer-events-none" : ""} `}
+            >
               <div className="flex items-center gap-2">
                 <input
                   type="radio"
                   name="shipping"
-                  // checked={shipping === 0}
-                  // onChange={() => setShipping(0)}
+                  disabled
+                  className="disabled:opacity-90 disabled:cursor-not-allowed"
                 />
-                <span>Express shipping</span>
+                <span className="disabled:text-primary-400">
+                  Express shipping
+                </span>
               </div>
               <span className="font-medium">+$15.00</span>
             </label>
 
             <div className="flex items-center justify-between pb-2 mt-3 font-medium border-b text-primary-900 border-b-primary-300">
               <h3 className="text-base">Subtotal</h3>
-              <span className="text-sm">$00.00</span>
+              <span className="text-sm">${totalPriceCarts.toFixed(2)}</span>
             </div>
             <div className="flex items-center justify-between font-medium text-primary-900">
               <h2 className="text-base">Total</h2>
-              <span className="text-sm">$1345.00</span>
+              <span className="text-sm">${totalPriceCarts.toFixed(2)}</span>
             </div>
           </div>
           <button className="w-full px-6 py-2 mt-4 text-sm transition-colors border rounded-full border-primary-900 hover:bg-primary-900 hover:text-primary-50">

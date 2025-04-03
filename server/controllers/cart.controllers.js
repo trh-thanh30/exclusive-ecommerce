@@ -102,8 +102,9 @@ const getCart = async (req, res) => {
     const cart = await Cart.findOne({ user: user.id }).populate(
       "products.product"
     );
+    const cartLength = cart.products.reduce((a, b) => a + b.quantity, 0);
     if (!cart) return res.status(404).json({ message: "Cart not found" });
-    return res.status(200).json({ cart, cartLength: cart.products.length });
+    return res.status(200).json({ cart, cartLength: cartLength });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -120,9 +121,56 @@ const emptyCart = async (req, res) => {
     return res.status(400).json({ message: error.message });
   }
 };
+const updatedQuantity = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { cartId, quantity } = req.body;
+    const cart = await Cart.findOne({ user: id });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
+    const item = cart.products.find((p) => p._id.toString() === cartId);
+    if (!item) return res.status(404).json({ message: "Item not found" });
+    item.quantity = quantity;
+    item.priceAfterQuantity = item.price * quantity;
+    cart.totalPriceCart = cart.products.reduce(
+      (sum, p) => sum + p.price * p.quantity,
+      0
+    );
+    await cart.save();
+    return res.status(200).json({ success: true, cart });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+const removeCart = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const { cartId } = req.body;
+    if (!cartId) {
+      return res.status(400).json({ message: "Cart not found" });
+    }
+    const cart = await Cart.findOne({ user: id });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
+    const deleteCart = cart.products.filter(
+      (item) => item._id.toString() !== cartId
+    );
+    cart.products = deleteCart;
+    cart.totalPriceCart = cart.products.reduce(
+      (sum, p) => sum + p.price * p.quantity,
+      0
+    );
+    await cart.save();
+    return res
+      .status(200)
+      .json({ success: true, message: "Cart removed successfully" });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
 module.exports = {
   addToCart,
   applyCoupon,
   getCart,
   emptyCart,
+  updatedQuantity,
+  removeCart,
 };

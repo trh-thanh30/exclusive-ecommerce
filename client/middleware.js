@@ -6,6 +6,9 @@ export default function middleware(request) {
   if (pathname.startsWith("/account") && !token) {
     return NextResponse.redirect(new URL("/signin", request.url));
   }
+  if (pathname.startsWith("/cart") && !token) {
+    return NextResponse.redirect(new URL("/signin", request.url));
+  }
   if (pathname.startsWith("/dashboard")) {
     if (!token) {
       return NextResponse.redirect(new URL("/signin", request.url));
@@ -16,5 +19,5 @@ export default function middleware(request) {
   }
 }
 export const config = {
-  matcher: ["/account/:path*", "/dashboard/:path*"],
+  matcher: ["/account/:path*", "/dashboard/:path*", "/cart/:path*"],
 };
