@@ -1,12 +1,13 @@
 "use client";
-import CartEmpty from "@/app/_components/cart/CartEmpty";
 import Checkout from "@/app/_components/cart/Checkout";
 import OrderComplete from "@/app/_components/cart/OrderComplete";
 import ShoppingCart from "@/app/_components/cart/ShoppingCart";
+import Spinner from "@/app/_components/Spinner";
 import { useCart } from "@/app/context/CartContext";
 
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { useEffect } from "react";
+import { TiTick } from "react-icons/ti";
 
 const cartItems = [
   {
@@ -38,14 +39,6 @@ const cartItems = [
   },
 ];
 export default function Page() {
-  const location = useSearchParams();
-  const router = useRouter();
-  const cart = location.get("cart");
-  useEffect(() => {
-    if (!cart) {
-      router.push("/cart?cart=shopping-cart");
-    }
-  }, [cart]);
   const {
     loading,
     carts,
@@ -55,9 +48,26 @@ export default function Page() {
     handleRemoveItem,
     handleFetchCarts,
   } = useCart();
+  const location = useSearchParams();
+  const router = useRouter();
+  const cart = location.get("cart");
+  useEffect(() => {
+    if (!cart || cartLength === 0) {
+      router.push("/cart?cart=shopping-cart");
+    }
+  }, [cart]);
+
   useEffect(() => {
     handleFetchCarts();
   }, []);
+  const orderId = cart?.split("order-complete/")[1];
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Spinner />
+      </div>
+    );
+  }
   return (
     <>
       {/* Header */}
@@ -68,38 +78,39 @@ export default function Page() {
         {/* 1 */}
         <div className="flex flex-col items-center gap-1 md:flex-row md:gap-2">
           <span
-            className={`flex items-center justify-center w-8 h-8 text-xs rounded-full md:text-sm  text-primary-50 ${
-              cart === "shopping-cart" ? "bg-primary-900 " : " bg-primary-400"
-            } `}
-          >
-            1
+            className={`flex items-center justify-center w-8 h-8 text-xs rounded-full md:text-sm   ${
+              cart === "shopping-cart"
+                ? "bg-primary-900 text-primary-50"
+                : "text-success-50 bg-success-400"
+            }  `}>
+            {cart === "shopping-cart"
+              ? "1"
+              : (cart === "checkout" || "order-complete") && <TiTick />}
           </span>
           <span
             className={`text-xs font-medium md:text-base  ${
               cart === "shopping-cart"
                 ? "text-primary-900 "
-                : " text-primary-400"
-            }`}
-          >
+                : (cart === "checkout" || "order-complete") &&
+                  "text-success-400 "
+            }
+            }`}>
             Shopping cart
           </span>
         </div>
         {/* 2 */}
         <div
-          className={`flex flex-col items-center gap-1 md:flex-row md:gap-2 `}
-        >
+          className={`flex flex-col items-center gap-1 md:flex-row md:gap-2 `}>
           <span
             className={`flex items-center justify-center w-8 h-8 text-xs rounded-full md:text-sm text-primary-50  ${
               cart === "checkout" ? "bg-primary-900 " : " bg-primary-400"
-            }`}
-          >
-            2
+            } ${cart?.startsWith("order-complete/") && "bg-success-400"}`}>
+            {cart ? "2" : cart?.startsWith("order-complete/") && <TiTick />}
           </span>
           <span
             className={`text-xs font-medium md:text-base ${
               cart === "checkout" ? "text-primary-900" : "text-primary-400"
-            }`}
-          >
+            } ${cart?.startsWith("order-complete/") && "text-success-400"}`}>
             Checkout details
           </span>
         </div>
@@ -107,18 +118,18 @@ export default function Page() {
         <div className="flex flex-col items-center gap-1 md:flex-row md:gap-2">
           <span
             className={`flex items-center justify-center w-8 h-8 text-xs rounded-full md:text-sm text-primary-50 ${
-              cart === "order-complete" ? "bg-primary-900 " : " bg-primary-400"
-            }`}
-          >
+              cart?.startsWith("order-complete/")
+                ? "bg-primary-900 "
+                : " bg-primary-400"
+            }`}>
             3
           </span>
           <span
             className={`text-xs font-medium md:text-base  ${
-              cart === "order-complete"
+              cart?.startsWith("order-complete/")
                 ? "text-primary-900"
                 : "text-primary-400"
-            }`}
-          >
+            }`}>
             Order complete
           </span>
         </div>
@@ -126,22 +137,22 @@ export default function Page() {
 
       {/* Body */}
       <>
-        {cartLength ? (
-          <>
-            {cart === "shopping-cart" && (
-              <ShoppingCart
-                carts={carts}
-                cartItems={cartItems}
-                handleRemoveItem={handleRemoveItem}
-                handleChangeQuantity={handleChangeQuantity}
-                totalPriceCarts={totalPriceCarts}
-              />
-            )}
-            {cart === "checkout" && <Checkout />}
-            {cart === "order-complete" && <OrderComplete />}
-          </>
-        ) : (
-          <CartEmpty className={"md:mt-20 mt-10"}/>
+        {cart === "shopping-cart" && (
+          <ShoppingCart
+            carts={carts}
+            cartItems={cartItems}
+            handleRemoveItem={handleRemoveItem}
+            handleChangeQuantity={handleChangeQuantity}
+            totalPriceCarts={totalPriceCarts}
+            cartLength={cartLength}
+          />
+        )}
+
+        {cart === "checkout" && (
+          <Checkout totalPriceCarts={totalPriceCarts} carts={carts} />
+        )}
+        {cart?.startsWith("order-complete/") && (
+          <OrderComplete orderId={orderId} />
         )}
       </>
     </>

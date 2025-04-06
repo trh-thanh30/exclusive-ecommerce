@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { FiMinus } from "react-icons/fi";
 import { GoPlus } from "react-icons/go";
 import { FaHeart } from "react-icons/fa";
-import { CART_ENDPOINT, PRODUCTS_ENDPOINT } from "@/app/constants/api";
+import { PRODUCTS_ENDPOINT } from "@/app/constants/api";
 
 import Breadcrumb from "@/app/_components/Breadcrumb";
 import Image from "next/image";
@@ -13,11 +13,13 @@ import Link from "next/link";
 import truck from "../../../IconSvg/truck.svg";
 import returnicon from "../../../IconSvg/return.svg";
 import ProductsListSwpier from "@/app/_components/ProductsListSwpier";
+import AddToCartBtn from "@/app/_components/cart/AddToCartBtn";
 import Reviews from "@/app/_components/Reviews";
 import ProductDescription from "@/app/_components/ProductDescription";
 import { useWishlist } from "@/app/context/WishlistContext";
 import toast from "react-hot-toast";
 import { useCart } from "@/app/context/CartContext";
+import Spinner from "@/app/_components/Spinner";
 
 export default function ProductDetails() {
   const params = useParams();
@@ -27,20 +29,24 @@ export default function ProductDetails() {
   const [product, setProduct] = useState([]);
   const [quantity, setQuantity] = useState(1);
   const [image, setImage] = useState(null);
+  const [loading, setLoading] = useState(false);
   const { addToWishList, wishlist } = useWishlist();
   const isProductInWishlist = wishlist.some(
     (item) => item._id === product?._id
   );
   const { addToCart } = useCart();
   const handleGetProduct = async () => {
+    setLoading(true);
     try {
       const res = await fetch(`${PRODUCTS_ENDPOINT}/${id}`, {
         method: "GET",
       });
       const data = await res.json();
+      setLoading(false);
       setProduct(data.product);
       setImage(data?.product?.images[0]);
     } catch (error) {
+      setLoading(false);
       console.error(error.message);
     }
   };
@@ -69,7 +75,12 @@ export default function ProductDetails() {
   const handleChangeColor = (name) => {
     setColorGet(name);
   };
-
+  if (loading)
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Spinner />
+      </div>
+    );
   return (
     <>
       <Breadcrumb items={breadcrumb} />
@@ -98,7 +109,7 @@ export default function ProductDetails() {
           </div>
           {product?.images?.length > 0 && (
             <Image
-              className="w-56 h-56 p-2 bg-white rounded-md md:w-96 md:h-96 lg:h-full"
+              className="w-56 h-56 p-2 bg-white rounded-md md:w-[400px] md:h-80 lg:h-full"
               src={image}
               loading="lazy"
               width={500}
@@ -138,7 +149,7 @@ export default function ProductDetails() {
 
           <hr className="w-full my-4 md:my-6 border-primary-300" />
           <div className="flex items-center gap-2">
-            <span className="text-sm text-primary-900">Colours:</span>
+            <span className="text-sm text-primary-900">Colors:</span>
             <div className="flex items-center gap-2 ml-2">
               {product.color?.map((color, index) => (
                 <span
@@ -163,7 +174,7 @@ export default function ProductDetails() {
               >
                 <FiMinus />
               </button>
-              <span className="">{+(quantity)}</span>
+              <span className="">{+quantity}</span>
               <button
                 disabled={quantity === product.quantity}
                 onClick={() => setQuantity((prev) => prev + 1)}
@@ -172,13 +183,11 @@ export default function ProductDetails() {
                 <GoPlus />
               </button>
             </div>
-            <button
-              type="button"
-              onClick={() => addToCart(product, colorGet, quantity)}
-              className="px-4 py-3 text-xs rounded-md text-nowrap md:py-3 md:text-sm md:px-7 bg-primary-800 text-primary-50"
-            >
-              Add to Cart
-            </button>
+
+            <AddToCartBtn
+              color={colorGet}
+              addToCart={() => addToCart(product, colorGet, quantity)}
+            />
             <button
               type="button"
               onClick={() => addToWishList(product)}

@@ -20,7 +20,7 @@ import Dropdown from "./Dropdown";
 import RightSidebar from "./RightSidebar";
 import DropDownHeart from "./DropDownHeart";
 import RightCart from "./RightCart";
-
+import { useCart } from "../context/CartContext";
 
 const navLink = [
   {
@@ -59,8 +59,8 @@ export default function Header() {
   const dropdownRef = useRef(null);
   const dropdownHeartRef = useRef(null);
   const wishlist = useSelector((state) => state.wishlist.wishlist);
+  const { cartLength } = useCart();
 
- 
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -115,8 +115,7 @@ export default function Header() {
                     ? "border-b-[1.5px] border-primary-900 py-1"
                     : ""
                 }
-                href={link.href}
-              >
+                href={link.href}>
                 {link.name}
               </Link>
             </li>
@@ -167,8 +166,7 @@ export default function Header() {
                         opacity: 0,
                       }}
                       transition={{ duration: 0.2, ease: "easeOut" }}
-                      className="absolute right-0 z-50 w-56 p-3 mt-2 overflow-y-scroll bg-white border rounded-md shadow-md md:p-4 border-slate-50 sm:w-[500px]"
-                    >
+                      className="absolute right-0 z-50 w-56 p-3 mt-2 overflow-y-scroll bg-white border rounded-md shadow-md md:p-4 border-slate-50 sm:w-[500px]">
                       <DropDownHeart />
                     </motion.div>
                   )}
@@ -181,7 +179,7 @@ export default function Header() {
                   <CiShoppingCart size={sizeIcon} />
                 </button>
                 <div className="absolute w-4 h-4 text-xs text-center rounded-full -right-1 -top-1 bg-primary-900 text-primary-50">
-                  2
+                  {cartLength}
                 </div>
               </div>
 
@@ -191,8 +189,7 @@ export default function Header() {
                   <button
                     type="button"
                     onClick={() => setDropDown((perv) => !perv)}
-                    className={`${styleIcon}`}
-                  >
+                    className={`${styleIcon}`}>
                     <CiUser size={sizeIcon} />
                   </button>
                   <AnimatePresence>
@@ -209,8 +206,7 @@ export default function Header() {
                           opacity: 0,
                         }}
                         transition={{ duration: 0.2, ease: "easeOut" }}
-                        className="absolute right-0 z-50 px-6 py-4 mt-2 bg-white border rounded-md shadow-md border-slate-50"
-                      >
+                        className="absolute right-0 z-50 px-6 py-4 mt-2 bg-white border rounded-md shadow-md border-slate-50">
                         <Dropdown user={currentUser.user} />
                       </motion.div>
                     )}
@@ -235,8 +231,7 @@ export default function Header() {
               animate={{ y: 0 }}
               exit={{ y: "-50%" }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
-              className="absolute left-0 z-10 block w-full top-full md:hidden"
-            >
+              className="absolute left-0 z-10 block w-full top-full md:hidden">
               <Input
                 fullWidth={true}
                 placeholder={"Search some things..."}
@@ -263,8 +258,7 @@ export default function Header() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: "easeIn" }}
-            className="fixed top-0 right-0 z-50 block w-64 h-full bg-white shadow-2xl rounded-l-2xl rounded-bl-2xl md:hidden"
-          >
+            className="fixed top-0 right-0 z-50 block w-64 h-full bg-white shadow-2xl rounded-l-2xl rounded-bl-2xl md:hidden">
             <RightSidebar
               navLink={navLink}
               onClose={() => setOpenSideBar(false)}
@@ -280,8 +274,7 @@ export default function Header() {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ duration: 0.3, ease: "easeIn" }}
-            className="fixed top-0 right-0 z-50 block h-full bg-white shadow-2xl w-[300px] md:w-96 rounded-l-2xl rounded-bl-2xl"
-          >
+            className="fixed top-0 right-0 z-50 block h-full bg-white shadow-2xl w-[300px] md:w-96 rounded-l-2xl rounded-bl-2xl">
             <RightCart onClose={() => setOpenCart(false)} />
           </motion.div>
         )}

@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
                 fontSize: "12px",
                 fontWeight: "500",
                 color: "#9CA3AF",
-             
+                textWrap: "nowrap",
                 maxWidth: "400px",
                 padding: "14px 20px",
               },

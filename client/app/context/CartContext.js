@@ -56,11 +56,10 @@ export function CartProvider({ children }) {
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.message);
-
       setLoading(false);
       setCarts(data.cart.products);
     } catch (error) {
-      console.error("Fetch Cart Error:", error.message);
+      console.error(error.message);
     } finally {
       setLoading(false);
     }
@@ -137,8 +136,7 @@ export function CartProvider({ children }) {
         cartLength,
         loading,
         handleFetchCarts,
-      }}
-    >
+      }}>
       {children}
     </CartContext.Provider>
   );
