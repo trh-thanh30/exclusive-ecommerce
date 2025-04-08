@@ -24,80 +24,54 @@ const orderRouters = require("./routers/order.router");
 const passport = require("passport");
 
 const app = express();
-const PORT = process.env.PORT || 8080;
 
 app.use(morgan("dev"));
 app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:3000", // nhớ thay bằng domain thực tế nếu deploy
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
 app.use(
   session({
-    secret: process.env.SESSION_SECRET, // Khóa bí mật để mã hóa session
-    resave: false, // Không lưu session nếu không có thay đổi
-    saveUninitialized: false, // Không lưu session chưa khởi tạo
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
     cookie: {
-      secure: false, // Đặt thành true nếu dùng HTTPS
-      maxAge: 1000 * 60 * 60, // Thời gian sống của cookie (1 giờ)
+      secure: false,
+      maxAge: 1000 * 60 * 60,
     },
   })
 );
 app.use(passport.initialize());
 app.use(passport.session());
+
 // App routes
-/**  ROLE ROUTER **/
 app.use("/api/role", roleRouters);
-/**  USER ROUTER  **/
 app.use("/api/user", userRouters);
-/**  GOOGLE ROUTER  **/
-app.use(gooleRouters); // GET -> auth/google
-
-/** CONTACT ROUTER */
+app.use(gooleRouters);
 app.use("/api/contact", contactRouters);
-
-/* CATEGORY ROUTER */
 app.use("/api/category", categoryRouters);
-
-/* PRODUCTS ROUTER */
 app.use("/api/product", productRouters);
-
-/* BLOG-CATEGORIES ROUTER */
 app.use("/api/blog-category", blogCategoryRouters);
-
-/* BLOG ROUTER */
 app.use("/api/blog", blogRouters);
-
-/* BRAND ROUTER */
 app.use("/api/brand", brandRouters);
-
-/* COUPON ROUTER */
 app.use("/api/coupon", couponRouters);
-
-/* WISHLISTS ROUTER */
 app.use("/api/wishlists", wishlistsRouters);
-
-/* CART ROUTER */
 app.use("/api/cart", cartRouters);
-/* ORDER ROUTER */
 app.use("/api/order", orderRouters);
 
-
-// Connect to MongoDB
+// MongoDB connect
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log("Connected to MongoDB");
+    console.log(" Connected to MongoDB");
   })
   .catch((err) => {
-    console.log(err.message);
+    console.log(" MongoDB Error:", err.message);
   });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+module.exports = app; // ✅ Export app cho Vercel dùng
