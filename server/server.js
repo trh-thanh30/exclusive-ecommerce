@@ -30,7 +30,10 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: "https://exclusive-ecommerce-x4mn.vercel.app/", // nhớ thay bằng domain thực tế nếu deploy
+    origin: [
+      "http://localhost:3000",
+      "https://exclusive-ecommerce-x4mn.vercel.app",
+    ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
@@ -73,5 +76,4 @@ mongoose
   .catch((err) => {
     console.log(" MongoDB Error:", err.message);
   });
-
 module.exports = app;

@@ -1,4 +1,4 @@
-export const API_URL = "https://exclusive-ecommerce-beige.vercel.app/api";
+export const API_URL = "loaclhost:5000";
 export const SIGNIN_ENDPOINT = `${API_URL}/user/signin`;
 export const SIGNUP_ENDPOINT = `${API_URL}/user/signup`;
 export const SIGNOUT_ENDPOINT = `${API_URL}/user/logout`;
