@@ -3,10 +3,10 @@ import Footer from "../_components/Footer";
 import Header from "../_components/Header";
 import { CartProvider } from "../context/CartContext";
 import { WishlistProvider } from "../context/WishlistContext";
-import useCheckAuth from "../hooks/useCheckAuth";
+// import useCheckAuth from "../hooks/useCheckAuth";
 
 export default function HomeLayOut({ children }) {
-  useCheckAuth(); // check user have token or not i need i will fix this in the future
+  // useCheckAuth()
   return (
     <>
       <CartProvider>

@@ -72,10 +72,14 @@ const signin = async (req, res) => {
     return res
       .cookie("access_token", token, {
         httpOnly: true,
+        secure: true,
+        sameSite: "None",
         expires: dateToken,
       })
       .cookie("role", role, {
         httpOnly: true,
+        secure: true,
+        sameSite: "None",
         expires: dateToken,
       })
       .status(200)
