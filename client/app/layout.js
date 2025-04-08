@@ -5,6 +5,7 @@ import "swiper/css/pagination";
 import ClientProvider from "./_providers/ClientProvider";
 import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
+import Script from "next/script"; // ✅ import Script từ next
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -45,9 +46,19 @@ export default function RootLayout({ children }) {
               },
             }}
           />
-          <>
-            <main className="w-full mx-auto min-h-svh">{children}</main>
-          </>
+
+          <main className="w-full mx-auto min-h-svh">{children}</main>
+
+          {/* ✅ Script và Messenger của Dialogflow */}
+          <Script
+            src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"
+            strategy="afterInteractive"
+          />
+          <df-messenger
+            intent="WELCOME"
+            chat-title="Exclusvie-chatai"
+            agent-id="cb530104-3919-49df-9cc3-66d2c5e9dfdc"
+            language-code="en"></df-messenger>
         </ClientProvider>
       </body>
     </html>

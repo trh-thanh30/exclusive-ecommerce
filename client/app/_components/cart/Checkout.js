@@ -8,6 +8,7 @@ import Spinner from "../Spinner";
 import { useRouter } from "next/navigation";
 import SpinnerMini from "../SpinnerMini";
 import CartEmpty from "./CartEmpty";
+import AddressSelect from "../AddressSelect";
 
 export default function Checkout({ carts, totalPriceCarts }) {
   const router = useRouter();
@@ -27,88 +28,15 @@ export default function Checkout({ carts, totalPriceCarts }) {
     },
     paymentMethod: "",
   });
-  const [provinces, setProvinces] = useState([]);
-  const [districts, setDistricts] = useState([]);
   const [communes, setCommunes] = useState([]);
-  const [provinceId, setProvinceId] = useState(null);
-  const [districtId, setDistrictId] = useState(null);
   const [errorForm, setErrorForm] = useState(null);
   const [loadingOrder, setLoadingOrder] = useState(false);
-  // get provinces
-  useEffect(() => {
-    const getProvinces = async () => {
-      try {
-        const res = await fetch(
-          "https://toinh-api-tinh-thanh.onrender.com/province"
-        );
-        const data = await res.json();
-        if (!res.ok) {
-          console.log("Have error");
-        }
-        setProvinces(data);
-      } catch (error) {
-        console.error("Error fetching provinces:", error);
-      }
-    };
 
-    getProvinces();
-  }, []);
-  // get districts by province id
-  useEffect(() => {
-    const getDistrictsByProvinceId = async () => {
-      try {
-        const res = await fetch(
-          `https://toinh-api-tinh-thanh.onrender.com/district?idProvince=${provinceId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.json();
-        setDistricts(data);
-      } catch (error) {
-        console.error("Error fetching districts:", error);
-      }
-    };
-    getDistrictsByProvinceId();
-  }, [provinceId]);
-  // get wards by district id
-  useEffect(() => {
-    const getCommuneByDistrictId = async () => {
-      try {
-        const res = await fetch(
-          `https://toinh-api-tinh-thanh.onrender.com/commune?idDistrict=${districtId}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        const data = await res.json();
-        setCommunes(data);
-      } catch (error) {
-        console.error(error.message);
-      }
-    };
-    getCommuneByDistrictId();
-  }, [districtId]);
   const handleChangeUser = (e) => {
     setFormData({
       ...formData,
       userInformation: {
         ...formData.userInformation,
-        [e.target.name]: e.target.value,
-      },
-    });
-  };
-  const handleChangeAddress = (e) => {
-    setFormData({
-      ...formData,
-      shippingAddress: {
-        ...formData.shippingAddress,
         [e.target.name]: e.target.value,
       },
     });
@@ -119,7 +47,6 @@ export default function Checkout({ carts, totalPriceCarts }) {
       paymentMethod: e.target.value,
     });
   };
-  // console.log(formData);
   const handleOrder = async (e) => {
     e.preventDefault();
     setLoadingOrder(true);
@@ -215,80 +142,11 @@ export default function Checkout({ carts, totalPriceCarts }) {
           />
         </div>
         {/*  Shipping Address */}
-        <div
-          className={`px-3 py-5 border rounded-md lg:px-6 xl:px-10 md:py-6 border-primary-400 ${
-            errorForm?.failAddress
-              ? "bg-error-50 border border-error-500"
-              : "border-primary-400"
-          }}`}>
-          <h2 className="text-xl font-medium">Shipping Address</h2>
-
-          <div className="flex gap-3">
-            <div className="w-full">
-              <label className="block mt-6 mb-2 text-sm font-medium text-gray-600">
-                Provinces *
-              </label>
-              <select
-                className="w-full px-3 py-2 text-xs border rounded-md outline-none text-primary-900 border-primary-200"
-                name="province"
-                onChange={(e) => {
-                  setProvinceId(e.target.value);
-                  handleChangeAddress(e);
-                }}>
-                <option value="title">----Provinces----</option>
-                {provinces.map((province) => (
-                  <option key={province.idProvince} value={province.idProvince}>
-                    {province.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="w-full">
-              <label className="block mt-6 mb-2 text-sm font-medium text-gray-600">
-                District *
-              </label>
-              <select
-                className="w-full px-3 py-2 text-xs border rounded-md outline-none text-primary-900 border-primary-200"
-                name="district"
-                onChange={(e) => {
-                  setDistrictId(e.target.value);
-                  handleChangeAddress(e);
-                }}>
-                <option value="title">----District----</option>
-                {districts.map((district) => (
-                  <option key={district.idDistrict} value={district.idDistrict}>
-                    {district.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-          </div>
-          <label className="block mt-4 mb-2 text-sm font-medium text-gray-600">
-            Commune *
-          </label>
-          <select
-            className="w-full px-3 py-2 text-xs border rounded-md outline-none text-primary-900 border-primary-200"
-            onChange={handleChangeAddress}
-            name="commune">
-            <option value="title">----Commune-----</option>
-            {communes.map((commune) => (
-              <option value={commune.name}>{commune.name}</option>
-            ))}
-          </select>
-
-          <label className="block mt-4 mb-2 text-sm font-medium text-gray-600">
-            Full address
-          </label>
-          <Input
-            name={"detailAddress"}
-            fullWidth={true}
-            isTextArea={true}
-            onChange={handleChangeAddress}
-            type="text"
-            placeholder={"Please provide your full address for delivery"}
-            className={"!text-xs "}
-          />
-        </div>
+        <AddressSelect
+          formData={formData}
+          setFormData={setFormData}
+          errorForm={errorForm}
+        />
 
         {/*  Payment method */}
         <div className="px-3 py-5 border rounded-md lg:px-6 xl:px-10 md:py-6 border-primary-400">

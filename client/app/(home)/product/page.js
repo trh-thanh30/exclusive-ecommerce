@@ -21,7 +21,7 @@ const breadcrumb = [
 ];
 export default function page() {
   const [openFilter, setOpenFilter] = useState(false);
-  const { fetchProducts, loading, paginations, products, query, setQuery } =
+  const { loading, paginations, products, query, setQuery } =
     useFetchProducts();
   const handleSort = (e) => {
     setQuery({ ...query, [e.target.name]: e.target.value });
@@ -41,8 +41,7 @@ export default function page() {
         <div className="gap-1 py-2 font-medium border-y border-y-primary-200 md:border-none xl:border-none ">
           <button
             onClick={() => setOpenFilter((filter) => !filter)}
-            className="flex items-center gap-2 hover:opacity-80"
-          >
+            className="flex items-center gap-2 hover:opacity-80">
             <Image alt="filter-icon" src={filter}></Image>
             <h3>Filter</h3>
           </button>
@@ -53,8 +52,7 @@ export default function page() {
             className="py-[7px] px-2 text-xs border rounded-lg outline-none border-primary-400 text-primary-800 w-full md:w-fit  sm:mt-0 mt-2"
             id="sort"
             name="sort"
-            onChange={handleSort}
-          >
+            onChange={handleSort}>
             <option value="title">Sort by name(A-Z)</option>
             <option value="-title">Sort by name(Z-A)</option>
             <option value="price">Sort by price(Min-Max)</option>

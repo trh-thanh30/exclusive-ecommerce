@@ -55,7 +55,7 @@ export default function Page() {
     if (!cart || cartLength === 0) {
       router.push("/cart?cart=shopping-cart");
     }
-  }, [cart]);
+  }, [cart, cartLength]);
 
   useEffect(() => {
     handleFetchCarts();
