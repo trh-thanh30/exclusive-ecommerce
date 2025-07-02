@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import useFetchCategories from "../hooks/useFetchCategories";
 
-export default function Filter({ openFilter, query, setQuery }) {
+export default function Filter({ openFilter, query, setQuery, loading }) {
   const handleCategoryChange = (e) => {
     setQuery({ ...query, category: e.target.value });
   };
@@ -11,15 +11,14 @@ export default function Filter({ openFilter, query, setQuery }) {
     <section
       className={`xl:block ${
         openFilter ? "block" : "hidden "
-      } px-3 bg-white rounded-md`}
-    >
+      } px-3 bg-white rounded-md`}>
       {/* Categories */}
       <div className="mt-8 font-medium ">
         <h4 className="text-xl ">CATEGORIES</h4>
         <select
           onChange={handleCategoryChange}
-          className="w-full p-2 mt-4 text-xs border rounded-md outline-none"
-        >
+          disabled={loading}
+          className="w-full p-2 mt-4 text-xs border rounded-md outline-none">
           <option value="">All Categories</option>
           {categories.map((category) => (
             <option key={category._id} value={category.title}>

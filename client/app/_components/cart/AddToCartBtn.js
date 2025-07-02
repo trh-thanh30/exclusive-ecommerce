@@ -9,6 +9,7 @@ export default function AddToCartBtn({
   quantity,
   addToCart,
   color,
+  productQuantity,
 }) {
   const [status, setStatus] = useState("idle");
   const [drop, setDrop] = useState(false);
@@ -45,10 +46,11 @@ export default function AddToCartBtn({
     <div className="relative inline-block text-nowrap">
       <button
         type="button"
-        disabled={status === "added" || status === "moving"}
+        disabled={
+          status === "added" || status === "moving" || productQuantity === 0
+        }
         onClick={handleClick}
-        className="relative flex items-center justify-center gap-2 px-4 py-3 overflow-hidden text-xs transition-all duration-300 rounded-md shadow-lg md:py-3 md:text-sm md:px-7 bg-primary-900 text-primary-50 hover:opacity-90 shadow-primary-500"
-      >
+        className="relative flex items-center justify-center gap-2 px-4 py-3 overflow-hidden text-xs transition-all duration-300 rounded-md shadow-lg md:py-3 md:text-sm md:px-7 bg-primary-900 text-primary-50 hover:opacity-90 shadow-primary-500">
         {status === "added" && color ? null : (
           <FiShoppingCart
             className={`w-4 h-4 transition-transform duration-500 ${
@@ -66,12 +68,11 @@ export default function AddToCartBtn({
             status === "moving" && color
               ? "scale-0 opacity-0"
               : "scale-100 opacity-100"
-          }`}
-        >
+          }`}>
           {status === "added" && color ? (
-            <div className="flex items-center gap-1 text-xs md:text-sm">
+            <div className="flex items-center gap-1 text-xs font-medium md:text-sm">
               <TiTickOutline className="w-4 h-4" />
-              <span>Added</span>
+              <span>Added!</span>
             </div>
           ) : (
             "Add to Cart"

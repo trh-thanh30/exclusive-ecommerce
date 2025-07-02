@@ -14,8 +14,7 @@ export default function ProductsListHeader({ name, link, haveTime }) {
       </div>
       <Link
         href={"/product"}
-        className="flex items-center gap-1 text-sm md:text-base text-primary-700 hover:underline group"
-      >
+        className="flex items-center gap-1 text-sm font-medium text-primary-500 hover:text-primary-900 hover:underline group">
         View All
         <FaAngleRight className="transition-transform group-hover:translate-x-2" />
       </Link>

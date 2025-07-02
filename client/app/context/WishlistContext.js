@@ -64,15 +64,29 @@ export function WishlistProvider({ children }) {
       toast.error(error.message);
     }
   };
-  const removeAllWishlist = () => {
-    dispatch(setWishlist([]));
-    toast.success("All wishlist items removed successfully", { icon: "���️" });
+  const removeAllWishlist = async () => {
+    try {
+      const res = await fetch(WISLIST_ENDPOINT, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok) return toast.error(data.message);
+      else if (res.ok) {
+        fetchWishlist();
+        dispatch(setWishlist([]));
+        toast.success("All wishlist items removed successfully", {
+          icon: "💔",
+        });
+      }
+    } catch (error) {
+      return toast.error(error.message);
+    }
   };
 
   return (
     <WishlistContext.Provider
-      value={{ wishlist, addToWishList, removeAllWishlist }}
-    >
+      value={{ wishlist, addToWishList, removeAllWishlist }}>
       {children}
     </WishlistContext.Provider>
   );

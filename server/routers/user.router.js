@@ -11,6 +11,7 @@ const {
   blockedUser,
   unblockedUser,
   checkAuth,
+  changePassword,
 } = require("../controllers/user.controllers");
 const verifyToken = require("../middleware/verifyToken");
 const cloudinaryFileUploader = require("../middleware/uploadImage");
@@ -37,4 +38,6 @@ router.put("/unblocked-user/:id", verifyToken, unblockedUser);
 router.delete("/delete-user", verifyToken, deleteUser);
 router.delete("/deleteUserByAdmin", verifyToken, deleteUserByAdmin);
 
+/** PATCH */
+router.patch("/change-password", verifyToken, changePassword);
 module.exports = router;

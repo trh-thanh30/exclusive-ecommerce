@@ -30,6 +30,9 @@
   }
 }
 
+.swiper-pagination-bullets {
+  display: none;
+}
 .nav-link {
   position: relative; /* Cần để pseudo-element ::before hoạt động */
 }

@@ -17,15 +17,16 @@ const orderSchema = new mongoose.Schema(
     ],
     orderStatus: {
       type: String,
-      default: "Not Processed",
       enum: [
-        "Not Processed",
+        "Pending",
         "Processing",
-        "Dispatched",
-        "Completed",
+        "Shipped",
+        "Delivered",
         "Cancelled",
-        "Cash On Delivery",
+        "Returned",
+        "Refunded",
       ],
+      default: "Pending",
     },
     orderByUser: {
       type: mongoose.Schema.Types.ObjectId,
@@ -41,7 +42,7 @@ const orderSchema = new mongoose.Schema(
         required: true,
       },
       phoneNumber: {
-        type: String, 
+        type: String,
         required: true,
         validate: {
           validator: function (v) {
@@ -71,8 +72,7 @@ const orderSchema = new mongoose.Schema(
     },
     paymentMethod: {
       type: String,
-      enum: ["COD", "PAY"],
-      default: "COD",
+      enum: ["Cash On Delivery", "Credit Card", "PayPal", "Momo", "ZaloPay"],
       required: true,
     },
     totalAmount: {

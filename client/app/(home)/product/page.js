@@ -7,7 +7,7 @@ import ProductCart from "@/app/_components/ProductCart";
 import Paginations from "@/app/_components/Paginations";
 import Filter from "@/app/_components/Filter";
 import useFetchProducts from "@/app/hooks/useFetchProducts";
-import SpinnerDoot from "@/app/_components/SpinnerDoot";
+import LoadingSkeleton from "@/app/_components/LoadingSkeleton";
 
 const breadcrumb = [
   {
@@ -51,6 +51,7 @@ export default function page() {
           <select
             className="py-[7px] px-2 text-xs border rounded-lg outline-none border-primary-400 text-primary-800 w-full md:w-fit  sm:mt-0 mt-2"
             id="sort"
+            disabled={loading}
             name="sort"
             onChange={handleSort}>
             <option value="title">Sort by name(A-Z)</option>
@@ -66,10 +67,14 @@ export default function page() {
       {/* Body */}
       <div className="grid grid-cols-1 xl:grid-cols-[0.5fr_2fr] md:mt-6 mt-3 gap-6 ">
         {/* Left */}
-        <Filter query={query} setQuery={setQuery} openFilter={openFilter} />
+        <Filter loading={loading} query={query} setQuery={setQuery} openFilter={openFilter} />
         {/* Right */}
         {loading ? (
-          <SpinnerDoot />
+          <div className="grid grid-cols-2 mt-8 gap-x-2 md:gap-x-4 gap-y-4 md:grid-cols-3 lg:grid-cols-4">
+            {Array.from({ length: 16 }).map((_, i) => (
+              <LoadingSkeleton key={i} />
+            ))}
+          </div>
         ) : (
           <section>
             <div className="grid grid-cols-2 mt-8 gap-x-2 md:gap-x-4 gap-y-4 md:grid-cols-3 lg:grid-cols-4">

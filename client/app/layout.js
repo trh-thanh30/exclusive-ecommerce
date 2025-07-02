@@ -5,8 +5,7 @@ import "swiper/css/pagination";
 import ClientProvider from "./_providers/ClientProvider";
 import { Poppins } from "next/font/google";
 import { Toaster } from "react-hot-toast";
-import Script from "next/script"; // ✅ import Script từ next
-
+import Script from "next/script";
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -22,12 +21,13 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" className="scroll-smooth">
       <head>
         <title>{metadata.title.default}</title>
         <meta name="description" content={metadata.description} />
       </head>
-      <body className={`${poppins.className} bg-primary-50`}>
+      <body
+        className={`${poppins.className} bg-primary-50 dark:bg-primary-100`}>
         <ClientProvider>
           <Toaster
             position="top-center"
@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
               style: {
                 fontSize: "12px",
                 fontWeight: "500",
-                color: "#9CA3AF",
+                color: "#202C46",
                 textWrap: "nowrap",
                 maxWidth: "400px",
                 padding: "14px 20px",
@@ -49,7 +49,6 @@ export default function RootLayout({ children }) {
 
           <main className="w-full mx-auto min-h-svh">{children}</main>
 
-          {/* ✅ Script và Messenger của Dialogflow */}
           <Script
             src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"
             strategy="afterInteractive"
@@ -58,7 +57,8 @@ export default function RootLayout({ children }) {
             intent="WELCOME"
             chat-title="Exclusvie-chatai"
             agent-id="cb530104-3919-49df-9cc3-66d2c5e9dfdc"
-            language-code="en"></df-messenger>
+            language-code="en"
+          />
         </ClientProvider>
       </body>
     </html>

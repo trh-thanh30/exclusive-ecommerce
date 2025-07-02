@@ -34,7 +34,6 @@ export function CartProvider({ children }) {
       const data = await res.json();
       if (data === "Not authenticated") {
         toast.error("Please sign in or sign up to add to cart");
-        router.push("/signup");
         return;
       }
       if (!res.ok) {
@@ -59,7 +58,7 @@ export function CartProvider({ children }) {
       setLoading(false);
       setCarts(data.cart.products);
     } catch (error) {
-      console.error(error.message);
+      return false;
     } finally {
       setLoading(false);
     }

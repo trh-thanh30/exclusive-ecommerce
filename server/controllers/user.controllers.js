@@ -72,20 +72,21 @@ const signin = async (req, res) => {
     return res
       .cookie("access_token", token, {
         httpOnly: true,
-        // secure: true,
+        secure: true,
         sameSite: "None",
         expires: dateToken,
       })
       .cookie("role", role, {
         httpOnly: true,
-        // secure: true,
+        secure: true,
         sameSite: "None",
         expires: dateToken,
       })
       .status(200)
       .json({
+        token: token,
         user: rest,
-      });
+      }); 
   } catch (error) {
     return res.status(400).send({ message: error.message });
   }
@@ -182,33 +183,8 @@ const updateUser = async (req, res) => {
     if (!userInfo) {
       return res.status(404).json({ message: "User not found" });
     }
-
-    const {
-      username,
-      email,
-      firstname,
-      lastname,
-      address,
-      phone_number,
-      oldpassword,
-      newpassword,
-      confirmPassword,
-    } = req.body;
-
-    // Kiểm tra mật khẩu mới và xác nhận mật khẩu mới
-    if (newpassword && newpassword !== confirmPassword) {
-      return res
-        .status(400)
-        .json({ message: "New password and confirm password do not match" });
-    }
-
-    // Kiểm tra nếu mật khẩu mới thì cần có mật khẩu cũ
-    if (newpassword && !oldpassword) {
-      return res
-        .status(400)
-        .json({ message: "Please provide your current password" });
-    }
-
+    const { username, email, firstname, lastname, address, phone_number } =
+      req.body;
     let userUpdate = {
       username,
       email,
@@ -217,21 +193,6 @@ const updateUser = async (req, res) => {
       address,
       phone_number,
     };
-
-    // Nếu có mật khẩu mới, kiểm tra và thay đổi mật khẩu
-    if (oldpassword && newpassword) {
-      const isMatch = await bcryptjs.compare(oldpassword, userInfo.password);
-      if (!isMatch) {
-        return res.status(400).json({ message: "Incorrect current password" });
-      }
-
-      // Băm mật khẩu mới và thêm vào userUpdate
-      userUpdate.password = await bcryptjs.hash(newpassword, 10);
-
-      // Xóa token khi user đổi mật khẩu
-      res.clearCookie("access_token");
-    }
-
     // Cập nhật avatar nếu có
     if (req.file) {
       userUpdate.avatar = req.file.path;
@@ -240,6 +201,53 @@ const updateUser = async (req, res) => {
     // Cập nhật người dùng
     const user = await User.findByIdAndUpdate(id, userUpdate, { new: true });
     return res.status(200).json({ user: user });
+  } catch (error) {
+    return res.status(400).json({ message: error.message });
+  }
+};
+const changePassword = async (req, res) => {
+  const { id } = req.user;
+  try {
+    const userInfo = await User.findById(id);
+    if (!userInfo) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const { oldPassword, newPassword, confirmPassword } = req.body;
+    if (!oldPassword || !newPassword || !confirmPassword)
+      return res
+        .status(402)
+        .json({ message: "Please fill in all required fields" });
+    if (newPassword && newPassword !== confirmPassword) {
+      return res
+        .status(400)
+        .json({ message: "New password and confirm password do not match" });
+    }
+    if (newPassword && !oldPassword) {
+      return res
+        .status(400)
+        .json({ message: "Please provide your current password" });
+    }
+    if (oldPassword && newPassword) {
+      const isMatch = await bcryptjs.compare(oldPassword, userInfo.password);
+      if (!isMatch) {
+        return res.status(400).json({ message: "Incorrect current password" });
+      }
+
+      // Băm mật khẩu mới và thêm vào userUpdate
+      const hashedPassword = await bcryptjs.hash(newPassword, 10);
+      await User.findByIdAndUpdate(
+        id,
+        {
+          password: hashedPassword,
+        },
+        { new: true }
+      );
+      // Xóa token khi user đổi mật khẩu
+      res.clearCookie("access_token");
+      res.clearCookie("role");
+    }
+    return res.status(200).json({ message: "Change password successfully!" });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -324,4 +332,5 @@ module.exports = {
   blockedUser,
   unblockedUser,
   checkAuth,
+  changePassword,
 };

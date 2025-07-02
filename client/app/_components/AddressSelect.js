@@ -1,20 +1,23 @@
 "use client";
 import { useEffect, useState } from "react";
-import SpinnerMini from "./SpinnerMini";
-import Spinner from "./Spinner";
+import { ADDRESS_ENDPOINT } from "../constants/api";
 
-export default function AddressSelect({ formData, setFormData, errorForm }) {
+export default function AddressSelect({
+  errorForm,
+  haveBorder,
+  handleChangeAddressCustom,
+  formData,
+  mode,
+}) {
+  console.log(formData);
   const [loadingProvinces, setLoadingProvinces] = useState(false);
   const [loadingDistricts, setLoadingDistricts] = useState(false);
   const [loadingCommunes, setLoadingCommunes] = useState(false);
-
   const [provinces, setProvinces] = useState([]);
-
   const [districts, setDistricts] = useState([]);
   const [communes, setCommunes] = useState([]);
   const [provinceId, setProvinceId] = useState(null);
   const [districtId, setDistrictId] = useState(null);
-
   useEffect(() => {
     const getProvinces = async () => {
       setLoadingProvinces(true);
@@ -32,7 +35,6 @@ export default function AddressSelect({ formData, setFormData, errorForm }) {
     };
     getProvinces();
   }, []);
-  console.log(provinces);
   useEffect(() => {
     if (!provinceId) return;
     const getDistricts = async () => {
@@ -51,7 +53,6 @@ export default function AddressSelect({ formData, setFormData, errorForm }) {
     };
     getDistricts();
   }, [provinceId]);
-
   useEffect(() => {
     if (!districtId) return;
     const getCommunes = async () => {
@@ -71,19 +72,11 @@ export default function AddressSelect({ formData, setFormData, errorForm }) {
     getCommunes();
   }, [districtId]);
 
-  const handleChangeAddressCustom = (fieldName, value) => {
-    setFormData((prev) => ({
-      ...prev,
-      shippingAddress: {
-        ...prev.shippingAddress,
-        [fieldName]: value,
-      },
-    }));
-  };
-
   return (
     <div
-      className={`px-3 py-5 border rounded-md lg:px-6 xl:px-10 md:py-6 ${
+      className={`px-3 py-5 ${
+        haveBorder && "border"
+      } rounded-md lg:px-6 xl:px-10 md:py-6 ${
         errorForm?.failAddress
           ? "bg-error-50 border-error-500"
           : "border-primary-400"
@@ -108,7 +101,12 @@ export default function AddressSelect({ formData, setFormData, errorForm }) {
                 selectedProvince?.name || ""
               );
             }}>
-            <option value="">---- Province ----</option>
+            {mode === "edit" && <option>{formData.province}</option>}
+            {mode !== "edit" && (
+              <option disabled selected>
+                ---- Province ----
+              </option>
+            )}
             {loadingProvinces ? (
               <option disabled>Loading...</option>
             ) : (
@@ -124,6 +122,7 @@ export default function AddressSelect({ formData, setFormData, errorForm }) {
           <label className="block mt-6 mb-2 text-sm font-medium text-gray-600">
             District *
           </label>
+
           <select
             className="w-full px-3 py-2 text-xs border rounded-md outline-none text-primary-900 border-primary-200"
             name="district"
@@ -138,7 +137,12 @@ export default function AddressSelect({ formData, setFormData, errorForm }) {
                 selectedDistrict?.name || ""
               );
             }}>
-            <option value="">---- District ----</option>
+            {mode === "edit" && <option>{formData.district}</option>}
+            {mode !== "edit" && (
+              <option disabled selected>
+                ---- District ----
+              </option>
+            )}
             {loadingDistricts ? (
               <option disabled>Loading...</option>
             ) : (
@@ -161,7 +165,12 @@ export default function AddressSelect({ formData, setFormData, errorForm }) {
           handleChangeAddressCustom("commune", e.target.value);
         }}
         name="commune">
-        <option value="">---- Commune ----</option>
+        {mode === "edit" && <option>{formData.commune}</option>}
+        {mode !== "edit" && (
+          <option disabled selected>
+            ---- Commune ----
+          </option>
+        )}
         {loadingCommunes ? (
           <option disabled>Loading...</option>
         ) : (
@@ -184,6 +193,7 @@ export default function AddressSelect({ formData, setFormData, errorForm }) {
         placeholder="Please provide your full address for delivery"
         className="w-full px-3 py-2 text-xs border rounded-md outline-none resize-none text-primary-900 border-primary-200"
         rows={3}
+        defaultValue={mode === "edit" ? formData.detailAddress : ""}
       />
     </div>
   );

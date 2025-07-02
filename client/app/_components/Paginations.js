@@ -1,4 +1,3 @@
-import { current } from "@reduxjs/toolkit";
 import React from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa6";
 
@@ -35,8 +34,7 @@ export default function Paginations({ pagination, setQuery, query }) {
       <button
         disabled={currentPage === 1}
         onClick={handlePrevPage}
-        className="p-2 transition-colors rounded-full hover:bg-primary-900 hover:text-primary-50 disabled:cursor-not-allowed disabled:opacity-70"
-      >
+        className="p-2 transition-colors rounded-full hover:bg-primary-900 hover:text-primary-50 disabled:cursor-not-allowed disabled:opacity-70">
         <FaChevronLeft />
       </button>
 
@@ -48,8 +46,7 @@ export default function Paginations({ pagination, setQuery, query }) {
           disabled={currentPage === page}
           className={`flex items-center justify-center h-7 w-7 transition-colors rounded-full hover:bg-primary-900 hover:text-primary-50 disabled:cursor-not-allowed disabled:opacity-70 ${
             currentPage === page ? "bg-primary-900 text-primary-50" : null
-          }`}
-        >
+          }`}>
           {page}
         </button>
       ))}
@@ -58,8 +55,7 @@ export default function Paginations({ pagination, setQuery, query }) {
       <button
         onClick={handleNextPage}
         disabled={currentPage === totalPages}
-        className="p-2 transition-colors rounded-full hover:bg-primary-900 hover:text-primary-50 disabled:cursor-not-allowed disabled:opacity-70"
-      >
+        className="p-2 transition-colors rounded-full hover:bg-primary-900 hover:text-primary-50 disabled:cursor-not-allowed disabled:opacity-70">
         <FaChevronRight />
       </button>
     </div>

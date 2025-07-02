@@ -1,5 +1,5 @@
 "use client";
-import ConversatiDash from "@/app/_components/admin_ui/dash/BlogDash";
+import BlogDash from "@/app/_components/admin_ui/dash/BlogDash";
 import CategoriesDash from "@/app/_components/admin_ui/dash/CategoriesDash";
 import CustomersDash from "@/app/_components/admin_ui/dash/CustomersDash";
 import Dashboard from "@/app/_components/admin_ui/dash/Dash";
@@ -31,7 +31,7 @@ export default function Page() {
         {tab === "categories" && <CategoriesDash />}
         {tab === "orders" && <OrdersDash />}
         {tab === "customers" && <CustomersDash />}
-        {tab === "blog" && <ConversatiDash />}
+        {tab === "blog" && <BlogDash />}
       </div>
     </div>
   );

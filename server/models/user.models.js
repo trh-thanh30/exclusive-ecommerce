@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
-      minlength: [10, "Username must be at least 10 characters"],
+      minlength: [6, "Username must be at least 6 characters"],
     },
     email: {
       type: String,
@@ -36,10 +36,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "https://cdn-icons-png.flaticon.com/512/149/149071.png",
     },
-    address: {
-      type: String,
-      required: false,
-    },
+    address: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address",
+      },
+    ],
     phone_number: {
       type: String,
       required: false,

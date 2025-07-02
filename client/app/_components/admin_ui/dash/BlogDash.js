@@ -38,7 +38,7 @@ const tableHeader = [
     name: "Actions",
   },
 ];
-export default function ConversatiDash() {
+export default function BlogDash() {
   const { loading, blogs, pagination, fetchBlogs } = useFetchBlog();
   const [openModal, setOpenModal] = useState();
   const [modModal, setModModal] = useState("");

@@ -1,5 +1,6 @@
 const Cart = require("../models/cart.models");
 const Order = require("../models/order.models");
+const Product = require("../models/products.models");
 
 const createOrder = async (req, res) => {
   try {
@@ -36,11 +37,16 @@ const createOrder = async (req, res) => {
       });
     }
     const userCart = await Cart.findOne({ user: id });
+    const productId = userCart.products?.map((item) => item.product);
+    const getCount = userCart.products?.map((item) => item.quantity);
+    console.log(getCount);
+    await Product.findByIdAndUpdate(productId, {
+      $inc: { quantity: -getCount },
+    });
     let totalAmount = 0;
     if (!userCart) {
       return res.status(404).json({ message: "Cart not found" });
     }
-    console.log(userCart);
     if (appliedCoupon && userCart.totalAfterDiscount) {
       totalAmount = userCart.totalAfterDiscount;
     } else {
@@ -59,10 +65,11 @@ const createOrder = async (req, res) => {
       shippingAddress,
       paymentMethod,
       totalAmount,
-      orderStatus: "Cash On Delivery",
     });
+
     await order.save();
     await Cart.deleteOne({ user: id });
+
     return res
       .status(200)
       .json({ message: "Order created successfully", order });
@@ -79,16 +86,37 @@ const createOrder = async (req, res) => {
 const getOrderByUser = async (req, res) => {
   try {
     const { id } = req.user;
+    let { page, limit, orderStatus } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
+    const skip = (page - 1) * limit;
     if (!id) {
       return res.status(404).json({ message: "User not found" });
     }
-    const orders = await Order.find({ orderByUser: id })
+    // get order by orderStatus
+    const query = { orderByUser: id };
+    if (orderStatus) {
+      query.orderStatus = orderStatus;
+    }
+    const orders = await Order.find(query)
       .select("products totalAmount paymentMethod orderStatus")
-      .populate("products.product", "title price images");
+      .populate("products.product", "title price images")
+      .limit(limit)
+      .skip(skip);
     if (!orders) {
       return res.status(404).json({ message: "No orders found" });
     }
-    return res.status(200).json({ orders });
+    return res.status(200).json({
+      orders,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil(
+          (await Order.countDocuments({ orderByUser: id })) / limit
+        ),
+        totalOrders: await Order.countDocuments({ orderByUser: id }),
+        pageSize: limit,
+      },
+    });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }
@@ -120,13 +148,26 @@ const getAllOrdersAdmin = async (req, res) => {
         .status(401)
         .json({ message: "You are not allowed to get all orders" });
     }
+    let { page, limit, search } = req.query;
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 10;
+    const skip = (page - 1) * limit;
     const orders = await Order.find()
+      .limit(limit)
+      .skip(skip)
       .populate("products.product", "title price images")
       .populate("orderByUser", "firstName lastName phoneNumber email");
     if (!orders) {
       return res.status(404).json({ message: "No orders found" });
     }
-    return res.status(200).json({ orders });
+    return res.status(200).json({
+      orders,
+      pagination: {
+        currentPage: page,
+        totalPages: Math.ceil((await Order.countDocuments()) / limit),
+        pageSize: limit,
+      },
+    });
   } catch (error) {
     return res.status(400).json({ message: error.message });
   }

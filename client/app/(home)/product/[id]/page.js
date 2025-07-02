@@ -133,8 +133,7 @@ export default function ProductDetails() {
             <span
               className={
                 product.quantity > 0 ? "text-emerald-400" : "text-error-500"
-              }
-            >
+              }>
               {product.quantity > 0
                 ? `In Stock (${product.quantity})`
                 : "Out of Stock"}
@@ -155,48 +154,47 @@ export default function ProductDetails() {
                 <span
                   onClick={() => handleChangeColor(color)}
                   key={index}
-                  className={`w-5 h-5 border rounded-full border-primary-300 hover:cursor-pointer ${
+                  className={`w-5 h-5 border rounded-full border-primary-200 hover:cursor-pointer ${
                     color === colorGet
-                      ? "border-[1.5px]  opacity-70 transition-opacity"
+                      ? "border-[1.5px] border-primary-500 opacity-50 transition-opacity"
                       : ""
                   }`}
-                  style={{ backgroundColor: color }}
-                ></span>
+                  style={{ backgroundColor: color }}></span>
               ))}
             </div>
           </div>
           <div className="flex items-center gap-2 mt-4 md:gap-4 md:mt-6">
-            <div className="flex items-center justify-between gap-5 p-2 text-sm border rounded-md md:gap-6 md:p-3 bg-primary-100">
+            <div className="flex items-center justify-between gap-5 p-2 text-sm rounded-md shadow-sm md:gap-6 md:p-3 bg-primary-100 shadow-primary-100">
               <button
-                disabled={quantity === 1}
+                disabled={quantity === 1 || product.quantity === 0}
                 onClick={() => setQuantity((prev) => prev - 1)}
-                className="hover:cursor-pointer disabled:cursor-not-allowed"
-              >
+                className="hover:cursor-pointer disabled:cursor-not-allowed">
                 <FiMinus />
               </button>
-              <span className="">{+quantity}</span>
+              <span className="">{product.quantity === 0 ? 0 : +quantity}</span>
               <button
-                disabled={quantity === product.quantity}
+                disabled={
+                  quantity === product.quantity || product.quantity === 0
+                }
                 onClick={() => setQuantity((prev) => prev + 1)}
-                className="hover:cursor-pointer disabled:cursor-not-allowed"
-              >
+                className="hover:cursor-pointer disabled:cursor-not-allowed">
                 <GoPlus />
               </button>
             </div>
 
             <AddToCartBtn
+              productQuantity={product.quantity}
               color={colorGet}
               addToCart={() => addToCart(product, colorGet, quantity)}
             />
             <button
               type="button"
               onClick={() => addToWishList(product)}
-              className={`p-2 transition-colors border rounded-md md:p-3  hover:text-error-500 hover:border-error-500 ${
+              className={`p-2 transition-colors  rounded-md md:p-3 shadow-error-100 bg-error-50 shadow-md hover:text-error-400  ${
                 isProductInWishlist
                   ? "text-error-500 border-error-500"
                   : "border-primary-500"
-              }`}
-            >
+              }`}>
               <FaHeart size={20} />
             </button>
           </div>
@@ -235,24 +233,21 @@ export default function ProductDetails() {
           onClick={() => setActiveOption("description")}
           className={`hover:text-primary-900 hover:cursor-pointer ${
             activeOption === "description" ? "text-primary-900" : ""
-          }`}
-        >
+          }`}>
           Description
         </span>
         <span
           onClick={() => setActiveOption("reviews")}
           className={`hover:text-primary-900 hover:cursor-pointer ${
             activeOption === "reviews" ? "text-primary-900" : ""
-          }`}
-        >
+          }`}>
           Reviews
         </span>
         <span
           onClick={() => setActiveOption("similar")}
           className={`hover:text-primary-900 hover:cursor-pointer ${
             activeOption === "similar" ? "text-primary-900" : ""
-          }`}
-        >
+          }`}>
           Similar
         </span>
       </div>

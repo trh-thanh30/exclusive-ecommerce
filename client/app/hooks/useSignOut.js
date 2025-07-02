@@ -25,6 +25,8 @@ export default function useSignOut() {
         dispatch(signinFailure(data));
         toast.error(data.message || "Failed to sign out");
       } else {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("role");
         dispatch(signoutSuccess(data));
         toast.success("Sign out successfully");
         router.push("/signin");

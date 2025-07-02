@@ -4,9 +4,10 @@ import "swiper/css";
 import "swiper/css/pagination";
 import ProductCart from "./ProductCart";
 import useFetchProducts from "../hooks/useFetchProducts";
+import LoadingSkeleton from "./LoadingSkeleton";
 
 export default function ProductsListSwpier() {
-  const { products } = useFetchProducts();
+  const { products, loading } = useFetchProducts();
   return (
     <Swiper
       slidesPerView={5}
@@ -27,17 +28,23 @@ export default function ProductsListSwpier() {
           slidesPerView: 5,
         },
       }}
-      spaceBetween={16}
+      spaceBetween={14}
+      grabCursor={true}
       pagination={{
         clickable: true,
       }}
-      className="mySwiper"
-    >
-      {products.map((product) => (
-        <SwiperSlide key={product._id}>
-          <ProductCart product={product} />
-        </SwiperSlide>
-      ))}
+      className="mySwiper">
+      {loading
+        ? Array.from({ length: 20 }).map((_, i) => (
+            <SwiperSlide key={i}>
+              <LoadingSkeleton key={i} />
+            </SwiperSlide>
+          ))
+        : products.map((product) => (
+            <SwiperSlide key={product._id}>
+              <ProductCart key={product._id} product={product} />
+            </SwiperSlide>
+          ))}
     </Swiper>
   );
 }

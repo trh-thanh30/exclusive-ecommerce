@@ -31,8 +31,7 @@ export default function Footer() {
         <div className="my-8 text-center">
           <Link
             href={"/contact"}
-            className="px-6 py-3 text-sm transition rounded-full md:text-lg opacity-95 text-primary-900 bg-primary-50"
-          >
+            className="py-3 text-sm font-medium transition rounded-full px-7 hover:opacity-90 md:text-base text-primary-900 bg-primary-50">
             Contact Us
           </Link>
         </div>

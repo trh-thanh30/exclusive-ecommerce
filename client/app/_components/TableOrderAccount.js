@@ -11,20 +11,31 @@ import Image from "next/image";
 import { CiDeliveryTruck } from "react-icons/ci";
 import toast from "react-hot-toast";
 import OrderProgress from "./OrderProgress";
+import Paginations from "./Paginations";
 
 export default function TableOrderAccount() {
-  const dateRandom = Math.floor(Math.random() * 10) + 1; // gen random date 1 to 10
+  const [dateRandom] = useState(Math.floor(Math.random() * 10) + 1);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [orderDetails, setOderDetails] = useState();
+  const [pagination, setPagination] = useState([]);
+  const [query, setQuery] = useState({
+    page: 1,
+    limit: 10,
+    orderStatus: "",
+  });
+  const { limit, page, orderStatus } = query;
   const handleFetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${ORDER_ENDPOINT}/`, {
-        credentials: "include",
-        method: "GET",
-      });
+      const res = await fetch(
+        `${ORDER_ENDPOINT}?limit=${limit}&page=${page}&orderStatus=${orderStatus}`,
+        {
+          credentials: "include",
+          method: "GET",
+        }
+      );
       const data = await res.json();
       if (!res.ok) {
         setLoading(false);
@@ -33,6 +44,7 @@ export default function TableOrderAccount() {
       }
       setLoading(false);
       setOrders(data.orders);
+      setPagination(data.pagination);
     } catch (error) {
       setLoading(false);
       console.log(error.message);
@@ -40,7 +52,7 @@ export default function TableOrderAccount() {
   };
   useEffect(() => {
     handleFetchOrders();
-  }, []);
+  }, [limit, page, orderStatus]);
   const handleFetchOrderDetails = async (orderId) => {
     try {
       const res = await fetch(`${ORDER_ENDPOINT}/${orderId}`, {
@@ -80,7 +92,24 @@ export default function TableOrderAccount() {
   return (
     <>
       <div>
-        <h2 className="mb-4 text-xl font-medium">Orders History</h2>
+        <div className="flex flex-col items-center justify-between md:flex-row">
+          <h2 className="mb-4 text-xl font-medium">Orders History</h2>
+          <select
+            className="w-full py-2 pl-3 pr-5 mt-2 text-xs border rounded-lg outline-none border-primary-400 text-primary-800 md:w-fit sm:mt-0"
+            onChange={(e) => {
+              setQuery({ ...query, orderStatus: e.target.value });
+            }}
+            name="orderStatus">
+            <option disabled>----Order Status----</option>
+            <option value="">All</option>
+            <option value="Not Processed">Not Processed</option>
+            <option value="Processing">Processing</option>
+            <option value="Dispatched">Dispatched</option>
+            <option value="Completed">Completed</option>
+            <option value="Cancelled">Cancelled</option>
+            <option value="Cash On Delivery">Cash On Delivery</option>
+          </select>
+        </div>
 
         {/* Table for PC */}
         {loading ? (
@@ -98,7 +127,7 @@ export default function TableOrderAccount() {
                       Description
                     </th>
                     <th className="pb-2 border-b border-b-primary-200">
-                      Payment Method
+                      Payment
                     </th>
                     <th className="pb-2 border-b border-b-primary-200">
                       Status
@@ -110,105 +139,133 @@ export default function TableOrderAccount() {
                   </tr>
                 </thead>
                 <tbody>
+                  {orders.length > 0 ? (
+                    <>
+                      {orders.map((order, index) => (
+                        <tr
+                          key={index}
+                          className="text-xs border-b hover:bg-gray-50">
+                          <td className="py-4 font-medium text-primary-900">
+                            #{truncateText(order._id, 10)}
+                          </td>
+                          <td className="py-4 font-medium">
+                            {order.products.map((product, idx) => (
+                              <div key={idx}>
+                                {product.product.title} - Qty: {product.count}
+                              </div>
+                            ))}
+                          </td>
+                          <td className="py-4">{order.paymentMethod}</td>
+                          <td
+                            className={`py-4 font-medium ${
+                              order.orderStatus === "Cancelled"
+                                ? "text-error-500 "
+                                : "text-blue-400"
+                            }`}>
+                            {order.orderStatus}
+                          </td>
+                          <td className="py-4 text-green-400">
+                            ${order.totalAmount.toFixed(2)}
+                          </td>
+                          <td
+                            onClick={() => {
+                              handleFetchOrderDetails(order._id);
+                              setOpenModal(true);
+                            }}
+                            className="py-4 text-primary-400 hover:text-primary-900 hover:underline hover:cursor-pointer">
+                            View Order
+                          </td>
+                        </tr>
+                      ))}
+                    </>
+                  ) : (
+                    <>
+                      <tr>
+                        <td
+                          colSpan={6}
+                          className="py-4 text-sm font-medium text-center text-primary-900">
+                          No orders found
+                        </td>
+                      </tr>
+                    </>
+                  )}
+                </tbody>
+              </table>
+              {orders.length > 0 && (
+                <Paginations
+                  pagination={pagination}
+                  setQuery={setQuery}
+                  query={query}
+                />
+              )}
+            </div>
+            {/* Card Layout for Mobile */}
+            <div className="flex flex-col gap-3 mt-7 md:hidden">
+              {orders.length > 0 ? (
+                <>
                   {orders.map((order, index) => (
-                    <tr
+                    <div
                       key={index}
-                      className="text-xs border-b hover:bg-gray-50">
-                      <td className="py-4 font-medium text-primary-900">
-                        #{truncateText(order._id, 10)}
-                      </td>
-                      <td className="py-4 font-medium">
-                        {order.products.map((product, idx) => (
-                          <div key={idx}>
+                      className="p-4 text-sm transition-colors bg-white rounded-md shadow-sm shadow-primary-300 hover:opacity-85">
+                      <p className="font-medium">
+                        Number ID:{" "}
+                        <span className="text-xs text-primary-500">
+                          #{order._id}
+                        </span>
+                      </p>
+                      <div className="flex flex-wrap items-center gap-1 font-medium">
+                        Description:
+                        {order.products.map((product, index) => (
+                          <div
+                            key={index}
+                            className={`text-xs ${
+                              order.products.length > 1 &&
+                              (index === 0 ||
+                                index === order.products.length - 2)
+                                ? "border-r border-r-primary-400 pr-2"
+                                : ""
+                            }`}>
                             {product.product.title} - Qty: {product.count}
                           </div>
                         ))}
-                      </td>
-                      <td className="py-4">{order.paymentMethod}</td>
-                      <td
-                        className={`py-4 font-medium ${
-                          order.orderStatus === "Cancelled"
-                            ? "text-error-500 "
-                            : "text-blue-400"
-                        }`}>
-                        {order.orderStatus}
-                      </td>
-                      <td className="py-4 text-green-400">
-                        ${order.totalAmount.toFixed(2)}
-                      </td>
-                      <td
+                      </div>
+                      <p className="font-medium">
+                        Payment Method:{" "}
+                        <span className="text-xs text-primary-500">
+                          {order.paymentMethod}
+                        </span>
+                      </p>
+                      <p className="font-medium">
+                        Status:{" "}
+                        <span
+                          className={`text-xs ${
+                            order.orderStatus === "Cancelled"
+                              ? "text-error-500"
+                              : "text-blue-400"
+                          }`}>
+                          {order.orderStatus}
+                        </span>
+                      </p>
+                      <p className="font-medium">
+                        Price:{" "}
+                        <span className="text-xs text-success-400">
+                          ${order.totalAmount}
+                        </span>
+                      </p>
+                      <button
                         onClick={() => {
                           handleFetchOrderDetails(order._id);
                           setOpenModal(true);
                         }}
-                        className="py-4 text-primary-400 hover:text-primary-900 hover:underline hover:cursor-pointer">
+                        className="py-2 mt-1 text-sm font-medium text-blue-500">
                         View Order
-                      </td>
-                    </tr>
+                      </button>
+                    </div>
                   ))}
-                </tbody>
-              </table>
-            </div>
-            {/* Card Layout for Mobile */}
-            <div className="flex flex-col gap-3 mt-7 md:hidden">
-              {orders.map((order, index) => (
-                <div
-                  key={index}
-                  className="p-4 text-sm transition-colors bg-white rounded-md shadow-sm shadow-primary-300 hover:opacity-85">
-                  <p className="font-medium">
-                    Number ID:{" "}
-                    <span className="text-xs text-primary-500">
-                      #{order._id}
-                    </span>
-                  </p>
-                  <p className="flex flex-wrap items-center gap-1 font-medium">
-                    Description:
-                    {order.products.map((product, index) => (
-                      <div
-                        key={index}
-                        className={`text-xs ${
-                          order.products.length > 1 &&
-                          (index === 0 || index === order.products.length - 2)
-                            ? "border-r border-r-primary-400 pr-2"
-                            : ""
-                        }`}>
-                        {product.product.title} - Qty: {product.count}
-                      </div>
-                    ))}
-                  </p>
-                  <p className="font-medium">
-                    Payment Method:{" "}
-                    <span className="text-xs text-primary-500">
-                      {order.paymentMethod}
-                    </span>
-                  </p>
-                  <p className="font-medium">
-                    Status:{" "}
-                    <span
-                      className={`text-xs ${
-                        order.orderStatus === "Cancelled"
-                          ? "text-error-500"
-                          : "text-blue-400"
-                      }`}>
-                      {order.orderStatus}
-                    </span>
-                  </p>
-                  <p className="font-medium">
-                    Price:{" "}
-                    <span className="text-xs text-success-400">
-                      ${order.totalAmount}
-                    </span>
-                  </p>
-                  <button
-                    onClick={() => {
-                      handleFetchOrderDetails(order._id);
-                      setOpenModal(true);
-                    }}
-                    className="py-2 mt-1 text-sm font-medium text-blue-500">
-                    View Order
-                  </button>
-                </div>
-              ))}
+                </>
+              ) : (
+                <p className="mt-10 text-sm font-medium text-center text-primary-900">No orders found</p>
+              )}
             </div>
           </>
         )}
@@ -247,9 +304,11 @@ export default function TableOrderAccount() {
                       {format(orderDetails.createdAt, "MMM dd, yyyy")}
                     </span>
                   </div>
-                  {orderDetails.orderStatus === "Cancelled" ? <span className="pl-3 text-xs text-error-500">
-                    Order has been canceled
-                  </span> : (
+                  {orderDetails.orderStatus === "Cancelled" ? (
+                    <span className="pl-3 text-xs text-error-500">
+                      Order has been canceled
+                    </span>
+                  ) : (
                     <div className="flex items-center gap-1 pl-3 text-xs text-success-400">
                       <CiDeliveryTruck size={20} />
                       <span>
@@ -274,7 +333,9 @@ export default function TableOrderAccount() {
                 )}
                 <div className="mt-7">
                   {orderDetails.products.map((product) => (
-                    <div className="flex items-center justify-between mt-7">
+                    <div
+                      key={product._id}
+                      className="flex items-center justify-between mt-7">
                       <div className="flex items-center gap-2 sm:gap-6">
                         <Image
                           src={product.product.images[0]}

@@ -2,11 +2,12 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import FormAccount from "../../_components/FormAccount";
 import AccountHeader from "@/app/_components/AccountHeader";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import SidebarAccount from "@/app/_components/SidebarAccount";
 import TableOrderAccount from "@/app/_components/TableOrderAccount";
 import WishListAccount from "@/app/_components/WishListAccount";
-import { AiOutlinePlus } from "react-icons/ai";
+import AddressAccount from "@/app/_components/AddressAccount";
+import { checkAuthOrRedirect } from "@/app/hooks/useCheckAuth";
 
 export default function Page() {
   const location = useSearchParams();
@@ -17,6 +18,9 @@ export default function Page() {
     const value = e.target.value;
     router.push(`/account?manage=${value}`);
   };
+  useEffect(() => {
+    checkAuthOrRedirect(); // Chỉ cần đăng nhập
+  }, []);
   useEffect(() => {
     if (!manage) {
       router.push("/account?manage=account");
@@ -36,17 +40,7 @@ export default function Page() {
         {/* FORM ACCOUNT */}
         {manage === "account" && <FormAccount />}
         {/* FORM ADDRESS */}
-        {manage === "address" && (
-          <div>
-            <div className="flex items-center justify-between">
-              <h2 className="mb-4 text-xl font-medium">Address</h2>
-              <button className="flex items-center gap-2 px-4 py-2 text-xs transition-colors border rounded-full border-primary-900 text-primary-900 hover:bg-primary-900 hover:text-primary-50">
-                <span>Add New Address</span>
-                <AiOutlinePlus size={16} />
-              </button>
-            </div>
-          </div>
-        )}
+        {manage === "address" && <AddressAccount />}
         {/* FORM ORDERS */}
         {manage === "orders" && <TableOrderAccount />}
         {/* FORM WISHLIST */}

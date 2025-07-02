@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/navigation";
+import { ADDRESS_ENDPOINT, ORDER_ENDPOINT } from "@/app/constants/api";
+
 import Input from "../Input";
 import Image from "next/image";
-import { useSelector } from "react-redux";
-import { ORDER_ENDPOINT } from "@/app/constants/api";
 import toast from "react-hot-toast";
-import Spinner from "../Spinner";
-import { useRouter } from "next/navigation";
 import SpinnerMini from "../SpinnerMini";
-import CartEmpty from "./CartEmpty";
 import AddressSelect from "../AddressSelect";
-
+import iconShipCod from "../../../public/icship-cod.png";
+import iconMomo from "../../../public/icmomo.png";
 export default function Checkout({ carts, totalPriceCarts }) {
   const router = useRouter();
   const { user } = useSelector((state) => state.user);
+  const [addressDefault, setAddressDefault] = useState([]);
   const [formData, setFormData] = useState({
     userInformation: {
       lastName: user?.user?.lastname,
@@ -21,14 +22,13 @@ export default function Checkout({ carts, totalPriceCarts }) {
       phoneNumber: "",
     },
     shippingAddress: {
-      province: "",
-      district: "",
-      commune: "",
-      detailAddress: "",
+      province: addressDefault?.province,
+      district: addressDefault?.district,
+      commune: addressDefault?.commune,
+      detailAddress: addressDefault?.detailAddress,
     },
     paymentMethod: "",
   });
-  const [communes, setCommunes] = useState([]);
   const [errorForm, setErrorForm] = useState(null);
   const [loadingOrder, setLoadingOrder] = useState(false);
 
@@ -74,7 +74,33 @@ export default function Checkout({ carts, totalPriceCarts }) {
       console.log(error.message);
     }
   };
-
+  const handleChangeAddressCustom = (fieldName, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      shippingAddress: {
+        ...prev.shippingAddress,
+        [fieldName]: value,
+      },
+    }));
+  };
+  useEffect(() => {
+    const fetchAddressDefault = async () => {
+      const res = await fetch(`${ADDRESS_ENDPOINT}/address-default`, {
+        method: "GET",
+        credentials: "include",
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        console.log("Have error");
+      }
+      setAddressDefault(data.address);
+      try {
+      } catch (error) {
+        console.log(object);
+      }
+    };
+    fetchAddressDefault();
+  }, []);
   return (
     <div className="md:mt-20 mt-10 md:gap-8 gap-6 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[1.2fr_0.9fr]">
       {/* LEFT */}
@@ -143,35 +169,59 @@ export default function Checkout({ carts, totalPriceCarts }) {
         </div>
         {/*  Shipping Address */}
         <AddressSelect
+          haveBorder={true}
           formData={formData}
           setFormData={setFormData}
           errorForm={errorForm}
+          handleChangeAddressCustom={handleChangeAddressCustom}
         />
 
         {/*  Payment method */}
         <div className="px-3 py-5 border rounded-md lg:px-6 xl:px-10 md:py-6 border-primary-400">
-          <h2 className="text-xl font-medium">Payment method</h2>
-          <label className="flex items-center justify-between p-3 mt-6 text-xs border rounded-lg cursor-pointer md:text-sm border-primary-200">
-            <div className="flex items-center gap-2">
-              <input
-                value={"COD"}
-                onChange={handleChangePayment}
-                type="radio"
-                name="paymentMethod"
-              />
-              <span>Cash on Delivery (COD)</span>
+          <h2 className="mb-6 text-xl font-medium">Payment method</h2>
+          <label className="text-xs cursor-pointer md:text-sm">
+            <div className="flex items-center justify-between p-3 border rounded-lg border-primary-200">
+              <div className="flex items-center w-full gap-2">
+                <input
+                  value={"Cash On Delivery"}
+                  onChange={handleChangePayment}
+                  type="radio"
+                  name="paymentMethod"
+                />
+                <div className="flex items-center justify-between w-full font-medium ">
+                  <span>Cash on Delivery (COD)</span>
+                  <Image
+                    src={iconShipCod}
+                    width={24}
+                    height={24}
+                    loading="lazy"
+                    alt="iccod"
+                  />
+                </div>
+              </div>
             </div>
           </label>
 
-          <label className="flex items-center justify-between p-3 mt-4 text-xs border rounded-lg cursor-pointer md:text-sm border-primary-200">
-            <div className="flex items-center gap-2">
-              <input
-                value={"MomoPay"}
-                onChange={handleChangePayment}
-                type="radio"
-                name="paymentMethod"
-              />
-              <span>Pay by MomoPay</span>
+          <label className="text-xs cursor-pointer md:text-sm">
+            <div className="flex items-center justify-between p-3 mt-6 border rounded-lg border-primary-200">
+              <div className="flex items-center w-full gap-2">
+                <input
+                  value={"Momo"}
+                  onChange={handleChangePayment}
+                  type="radio"
+                  name="paymentMethod"
+                />
+                <div className="flex items-center justify-between w-full font-medium ">
+                  <span>Pay with Momo</span>
+                  <Image
+                    src={iconMomo}
+                    loading="lazy"
+                    width={24}
+                    height={24}
+                    alt="icmomo"
+                  />
+                </div>
+              </div>
             </div>
           </label>
         </div>

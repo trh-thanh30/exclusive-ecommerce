@@ -33,6 +33,9 @@ export default function useSignin() {
         toast.error(data.message);
         setError(data.message);
       } else {
+        console.log(data);
+        localStorage.setItem("access_token", data.token);
+        localStorage.setItem("role", data.user.role_name);
         dispatch(signinSuccess(data));
         toast.success("Sign in successfully");
         router.push("/");

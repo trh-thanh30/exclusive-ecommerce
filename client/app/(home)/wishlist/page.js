@@ -14,8 +14,8 @@ const breadcrumb = [
   { name: "Home", href: "/" },
   { name: "wishlist", href: "/wishlist" },
 ];
-export default function Page() {
-  const { addToWishList, wishlist, removeAllWishlist } = useWishlist();
+export default async function Page() {
+  const { addToWishList, wishlist, removeAllWishlist } = await useWishlist();
 
   if (wishlist?.length === 0)
     return (
@@ -40,8 +40,7 @@ export default function Page() {
             </span>
             <Link
               href={"/product"}
-              className="px-6 py-3 text-xs transition-colors border rounded-full text-primary-900 border-primary-900 hover:bg-primary-900 hover:text-primary-50"
-            >
+              className="px-6 py-3 text-xs transition-colors border rounded-full text-primary-900 border-primary-900 hover:bg-primary-900 hover:text-primary-50">
               Let's add product to favourite list
             </Link>
           </div>
@@ -65,8 +64,7 @@ export default function Page() {
 
           <button
             onClick={removeAllWishlist}
-            className="px-4 py-2 text-xs transition-colors bg-white border rounded-full md:text-sm md:px-7 border-primary-900 text-primary-900 hover:bg-primary-900 hover:text-primary-50"
-          >
+            className="px-4 py-2 text-xs transition-colors bg-white border rounded-full md:text-sm md:px-7 border-primary-900 text-primary-900 hover:bg-primary-900 hover:text-primary-50">
             Delete All
           </button>
         </div>
@@ -75,8 +73,7 @@ export default function Page() {
         {wishlist.map((product) => (
           <div
             key={product._id}
-            className="flex items-center gap-2 pb-3 border-b md:gap-6 mt-7 border-b-primary-200"
-          >
+            className="flex items-center gap-2 pb-3 border-b md:gap-6 mt-7 border-b-primary-200">
             <Image
               className="w-24 h-24 rounded-sm md:w-40 md:h-44"
               src={product?.images[0]}
@@ -103,8 +100,7 @@ export default function Page() {
                 <span
                   className={` ${
                     product.quantity > 0 ? "text-emerald-400" : "text-error-500"
-                  }`}
-                >
+                  }`}>
                   {product.quantity > 0 ? "In Stock" : "Out of Stock"}
                 </span>
               </div>
@@ -115,8 +111,7 @@ export default function Page() {
                 </button>
                 <button
                   onClick={() => addToWishList(product)}
-                  className="flex items-center gap-1 transition-colors text-primary-400 hover:text-primary-900"
-                >
+                  className="flex items-center gap-1 transition-colors text-primary-400 hover:text-primary-900">
                   <GoTrash /> <span>Delete</span>
                 </button>
               </div>
@@ -128,8 +123,7 @@ export default function Page() {
         <div className="flex items-center justify-between mt-6 text-nowrap">
           <Link
             href={"/product"}
-            className="flex items-center gap-0 text-xs font-medium md:gap-1 md:text-base text-primary-900 group"
-          >
+            className="flex items-center gap-0 text-xs font-medium md:gap-1 md:text-base text-primary-900 group">
             <MdKeyboardArrowLeft
               size={25}
               className="transition-transform group-hover:-translate-x-2"
@@ -138,8 +132,7 @@ export default function Page() {
           </Link>
           <Link
             className="px-4 py-2 text-xs font-medium rounded-full md:px-8 md:text-base text-primary-50 bg-primary-900 hover:opacity-95"
-            href={"/check-out"}
-          >
+            href={"/check-out"}>
             All Check Out
           </Link>
         </div>

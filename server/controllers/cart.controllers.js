@@ -102,8 +102,7 @@ const getCart = async (req, res) => {
     const cart = await Cart.findOne({ user: user.id }).populate(
       "products.product"
     );
-    if (!cart) return res.status(400).json({ message: "No cart" });
-    const cartLength = cart.products.reduce((a, b) => a + b.quantity, 0);
+    const cartLength = cart?.products.reduce((a, b) => a + b.quantity, 0);
     return res.status(200).json({ cart, cartLength: cartLength });
   } catch (error) {
     console.log(error);

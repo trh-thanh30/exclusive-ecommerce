@@ -4,7 +4,6 @@ import Logo from "./Logo";
 import Link from "next/link";
 import Input from "./Input";
 import Introduce from "./Introduce";
-
 import { usePathname } from "next/navigation";
 import {
   CiUser,
@@ -21,6 +20,10 @@ import RightSidebar from "./RightSidebar";
 import DropDownHeart from "./DropDownHeart";
 import RightCart from "./RightCart";
 import { useCart } from "../context/CartContext";
+import Image from "next/image";
+import useFetchProducts from "../hooks/useFetchProducts";
+import Spinner from "./Spinner";
+import CategorySliderHome from "./CategorySliderHome";
 
 const navLink = [
   {
@@ -44,15 +47,20 @@ const navLink = [
 const sizeIcon = 20;
 
 export default function Header() {
+  const styleIcon =
+    "p-1 transition-colors rounded-full hover:bg-black hover:text-primary-50 hover:cursor-pointer";
   // const { user: userGoogle } = useGetUserWithGoogle();
+  const { products, setQuery, query, loading } = useFetchProducts({
+    fetchOnEmptySearch: false,
+  });
+  const [openSearchQuery, setOpenSearchQuery] = useState(null);
   const [dropDown, setDropDown] = useState(false);
   const [dropDownHeart, setDropDownHeart] = useState(false);
   const [openCart, setOpenCart] = useState(false);
   const [openSideBar, setOpenSideBar] = useState(false);
   const [openSearchInpt, setOpenSearchInpt] = useState(false);
   const [offIntro, setOffOffIntro] = useState(false);
-  const styleIcon =
-    "p-1 transition-colors rounded-full hover:bg-black hover:text-primary-50 hover:cursor-pointer";
+
   const pathname = usePathname();
   const user = useSelector((state) => state.user);
   const currentUser = user.user;
@@ -99,10 +107,18 @@ export default function Header() {
   const handleOpenCart = () => {
     setOpenCart((cart) => !cart);
   };
+  const handleChangeSearch = (e) => {
+    setQuery({
+      ...query,
+      search: e.target.value,
+    });
+    setOpenSearchQuery(e.target.value);
+  };
+
   return (
     <>
       {!offIntro ? <Introduce setOffOffIntro={setOffOffIntro} /> : ""}
-      <header className="sticky top-[-2px] z-50 flex items-center justify-between px-3 py-5 border-b shadow-neutral-50 bg-primary-50 md:px-12 border-b-neutral-100">
+      <header className="sticky top-[-2px] z-50 flex items-center justify-between px-3 py-5 border-b  shadow-neutral-200  bg-primary-50 md:px-12 border-b-neutral-100">
         <Logo logoDefault={true} />
 
         <ul className="items-center hidden gap-10 text-sm font-medium md:flex text-primary-800">
@@ -122,10 +138,13 @@ export default function Header() {
           ))}
         </ul>
 
-        <div className="flex items-center gap-4 ">
-          <div className="hidden xl:block">
+        <div className="flex items-center gap-2 ">
+          <div className="relative hidden xl:block">
             <Input
-              placeholder={"Search something..."}
+              className={"!text-xs"}
+              placeholder={"Search products...."}
+              onChange={handleChangeSearch}
+              type="search"
               icon={
                 <CiSearch
                   className="rounded-full cursor-pointer hover:bg-primary-200"
@@ -133,10 +152,72 @@ export default function Header() {
                 />
               }
             />
+            {openSearchQuery && (
+              <div className="absolute w-full h-[380px] p-3 overflow-y-scroll bg-white rounded-md shadow-lg shadow-primary-100">
+                <span className="text-xs text-primary-900">
+                  List of product
+                </span>
+                <>
+                  {loading ? (
+                    <Spinner />
+                  ) : (
+                    <>
+                      {products.length > 0 ? (
+                        <div className="grid grid-cols-1 gap-2">
+                          {products.map((product) => (
+                            <>
+                              <Link
+                                href={`/product/${product?._id}`}
+                                key={product?._id}
+                                className="p-2 mt-2 transition-colors rounded-md hover:bg-primary-100 hover:cursor-pointer group">
+                                <div className="flex items-center gap-2">
+                                  <Image
+                                    width={200}
+                                    height={200}
+                                    alt=""
+                                    className="w-16 h-16 rounded-md"
+                                    src={product?.images[0]}
+                                  />
+                                  <div className="flex flex-col w-full gap-2 text-xs font-medium">
+                                    <div className="flex items-center justify-between w-full">
+                                      <h3 className="text-primary-800">
+                                        {product?.title}
+                                      </h3>
+                                      <span className="text-primary-400">
+                                        ${product?.price.toFixed(2)}
+                                      </span>
+                                    </div>
+                                    <span className="text-primary-500 group-hover:text-primary-900">
+                                      {product?.category?.title}
+                                    </span>
+                                    <div className="flex items-center text-primary-400">
+                                      <span className="pr-2 border-r border-r-primary-400">
+                                        {product?.quantity}
+                                      </span>
+                                      <span className="pl-2">
+                                        {product?.brand}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </Link>
+                            </>
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-sm font-medium text-center text-primary-900">
+                          No results found
+                        </p>
+                      )}
+                    </>
+                  )}
+                </>
+              </div>
+            )}
           </div>
 
           <div className="flex items-center gap-1">
-            <div className="flex items-center gap-0 md:gap-1">
+            <div className="flex items-center gap-1">
               <CiSearch
                 onClick={handleOpenSearch}
                 className={`block xl:hidden ${styleIcon}`}
@@ -231,25 +312,92 @@ export default function Header() {
               animate={{ y: 0 }}
               exit={{ y: "-50%" }}
               transition={{ duration: 0.2, ease: "easeInOut" }}
-              className="absolute left-0 z-10 block w-full top-full md:hidden">
-              <Input
-                fullWidth={true}
-                placeholder={"Search some things..."}
-                className={
-                  "w-full p-2 outline-none border border-primary-400 text-xs rounded-none "
-                }
-                icon={
-                  <CiSearch
-                    className="rounded-full cursor-pointer hover:bg-primary-200 "
-                    size={sizeIcon}
-                  />
-                }
-                autoFocus
-              />
+              className="absolute left-0 z-10 w-full top-full xl:hidden">
+              <div className="relative w-full">
+                <Input
+                  fullWidth={true}
+                  placeholder={"Search some things..."}
+                  onChange={handleChangeSearch}
+                  type="search"
+                  className={
+                    "p-2 outline-none border border-primary-400 text-xs rounded-none "
+                  }
+                  icon={
+                    <CiSearch
+                      className="rounded-full cursor-pointer hover:bg-primary-200 "
+                      size={sizeIcon}
+                    />
+                  }
+                />
+
+                {openSearchQuery && (
+                  <div className="absolute w-full h-[380px] p-3 overflow-y-scroll bg-white rounded-md shadow-lg shadow-primary-100">
+                    <span className="text-xs text-primary-900">
+                      List of product
+                    </span>
+                    <>
+                      {loading ? (
+                        <Spinner />
+                      ) : (
+                        <>
+                          {products.length > 0 ? (
+                            <div className="grid grid-cols-1 gap-2">
+                              {products.map((product) => (
+                                <>
+                                  <section
+                                    key={product?._id}
+                                    className="p-2 mt-2 transition-colors rounded-md hover:bg-primary-100 hover:cursor-pointer group">
+                                    <div className="flex items-center gap-2">
+                                      <Image
+                                        width={200}
+                                        height={200}
+                                        alt=""
+                                        className="w-16 h-16 rounded-md"
+                                        src={product?.images[0]}
+                                      />
+                                      <div className="flex flex-col w-full gap-2 text-xs font-medium">
+                                        <div className="flex items-center justify-between w-full">
+                                          <h3 className="text-primary-800">
+                                            {product?.title}
+                                          </h3>
+                                          <span className="text-primary-400">
+                                            ${product?.price.toFixed(2)}
+                                          </span>
+                                        </div>
+                                        <span className="text-primary-500 group-hover:text-primary-900">
+                                          {product?.category?.title}
+                                        </span>
+                                        <div className="flex items-center text-primary-400">
+                                          <span className="pr-2 border-r border-r-primary-400">
+                                            {product?.quantity}
+                                          </span>
+                                          <span className="pl-2">
+                                            {product?.brand}
+                                          </span>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </section>
+                                </>
+                              ))}
+                            </div>
+                          ) : (
+                            <p className="text-sm font-medium text-center text-primary-900">
+                              No results found
+                            </p>
+                          )}
+                        </>
+                      )}
+                    </>
+                  </div>
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
       </header>
+      {/* === HERO BANNER THUMB === */}
+      <CategorySliderHome />
       {/* Open menu */}
       <AnimatePresence>
         {openSideBar && (

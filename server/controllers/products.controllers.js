@@ -80,6 +80,7 @@ const getAllProducts = async (req, res) => {
       "category",
       "fields",
       "search",
+      "price",
     ];
     excludeFields.forEach((field) => delete queryObject[field]);
     let queryString = JSON.stringify(queryObject);
@@ -105,6 +106,12 @@ const getAllProducts = async (req, res) => {
         return res.status(404).json({ message: "No category found" });
       }
       query = query.find({ category: category._id });
+    }
+
+    // get product with price
+    if (req.query.price) {
+      const price = req.query.price.split(",");
+      query = query.find({ price: { $gte: price[0], $lte: price[1] } });
     }
 
     // Limiting the fields

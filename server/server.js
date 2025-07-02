@@ -20,7 +20,7 @@ const couponRouters = require("./routers/coupon.router");
 const wishlistsRouters = require("./routers/wishlists.router");
 const cartRouters = require("./routers/cart.router");
 const orderRouters = require("./routers/order.router");
-
+const addressRouters = require("./routers/address.router");
 const passport = require("passport");
 
 const app = express();
@@ -32,7 +32,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      "https://exclusive-ecommerce-x4mn.vercel.app",
+      "http://domain-cua-tao.com:3000"
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
@@ -66,14 +66,17 @@ app.use("/api/coupon", couponRouters);
 app.use("/api/wishlists", wishlistsRouters);
 app.use("/api/cart", cartRouters);
 app.use("/api/order", orderRouters);
-
+app.use("/api/address", addressRouters);
 // MongoDB connect
 mongoose
   .connect(process.env.MONGODB_URI)
   .then(() => {
-    console.log(" Connected to MongoDB");
+    console.log("Connected to MongoDB");
   })
   .catch((err) => {
-    console.log(" MongoDB Error:", err.message);
+    console.log("MongoDB Error:", err.message);
   });
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
+});
 module.exports = app;
